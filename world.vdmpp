@@ -1,0 +1,20 @@
+class world
+  
+instance variables  
+  
+public static
+  env : [environment] := nil;
+
+public static 
+  timerRef : [Timer] := new Timer();    
+
+  
+   
+operations
+
+public 
+  Run : () ==> ()
+  Run() ==(
+    env := new environment("scenario.txt");
+    env.Run(););
+end world

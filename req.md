@@ -1,0 +1,14 @@
+Parking garage system
+- Cars have unique ID
+- Cars can have on of these two types "electric" or "gas"
+- Electric cars can park in any open spot
+- Gas cars can only park in open gas-car spots
+- Cars entering and leaving have their timesstamp recorded
+- Each type of car has a different price per hour of parking
+- When leaving they pay a price, according to how long they were parked
+- Before a car can enter, the controller checks that space is available
+- Cars parking position is determined by a coordinate (x, y, z)
+- A singular controller should manage the system
+- Cars are registered by the controller, when they enter and leave the garage
+- A car cannot enter if there is no spot available
+- On day end, check the total revenue is correct -- Maybe

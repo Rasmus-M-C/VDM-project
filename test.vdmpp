@@ -1,0 +1,19 @@
+class Example
+types
+  public RecordType = compose RecordType of
+    name : seq of char;
+    age  : nat
+  end;
+
+operations
+  -- Operation to create a record using mk_
+  public CreateRecord : () ==> RecordType
+  CreateRecord() ==
+    return mk_RecordType("Alice", 30);
+
+  -- Operation to display the record
+  public DisplayRecord : RecordType ==> ()
+  DisplayRecord(rec) ==
+    IO`println("Name: " ^ rec.name ^ ", Age: " ^ int2str(rec.age));
+  
+end Example

@@ -1,0 +1,21 @@
+class controller
+types
+public location = nat * nat * nat;
+
+parkingLot ::
+    plate : car`licenseplate    -- License plate of the car
+    pos : nat * nat * nat             -- Location in the parking lot
+    type : <electric> | <gas>   -- Type of car (electric or gas)
+
+instance variables
+dimensions: nat := 2;
+maxCapacity: nat := dimensions**3;
+parkedCars: set of car := {};
+grid: map parkingLot to car := {|->};
+
+--env: environment := new environment("scenario.txt");
+operations
+
+
+
+end controller

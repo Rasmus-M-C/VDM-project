@@ -1,0 +1,12 @@
+{
+    "configurations": [
+        {
+            "name": "Lens config: Launch Example`ExampleDom",
+            "type": "vdm",
+            "request": "launch",
+            "noDebug": true,
+            "defaultName": "Example",
+            "command": "p new Example().ExampleDom()"
+        }
+    ]
+}

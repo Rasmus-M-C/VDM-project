@@ -1,0 +1,31 @@
+class Timer 
+
+instance variables
+
+  currentTime : nat := 0;
+  endtime : nat := 0;
+
+values 
+
+  stepLength : nat = 1;
+
+operations
+
+public 
+  StepTime:() ==> ()
+  StepTime() == 
+    currentTime := currentTime + stepLength;
+
+pure public
+  getTime: () ==> nat 
+  getTime() == return currentTime;
+  
+public
+  GetEndTime: () ==> nat
+  GetEndTime() == return endtime;
+
+public SetEndTime: nat ==> ()
+SetEndTime(newEndTime) == 
+  endtime := newEndTime;
+
+end Timer

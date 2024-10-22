@@ -1,0 +1,62 @@
+class car
+
+types
+
+public licenseplate = seq of char;
+public location = nat * nat * nat;
+public time = nat;
+public type = <electric> | <gas>;
+
+instance variables
+plate: licenseplate := [];
+loc: location := mk_(0,0,0);
+ctime: time := 0;
+
+
+operations
+
+public car: licenseplate * location * time ==> car
+car(licenseplate, location, time) == (
+plate := licenseplate;
+loc := location;
+ctime := time
+)
+pre licenseplate <> [] and location.#1 >= 0 and location.#2 >= 0 and location.#3 >= 0;
+
+-- getters
+
+pure public getPlate: () ==> licenseplate
+getPlate() == (
+    return plate
+);
+
+pure public getLocation: () ==> location
+getLocation() == (
+return loc
+);
+
+pure public getTime: () ==> time
+getTime() == (
+return ctime
+);
+
+pure public getType: () ==> type
+getType() == (
+    return type
+);
+
+-- setters
+public setLocation: nat * nat * nat ==> ()
+setLocation(x,y,z) == (
+    loc:= mk_(x,y,z)
+)
+post loc = mk_(x,y,z);
+
+public setTime: nat ==> ()
+setTime(newTime) ==(
+ctime := newTime
+)
+pre newTime >= 0
+post ctime = newTime;
+
+end car
