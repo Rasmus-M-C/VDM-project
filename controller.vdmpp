@@ -3,7 +3,7 @@ types
 public location = nat * nat * nat;
 
 parkingLot ::
-    plate : car`licenseplate    -- License plate of the car
+    plate : seq of char    -- License plate of the car
     pos : nat * nat * nat             -- Location in the parking lot
     type : <electric> | <gas>   -- Type of car (electric or gas)
 
