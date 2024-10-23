@@ -4,8 +4,8 @@ public location = nat * nat * nat;
 
 parkingLot ::
     plate : seq of char    -- License plate of the car
-    pos : nat * nat * nat             -- Location in the parking lot
-    type : <electric> | <gas>   -- Type of car (electric or gas)
+    pos : location             -- Location in the parking lot
+    typeOfSlot : <electric> | <gas>   -- Type of car (electric or gas)
 
 instance variables
 dimensions: nat := 2;
@@ -13,8 +13,10 @@ maxCapacity: nat := dimensions**3;
 parkedCars: set of car := {};
 grid: map parkingLot to car := {|->};
 
+parkingSlots : map location to parkingLot := {|->};
 --env: environment := new environment("scenario.txt");
 operations
+
 
 
 
