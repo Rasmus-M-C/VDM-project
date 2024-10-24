@@ -1,12 +1,12 @@
 {
     "configurations": [
         {
-            "name": "Lens config: Launch Example`ExampleDom",
+            "name": "Lens config: Debug controller`initGarage",
             "type": "vdm",
             "request": "launch",
-            "noDebug": true,
-            "defaultName": "Example",
-            "command": "p new Example().ExampleDom()"
+            "noDebug": false,
+            "defaultName": "controller",
+            "command": "p new controller().initGarage()"
         }
     ]
 }

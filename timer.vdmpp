@@ -18,11 +18,13 @@ public
 
 pure public
   getTime: () ==> nat 
-  getTime() == return currentTime;
+  getTime() == 
+  return currentTime;
   
 public
   GetEndTime: () ==> nat
-  GetEndTime() == return endtime;
+  GetEndTime() == 
+  return endtime;
 
 public SetEndTime: nat ==> ()
 SetEndTime(newEndTime) == 

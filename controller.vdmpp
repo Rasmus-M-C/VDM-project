@@ -1,23 +1,63 @@
 class controller
 types
 public location = nat * nat * nat;
-
-parkingLot ::
-    plate : seq of char    -- License plate of the car
-    pos : location             -- Location in the parking lot
-    typeOfSlot : <electric> | <gas>   -- Type of car (electric or gas)
-
+public parkingLot ::
+        car : [car]
+        pos : location
+        typeOfSlot : <electric> | <gas>
 instance variables
 dimensions: nat := 2;
 maxCapacity: nat := dimensions**3;
-parkedCars: set of car := {};
-grid: map parkingLot to car := {|->};
 
+parkedCars: set of car := {};
 parkingSlots : map location to parkingLot := {|->};
 --env: environment := new environment("scenario.txt");
 operations
+-- operation to init garage (garage is currently the controller, should make new class)
+public initGarage: () ==>()
+initGarage() == (
+    for i = 0 to dimensions do
+        for j = 0 to dimensions do
+            for k = 0 to dimensions do
+            if i = dimensions  or j = dimensions or k = dimensions then 
+                parkingSlots := parkingSlots ++ {mk_(i, j, k) |-> mk_parkingLot(nil, mk_(i, j, k), <electric>)}
+            else
+                parkingSlots := parkingSlots ++ {mk_(i, j, k) |-> mk_parkingLot(nil, mk_(i, j, k), <gas> )}
+);
+-- operation to park a car in a slot
+public parkCar : car * location ==> ()
+parkCar(car, loc) == (
+    parkedCars := parkedCars union {car};
+    parkingSlots(loc).car := car;
+);
 
+-- find available slot
+public findSlot: car ==> location
+findSlot(car) == (
+    for all loc in set dom parkingSlots do
+        if isSlotFree(loc) and suitableSlot(parkingSlots(loc), car) then
+            return loc;
+        
+    return mk_(-1,-1,-1); 
+);
 
+-- operation to remove a car from a slot
+-- operation to get the location of a car
 
+-- operation to get status of slot
+public isSlotFree: location ==> bool
+isSlotFree(loc) == (
+    return  parkingSlots(loc).car = nil  -- returns true if slot is free
+);
+
+-- operation to check a car does not already exist in the garage
+-- operation to compare slot type and car type
+public suitableSlot: parkingLot * car ==> bool
+suitableSlot(slot, car) == (
+    return slot.typeOfSlot = car.getType() -- true if the two types matches, i.e car can park there
+);
+
+-- operation to pay when leaving the garage
+-- operation to get time spent in the garage
 
 end controller

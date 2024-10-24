@@ -20,3 +20,4 @@ Parking garage system
 - R7: A "day" is equal to 24 *stepLength* (int) from the **timer** class.
 - R7.1: The *stepLength* value will be used to calculate timestamps of parking (entering) and leaving.
 - R7.1: After each day, the correct total revenue should be calculated, according to the registered cars -- Maybe
+kjiIiinsee

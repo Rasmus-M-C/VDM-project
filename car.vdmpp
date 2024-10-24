@@ -3,25 +3,25 @@ class car
 types
 
 public licenseplate = seq of char;
-public location = nat * nat * nat;
+public location = rat * rat * rat;
 public time = nat;
-public type = <electric> | <gas>;
+public typeCar = <electric> | <gas>;
 
 instance variables
+loc: location := mk_(-1,-1,-1);
+ptime: time := 0;
 plate: licenseplate := [];
-loc: location := mk_(0,0,0);
-ctime: time := 0;
-
-
+type: typeCar := <gas>;
 operations
-
-public car: licenseplate * location * time ==> car
-car(licenseplate, location, time) == (
-plate := licenseplate;
-loc := location;
-ctime := time
-)
-pre licenseplate <> [] and location.#1 >= 0 and location.#2 >= 0 and location.#3 >= 0;
+public car : licenseplate * location * time * typeCar ==> car
+car(licenseplate, location, time, carType) ==
+  (
+    plate := licenseplate;   -- Set the license plate
+    loc := location;         -- Set the location
+    ptime := time;           -- Set the entry time
+    type := carType;      -- Set the car type
+  )
+  pre licenseplate <> [] and location.#1 >= 0 and location.#2 >= 0 and location.#3 >= 0;
 
 -- getters
 
@@ -37,12 +37,12 @@ return loc
 
 pure public getTime: () ==> time
 getTime() == (
-return ctime
+return ptime
 );
 
-pure public getType: () ==> type
+pure public getType: () ==> typeCar 
 getType() == (
-    return type
+return type 
 );
 
 -- setters
@@ -54,9 +54,9 @@ post loc = mk_(x,y,z);
 
 public setTime: nat ==> ()
 setTime(newTime) ==(
-ctime := newTime
+ptime := newTime
 )
 pre newTime >= 0
-post ctime = newTime;
+post ptime = newTime;
 
 end car
