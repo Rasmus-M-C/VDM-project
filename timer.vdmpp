@@ -3,7 +3,7 @@ class Timer
 instance variables
 
   currentTime : nat := 0;
-  endtime : nat := 0;
+  endSimTime : nat := 0;
 
 values 
 
@@ -12,8 +12,8 @@ values
 operations
 
 public 
-  StepTime:() ==> ()
-  StepTime() == 
+  Step:() ==> ()
+  Step() == 
     currentTime := currentTime + stepLength;
 
 pure public
@@ -22,12 +22,12 @@ pure public
   return currentTime;
   
 public
-  GetEndTime: () ==> nat
-  GetEndTime() == 
-  return endtime;
+  GetEndSimTime: () ==> nat
+  GetEndSimTime() == 
+  return endSimTime;
 
 public SetEndTime: nat ==> ()
 SetEndTime(newEndTime) == 
-  endtime := newEndTime;
+  endSimTime := newEndTime;
 
 end Timer
