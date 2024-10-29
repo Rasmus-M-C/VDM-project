@@ -5,6 +5,7 @@ public parkingLot ::
         car : [car]
         pos : location
         typeOfSlot : <electric> | <gas>
+        time : nat
 instance variables
 dimensions: nat := 2;
 maxCapacity: nat := dimensions**3;
@@ -12,7 +13,17 @@ maxCapacity: nat := dimensions**3;
 parkedCars: set of car := {};
 parkingSlots : map location to parkingLot := {|->};
 --env: environment := new environment("scenario.txt");
+
 operations
+
+-- flow of program
+-- 1. initGarage
+-- 2. can a car park
+-- 3 park car
+-- 4 start timer of parking
+-- 5. remove car when leaving
+-- 6. get time spent in garage
+-- 7. pay when leaving
 -- operation to init garage (garage is currently the controller, should make new class)
 public initGarage: () ==>()
 initGarage() == (
@@ -20,15 +31,18 @@ initGarage() == (
         for j = 0 to dimensions do
             for k = 0 to dimensions do
             if i = dimensions  or j = dimensions or k = dimensions then 
-                parkingSlots := parkingSlots ++ {mk_(i, j, k) |-> mk_parkingLot(nil, mk_(i, j, k), <electric>)}
+                parkingSlots := parkingSlots ++ {mk_(i, j, k) |-> mk_parkingLot(nil, mk_(i, j, k), <electric>, 0 )} -- edge slots are electric
             else
-                parkingSlots := parkingSlots ++ {mk_(i, j, k) |-> mk_parkingLot(nil, mk_(i, j, k), <gas> )}
+                parkingSlots := parkingSlots ++ {mk_(i, j, k) |-> mk_parkingLot(nil, mk_(i, j, k), <gas>, 0 )} -- other slots are gas
 );
 -- operation to park a car in a slot
 public parkCar : car * location ==> ()
 parkCar(car, loc) == (
     parkedCars := parkedCars union {car};
     parkingSlots(loc).car := car;
+    car.setLocation(loc.#1, loc.#2, loc.#3);
+    car.setTime(world`timerRef.getTime());
+    parkingSlots(loc).time := world`timerRef.getTime();
 );
 
 -- find available slot
@@ -39,25 +53,57 @@ findSlot(car) == (
             return loc;
         
     return mk_(-1,-1,-1); 
+) ;
+-- operation to check that no parkingSlot has a parked car for too long
+-- if a car has been parked too long, a fee is added to its final bill
+public checkSlots: () ==> ()
+checkSlots() == (
+    for all loc in set dom parkingSlots do
+        if not isSlotFree(loc) then
+            if world`timerRef.getTime() - parkingSlots(loc).time > 30 then
+                parkingSlots(loc).car.setFeeApplied(true); 
+);
+
+-- operation move car from electric slot to gas slot, from a single location
+
+-- operation to check if car exists in garage already
+public carExists: car ==> bool
+carExists(car) == (
+    return exists c in set parkedCars & c.getPlate() = car.getPlate();
+);
+
+-- operation to check if car can park
+public canPark: car ==> bool
+canPark(car) == (
+    return not carExists(car) and findSlot(car) <> mk_(-1,-1,-1);
 );
 
 -- operation to remove a car from a slot
--- operation to get the location of a car
-
+public removeCar: car ==> ()
+removeCar(car) == (
+    parkedCars := parkedCars \ {car};
+    for all loc in set dom parkingSlots do
+        if parkingSlots(loc).car = car then
+            parkingSlots(loc).car := nil;
+        
+);
 -- operation to get status of slot
 public isSlotFree: location ==> bool
 isSlotFree(loc) == (
     return  parkingSlots(loc).car = nil  -- returns true if slot is free
 );
 
--- operation to check a car does not already exist in the garage
+
 -- operation to compare slot type and car type
 public suitableSlot: parkingLot * car ==> bool
 suitableSlot(slot, car) == (
     return slot.typeOfSlot = car.getType() -- true if the two types matches, i.e car can park there
 );
-
+-- operation to get time spent in garage for a car
+public getTimeSpent: car ==> nat
+getTimeSpent(car) == (
+    return world`timerRef.getTime() - car.getTime();
+);
 -- operation to pay when leaving the garage
--- operation to get time spent in the garage
 
 end controller

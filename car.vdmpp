@@ -8,10 +8,11 @@ public time = nat;
 public typeCar = <electric> | <gas>;
 
 instance variables
-loc: location := mk_(-1,-1,-1);
+loc: location := mk_(-1,-1,-1); -- -1, -1, -1 represents everywhere outside the garage
 ptime: time := 0;
 plate: licenseplate := [];
 type: typeCar := <gas>;
+feeApplied: bool := false;
 operations
 public car : licenseplate * location * time * typeCar ==> car
 car(licenseplate, location, time, carType) ==
@@ -45,6 +46,10 @@ getType() == (
 return type 
 );
 
+pure public getFeeApplied: () ==> bool
+getFeeApplied() == (
+return feeApplied
+);
 -- setters
 public setLocation: nat * nat * nat ==> ()
 setLocation(x,y,z) == (
@@ -59,4 +64,8 @@ ptime := newTime
 pre newTime >= 0
 post ptime = newTime;
 
+public setFeeApplied: bool ==> ()
+setFeeApplied(boolean) == (
+    feeApplied := boolean
+)
 end car
