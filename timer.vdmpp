@@ -26,8 +26,8 @@ public
   GetEndSimTime() == 
   return endSimTime;
 
-public SetEndTime: nat ==> ()
-SetEndTime(newEndTime) == 
+public SetEndSimTime: nat ==> ()
+SetEndSimTime(newEndTime) == 
   endSimTime := newEndTime;
 
 end Timer

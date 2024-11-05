@@ -1,12 +1,12 @@
 {
     "configurations": [
         {
-            "name": "Lens config: Debug controller`initGarage",
+            "name": "Launch ParkGarage Debug",
             "type": "vdm",
             "request": "launch",
             "noDebug": false,
-            "defaultName": "controller",
-            "command": "p new controller().initGarage()"
+            "defaultName": "World",
+            "command": "print new world().Run()"
         }
     ]
 }

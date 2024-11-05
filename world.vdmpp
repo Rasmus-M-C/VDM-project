@@ -2,11 +2,10 @@ class world
   
 instance variables  
   
-public static
-  env : [environment] := nil;
 
-public static 
-  timerRef : [Timer] := new Timer();    
+public static  env : [environment] := nil;
+public static  controller : [controller] :=  new controller();
+public static  timerRef : [Timer] := new Timer();    
 
   
    
@@ -15,6 +14,7 @@ operations
 public 
   Run : () ==> ()
   Run() ==(
-    env := new environment("startup.txt");
-    env.Run(););
+    env := new environment("startup.txt", controller);
+    env.Simulate();
+    );
 end world

@@ -10,8 +10,15 @@ instance variables
 dimensions: nat := 2;
 maxCapacity: nat := dimensions**3;
 
+fee: real :=1.15;
+electricParkingPrice: real := 2.0;
+gasParkingPrice: real := 3.0;
+
 parkedCars: set of car := {};
-parkingSlots : map location to parkingLot := {|->};
+gasSlots : map location to parkingLot := {|->};
+electricSlots : map location to parkingLot := {|->};
+
+bank: real := 0.0;
 --env: environment := new environment("scenario.txt");
 
 operations
@@ -31,38 +38,69 @@ initGarage() == (
         for j = 0 to dimensions do
             for k = 0 to dimensions do
             if i = dimensions  or j = dimensions or k = dimensions then 
-                parkingSlots := parkingSlots ++ {mk_(i, j, k) |-> mk_parkingLot(nil, mk_(i, j, k), <electric>, 0 )} -- edge slots are electric
+                electricSlots := electricSlots ++ {mk_(i, j, k) |-> mk_parkingLot(nil, mk_(i, j, k), <electric>, 0 )} -- edge slots are electric
             else
-                parkingSlots := parkingSlots ++ {mk_(i, j, k) |-> mk_parkingLot(nil, mk_(i, j, k), <gas>, 0 )} -- other slots are gas
+                gasSlots := gasSlots ++ {mk_(i, j, k) |-> mk_parkingLot(nil, mk_(i, j, k), <gas>, 0 )} -- other slots are gas
 );
 -- operation to park a car in a slot
-public parkCar : car * location ==> ()
-parkCar(car, loc) == (
-    parkedCars := parkedCars union {car};
-    parkingSlots(loc).car := car;
-    car.setLocation(loc.#1, loc.#2, loc.#3);
-    car.setTime(world`timerRef.getTime());
-    parkingSlots(loc).time := world`timerRef.getTime();
+public parkCar: car * location ==> ()
+parkCar(car, loc) ==
+(
+    if loc in set dom gasSlots then
+    (
+        parkedCars := parkedCars union {car};
+        car.setLocation(loc.#1, loc.#2, loc.#3);
+        gasSlots(loc).time := world`timerRef.getTime(); -- Update the time in gasSlots
+    )
+    elseif loc in set dom electricSlots then
+    (
+        -- Park in an electric slot
+        parkedCars := parkedCars union {car};
+        car.setLocation(loc.#1, loc.#2, loc.#3);
+        electricSlots(loc).time := world`timerRef.getTime();  -- Update the time in electricSlots
+    )
+);
+
+public enterGarage: car ==> ()
+enterGarage(car) == (
+    if canPark(car) then
+    (
+        let loc = findSlot(car) in
+        parkCar(car, loc);
+    )
 );
 
 -- find available slot
 public findSlot: car ==> location
 findSlot(car) == (
-    for all loc in set dom parkingSlots do
-        if isSlotFree(loc) and suitableSlot(parkingSlots(loc), car) then
+    if car.getType() = <electric> then
+        for all loc in set dom electricSlots do
+        if isSlotFree(loc)  then
+            return loc
+    else
+        for all loc in set dom gasSlots do
+        if isSlotFree(loc) then
             return loc;
-        
+
+    if car.getType() = <gas> then
+        for all loc in set dom gasSlots do
+        if isSlotFree(loc) then
+            return loc;
     return mk_(-1,-1,-1); 
-) ;
+)
+pre card parkedCars < maxCapacity;
 -- operation to check that no parkingSlot has a parked car for too long
 -- if a car has been parked too long, a fee is added to its final bill
+-- TODO
 public checkSlots: () ==> ()
 checkSlots() == (
+    let parkingSlots = electricSlots munion gasSlots in
     for all loc in set dom parkingSlots do
         if not isSlotFree(loc) then
-            if world`timerRef.getTime() - parkingSlots(loc).time > 30 then
+            if world`timerRef.getTime() - parkingSlots(loc).time > 4 then
                 parkingSlots(loc).car.setFeeApplied(true); 
 );
+
 
 -- operation move car from electric slot to gas slot, from a single location
 
@@ -78,32 +116,87 @@ canPark(car) == (
     return not carExists(car) and findSlot(car) <> mk_(-1,-1,-1);
 );
 
--- operation to remove a car from a slot
-public removeCar: car ==> ()
-removeCar(car) == (
-    parkedCars := parkedCars \ {car};
-    for all loc in set dom parkingSlots do
-        if parkingSlots(loc).car = car then
-            parkingSlots(loc).car := nil;
-        
+-- operation to remove a car from garage
+
+public lookupCar: car`licenseplate ==> [car]
+  lookupCar(plate) ==
+(
+    for all car in set parkedCars do
+        if car.getPlate() = plate then
+            return car;
+    return nil;  -- Return nil if no match is found
 );
+
+public leaveGarage: car ==> ()
+leaveGarage(car) == (
+    parkedCars := parkedCars \ {car};
+
+    if car.getType() = <electric> then
+    (
+        for all loc in set dom electricSlots do
+        (
+            if electricSlots(loc).car = car then
+            (
+                electricSlots(loc).car := nil;
+                car.addTime(world`timerRef.getTime() - electricSlots(loc).time);
+                updateBankBalance(pay(car)); -- pay the price for parking
+                car.setLocation(-1, -1, -1); -- Set to outside garage
+            )
+        )
+    )
+    else
+    (
+        for all loc in set dom gasSlots do
+        (
+            if gasSlots(loc).car = car then
+            (
+                gasSlots(loc).car := nil;
+                car.addTime(world`timerRef.getTime() - gasSlots(loc).time);
+                updateBankBalance(pay(car));
+                car.setLocation(-1, -1, -1); -- Set to outside garage
+            )
+        )
+    )
+)
+pre car in set parkedCars
+post parkedCars = parkedCars \ {car};
+
+
 -- operation to get status of slot
 public isSlotFree: location ==> bool
 isSlotFree(loc) == (
-    return  parkingSlots(loc).car = nil  -- returns true if slot is free
+    if loc in set dom gasSlots then
+        return gasSlots(loc).car = nil  -- returns true if slot is free
+    else
+        return  electricSlots(loc).car = nil  -- returns true if slot is free
 );
 
+-- operation to pay when leaving
+public pay: car ==> real
+pay(car) ==
+(
+    let timeSpent = car.getTime() in
+    let feeApplied = car.getFeeApplied() in
+    if feeApplied then
+        return fee * timeSpent * priceTypeCar(car)
+    else
+        return timeSpent * priceTypeCar(car);
+);
 
--- operation to compare slot type and car type
-public suitableSlot: parkingLot * car ==> bool
-suitableSlot(slot, car) == (
-    return slot.typeOfSlot = car.getType() -- true if the two types matches, i.e car can park there
+public priceTypeCar: car ==> real
+priceTypeCar(car)==
+(
+    if car.getType() = <electric> then
+        return electricParkingPrice
+    else
+        return gasParkingPrice
 );
--- operation to get time spent in garage for a car
-public getTimeSpent: car ==> nat
-getTimeSpent(car) == (
-    return world`timerRef.getTime() - car.getTime();
+
+private updateBankBalance: real ==> ()
+updateBankBalance(amount) == (
+    bank := bank + amount;
 );
+
 -- operation to pay when leaving the garage
 
 end controller
