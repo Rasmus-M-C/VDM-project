@@ -64,8 +64,14 @@ ptime := newTime
 pre newTime >= 0
 post ptime = newTime;
 
+public addTime: nat ==> ()
+addTime(addedTime) ==(
+ptime := ptime + addedTime
+);
+
 public setFeeApplied: bool ==> ()
 setFeeApplied(boolean) == (
     feeApplied := boolean
 )
+
 end car
