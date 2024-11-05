@@ -1,0 +1,75 @@
+class environment
+types
+    public Time = nat;
+    public inline = car`licenseplate * car`typeCar;
+    protected outline = car`licenseplate * Time * real;
+    
+    carEntry :: 
+        plate : car`licenseplate
+        typeCar : car`typeCar
+        leaveTime : Time
+        enterTime : Time; 
+
+instance variables
+    io : IO := new IO();
+    endSimTime : Time := 72;
+    carSchedule : seq of carEntry := [];
+    outlines : seq of outline := [];
+    parked : seq of carEntry := [];
+    controllerRef : controller;
+
+operations
+
+public environment : seq of char * controller ==> environment
+environment(file, controllerInit) ==
+(
+    controllerRef := controllerInit;
+    def mk_(-,input) = io.freadval[seq of carEntry](file) 
+    in
+        carSchedule := input;
+);
+public Simulate : () ==> ()
+    Simulate() ==
+    (world`timerRef.SetEndSimTime(endSimTime);
+    while world`timerRef.getTime() < endSimTime do
+    (
+        world`timerRef.Step();
+        updateGarage();
+        
+    )
+    );
+
+public updateGarage: () ==> ()
+updateGarage() == (
+    -- Process any cars scheduled to enter at the current time
+    if carSchedule <> [] then
+    (
+        let carEntry = hd carSchedule in
+        if carEntry.enterTime = world`timerRef.getTime() then
+        (
+            -- Create a full car object with CarEntry details
+            dcl newCar : car := new car(carEntry.plate, mk_(0, 0, 0), carEntry.enterTime, carEntry.typeCar);
+            
+            -- Pass the car object to controller's enterGarage
+            controllerRef.enterGarage(newCar);
+            
+            carSchedule := tl carSchedule;  -- Remove the car from the schedule after entering
+        )
+    );
+
+    -- Process any cars scheduled to exit at the current time
+    for i = 1 to len parked do
+    (
+        let parkedCar = parked(i) in
+        if parkedCar.leaveTime = world`timerRef.getTime() then
+        (
+            dcl carToExit : [car] := controllerRef.lookupCar(parkedCar.plate);  -- Find the car by plate
+            if carToExit <> nil then
+              controllerRef.leaveGarage(carToExit)  -- Remove the car from the garage
+        )
+    )
+);
+
+
+
+end environment
