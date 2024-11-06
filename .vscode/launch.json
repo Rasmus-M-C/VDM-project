@@ -7,6 +7,14 @@
             "noDebug": false,
             "defaultName": "World",
             "command": "print new world().Run()"
+        },
+        {
+            "name": "Lens config: Launch world`Run",
+            "type": "vdm",
+            "request": "launch",
+            "noDebug": true,
+            "defaultName": "world",
+            "command": "p new world().Run()"
         }
     ]
 }

@@ -8,7 +8,7 @@ Parking garage system
 - R2: Each parkinglot (spot) has one of two types, "electric" or "gas"
 - R2.1: Cars of the type "electric" can park in any free spot.
 - R2.2: Cars of type "gas", can only park in free spots of type "gas"
-- R3: Cars entering and leaving have the timesstamp recorded
+- R3: Cars entering and leaving have the timestamp recorded
 - R3.1 Timestamp is described in R7.1
 - R4: Each type of car has a different price per hour of parking
 - R4.1: When a car leaves, they pay a price based on how long they were parked

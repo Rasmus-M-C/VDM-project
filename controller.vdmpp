@@ -1,6 +1,6 @@
 class controller
 types
-public location = nat * nat * nat;
+public location = real * real * real;
 public parkingLot ::
         car : [car]
         pos : location
@@ -10,7 +10,7 @@ instance variables
 dimensions: nat := 2;
 maxCapacity: nat := dimensions**3;
 
-fee: real :=1.15;
+fee: real :=1.15; -- % added to the price of parking
 electricParkingPrice: real := 2.0;
 gasParkingPrice: real := 3.0;
 
@@ -19,18 +19,17 @@ gasSlots : map location to parkingLot := {|->};
 electricSlots : map location to parkingLot := {|->};
 
 bank: real := 0.0;
---env: environment := new environment("scenario.txt");
 
 operations
 
 -- flow of program
 -- 1. initGarage
 -- 2. can a car park
--- 3 park car
--- 4 start timer of parking
--- 5. remove car when leaving
--- 6. get time spent in garage
--- 7. pay when leaving
+-- 3  park car
+-- 4. remove car when leaving
+-- 5. get time spent in garage
+-- 6. pay when leaving
+
 -- operation to init garage (garage is currently the controller, should make new class)
 public initGarage: () ==>()
 initGarage() == (
@@ -50,16 +49,16 @@ parkCar(car, loc) ==
     (
         parkedCars := parkedCars union {car};
         car.setLocation(loc.#1, loc.#2, loc.#3);
-        gasSlots(loc).time := world`timerRef.getTime(); -- Update the time in gasSlots
+        gasSlots(loc).time := world`timerRef.getTime(); -- Update the time
     )
     elseif loc in set dom electricSlots then
     (
-        -- Park in an electric slot
         parkedCars := parkedCars union {car};
         car.setLocation(loc.#1, loc.#2, loc.#3);
-        electricSlots(loc).time := world`timerRef.getTime();  -- Update the time in electricSlots
+        electricSlots(loc).time := world`timerRef.getTime();  -- Update the time
     )
-);
+)
+pre loc.#1 >=0 and loc.#2 >=0 and loc.#3 >=0 and loc.#1 < dimensions+1 and loc.#2 < dimensions+1 and loc.#3 < dimensions+1;
 
 public enterGarage: car ==> ()
 enterGarage(car) == (
@@ -68,6 +67,7 @@ enterGarage(car) == (
         let loc = findSlot(car) in
         parkCar(car, loc);
     )
+    -- else would like to error handle here
 );
 
 -- find available slot
@@ -89,9 +89,11 @@ findSlot(car) == (
     return mk_(-1,-1,-1); 
 )
 pre card parkedCars < maxCapacity;
+
 -- operation to check that no parkingSlot has a parked car for too long
 -- if a car has been parked too long, a fee is added to its final bill
 -- TODO
+
 public checkSlots: () ==> ()
 checkSlots() == (
     let parkingSlots = electricSlots munion gasSlots in
@@ -103,6 +105,7 @@ checkSlots() == (
 
 
 -- operation move car from electric slot to gas slot, from a single location
+-- TODO
 
 -- operation to check if car exists in garage already
 public carExists: car ==> bool
