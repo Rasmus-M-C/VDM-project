@@ -1,0 +1,111 @@
+@startuml Parking
+
+hide empty members
+skinparam Shadowing false
+skinparam classAttributeIconSize 0
+skinparam ClassBorderThickness 0.5
+skinparam groupInheritance 5
+skinparam class {
+	BackgroundColor AntiqueWhite
+	ArrowColor Black
+	BorderColor Black
+}
+skinparam defaultTextAlignment center
+skinparam linetype ortho
+skinparam Dpi 300
+' skinparam backgroundColor transparent
+
+class car
+{
+	+licenseplate : seq of char <<type>>
+	+location : rat * rat * rat <<type>>
+	+time : nat <<type>>
+	+typeCar : <electric> | <gas> <<type>>
+	-loc : location
+	-ptime : time
+	-plate : licenseplate
+	-type : typeCar
+	-feeApplied : bool
+	+car(licenseplate, location, time, typeCar) : car
+	+getPlate() : licenseplate
+	+getLocation() : location
+	+getTime() : time
+	+getType() : typeCar
+	+getFeeApplied() : bool
+	+setLocation(nat, nat, nat)
+	+setTime(nat)
+	+addTime(nat)
+	+setFeeApplied(bool)
+}
+
+class controller
+{
+	+location : real * real * real <<type>>
+	+parkingLot : {car : pos : typeOfSlot : time} <<type>>
+	-dimensions : nat
+	-maxCapacity : nat
+	-fee : real
+	-electricParkingPrice : real
+	-gasParkingPrice : real
+	-gasSlots : map location to parkingLot
+	-electricSlots : map location to parkingLot
+	-bank : real
+	+initGarage()
+	+parkCar(car, location)
+	+enterGarage(car)
+	+findSlot(car) : location
+	+checkSlots()
+	+carExists(car) : bool
+	+canPark(car) : bool
+	+lookupCar(licenseplate) : [car]
+	+leaveGarage(car)
+	+isSlotFree(location) : bool
+	+pay(car) : real
+	+priceTypeCar(car) : real
+	-updateBankBalance(real)
+}
+
+class environment
+{
+	+Time : nat <<type>>
+	+inline : licenseplate * typeCar <<type>>
+	+outline : ** <<type>>
+	+carEntry : *** <<type>>
+	-io : IO
+	-endSimTime : Time
+	-carSchedule : seq of carEntry
+	-outlines : seq of outline
+	-parked : seq of carEntry
+	-controllerRef : controller
+	-alreadyPrintedEmpty : bool
+	+environment(seq of char, controller) : environment
+	+Simulate()
+	+printParkedCars()
+	+updateGarage()
+	+report()
+}
+
+
+
+class Timer
+{
+	-currentTime : nat
+	-endSimTime : nat
+	-stepLength : nat <<value>>
+	+Step()
+	+getTime() : nat
+	+GetEndSimTime() : nat
+	+SetEndSimTime(nat)
+}
+
+class world
+{
+	+Run()
+}
+
+controller --> "*" car : -parkedCars
+world --> "0..1" environment : +env
+world --> "0..1" controller : +controller
+world --> "0..1" Timer : +timerRef
+
+@enduml
