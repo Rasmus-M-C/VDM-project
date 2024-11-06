@@ -34,14 +34,17 @@ public Simulate : () ==> ()
         printParkedCars();
     );
 
-    report();
+    --report();
     
     );
 public printParkedCars: () ==> ()
 printParkedCars() ==
-(
+(   
+    
     IO`println("Current Cars in the Garage:");
-    IO`println("-----------------------------------");
+    IO`println(len parked);
+
+    
     IO`println("Current time:");
     IO`println(world`timerRef.getTime());
     for car in parked do
@@ -55,44 +58,44 @@ printParkedCars() ==
         IO`println("-----------------------------------");
     );
 
-    if parked = [] and not alreadyPrintedEmpty then
-        (
-        IO`println("No cars in the garage.");
-        alreadyPrintedEmpty := true;
+    if parked = []  then
+    (
+        skip;
     );
     
 );
 
 public updateGarage: () ==> ()
-updateGarage() == (
+updateGarage() ==
+(
     -- Process any cars scheduled to enter at the current time
     if carSchedule <> [] then
     (
         let carEntry = hd carSchedule in
         if carEntry.#3 = world`timerRef.getTime() then
         (
-            
             dcl newCar : car := new car(carEntry.#1, mk_(-1, -1, -1), carEntry.#3, carEntry.#2);
-    
-            controllerRef.enterGarage(newCar);
-            parked := parked ^ [carEntry];  
-            carSchedule := tl carSchedule; 
+            controllerRef.enterGarage(newCar);  -- Add car to garage
+            parked := parked ^ [carEntry];      -- Add car to parked
+            carSchedule := tl carSchedule;      -- Remove from schedule
         )
     );
 
-    -- Process any cars scheduled to exit at the current time
-    for i = 1 to len parked do
+    -- Process cars scheduled to exit at the current time
+    parked := [p | p in seq parked & p.#4 <> world`timerRef.getTime()];
+
+    -- Remove the cars from the controller
+    for parkedCar in  parked do
     (
-        let parkedCar = parked(i) in
         if parkedCar.#4 = world`timerRef.getTime() then
         (
             dcl carToExit : [car] := controllerRef.lookupCar(parkedCar.#1);  -- Find the car by plate
             if carToExit <> nil then
-              controllerRef.leaveGarage(carToExit)  -- Remove the car from the garage
-            
+                controllerRef.leaveGarage(carToExit);  -- Remove the car from the garage
         )
-    )
+    );
 );
+
 
 public report: () ==> ()
 report() ==
