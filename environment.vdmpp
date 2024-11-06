@@ -37,34 +37,40 @@ public Simulate : () ==> ()
     --report();
     
     );
+
 public printParkedCars: () ==> ()
 printParkedCars() ==
-(   
-    
-    IO`println("Current Cars in the Garage:");
-    IO`println(len parked);
+(
+    IO`println("Current time: " ^ natToString(world`timerRef.getTime()));
+    IO`println("-----------------------------------------------");
+    IO`println("Plate      | Type     | Enter Time | Leave Time");
+    IO`println("-----------------------------------------------");
 
-    
-    IO`println("Current time:");
-    IO`println(world`timerRef.getTime());
     for car in parked do
     (
-        IO`println("Car Plate: " ^ car.#1);
-        IO`println("Car Type: " ^ (if car.#2 = <electric> then "Electric" else "Gas"));
-        IO`println("Entered at Time:");
-        IO`println(car.#3);
-        IO`println("Expected Leave Time:");
-        IO`println(car.#4);
-        IO`println("-----------------------------------");
+        IO`println(
+            car.#1 ^ " | " ^
+            (if car.#2 = <electric> then "Electric " else "Gas      ") ^ " | " ^
+            natToString(car.#3) ^ "         | " ^
+            natToString(car.#4)
+        );
     );
 
-    if parked = []  then
-    (
-        skip;
-    );
     
+
+    if parked = [] and not alreadyPrintedEmpty then
+    (
+        IO`println("No cars in the garage.");
+        alreadyPrintedEmpty := true;
+    );
+    IO`println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
 );
 
+public static natToString : nat ==> seq of char 
+		natToString(n) ==
+		(
+			return VDMUtil`val2seq_of_char[nat](n);
+		);
 public updateGarage: () ==> ()
 updateGarage() ==
 (
@@ -104,6 +110,5 @@ report() ==
     IO`println("------------------------------------------");    
 
 );
-
 
 end environment
