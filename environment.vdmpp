@@ -2,29 +2,25 @@ class environment
 types
     public Time = nat;
     public inline = car`licenseplate * car`typeCar;
-    protected outline = car`licenseplate * Time * real;
-    
-    carEntry :: 
-        plate : car`licenseplate
-        typeCar : car`typeCar
-        leaveTime : Time
-        enterTime : Time; 
+    public outline = car`licenseplate * Time * real;
+    public carEntry = car`licenseplate * car`typeCar * Time * Time;
+
 
 instance variables
     io : IO := new IO();
-    endSimTime : Time := 72;
+    endSimTime : Time := 5;
     carSchedule : seq of carEntry := [];
     outlines : seq of outline := [];
     parked : seq of carEntry := [];
     controllerRef : controller;
-
+    alreadyPrintedEmpty : bool := false;
 operations
 
 public environment : seq of char * controller ==> environment
 environment(file, controllerInit) ==
 (
     controllerRef := controllerInit;
-    def mk_(-,input) = io.freadval[seq of carEntry](file) 
+    def mk_(-, input) = io.freadval[seq of carEntry](file) 
     in
         carSchedule := input;
 );
@@ -33,11 +29,39 @@ public Simulate : () ==> ()
     (world`timerRef.SetEndSimTime(endSimTime);
     while world`timerRef.getTime() < endSimTime do
     (
-        world`timerRef.Step();
         updateGarage();
-        
-    )
+        world`timerRef.Step();
+        printParkedCars();
     );
+
+    report();
+    
+    );
+public printParkedCars: () ==> ()
+printParkedCars() ==
+(
+    IO`println("Current Cars in the Garage:");
+    IO`println("-----------------------------------");
+    IO`println("Current time:");
+    IO`println(world`timerRef.getTime());
+    for car in parked do
+    (
+        IO`println("Car Plate: " ^ car.#1);
+        IO`println("Car Type: " ^ (if car.#2 = <electric> then "Electric" else "Gas"));
+        IO`println("Entered at Time:");
+        IO`println(car.#3);
+        IO`println("Expected Leave Time:");
+        IO`println(car.#4);
+        IO`println("-----------------------------------");
+    );
+
+    if parked = [] and not alreadyPrintedEmpty then
+        (
+        IO`println("No cars in the garage.");
+        alreadyPrintedEmpty := true;
+    );
+    
+);
 
 public updateGarage: () ==> ()
 updateGarage() == (
@@ -45,15 +69,14 @@ updateGarage() == (
     if carSchedule <> [] then
     (
         let carEntry = hd carSchedule in
-        if carEntry.enterTime = world`timerRef.getTime() then
+        if carEntry.#3 = world`timerRef.getTime() then
         (
-            -- Create a full car object with CarEntry details
-            dcl newCar : car := new car(carEntry.plate, mk_(0, 0, 0), carEntry.enterTime, carEntry.typeCar);
             
-            -- Pass the car object to controller's enterGarage
+            dcl newCar : car := new car(carEntry.#1, mk_(-1, -1, -1), carEntry.#3, carEntry.#2);
+    
             controllerRef.enterGarage(newCar);
-            
-            carSchedule := tl carSchedule;  -- Remove the car from the schedule after entering
+            parked := parked ^ [carEntry];  
+            carSchedule := tl carSchedule; 
         )
     );
 
@@ -61,15 +84,23 @@ updateGarage() == (
     for i = 1 to len parked do
     (
         let parkedCar = parked(i) in
-        if parkedCar.leaveTime = world`timerRef.getTime() then
+        if parkedCar.#4 = world`timerRef.getTime() then
         (
-            dcl carToExit : [car] := controllerRef.lookupCar(parkedCar.plate);  -- Find the car by plate
+            dcl carToExit : [car] := controllerRef.lookupCar(parkedCar.#1);  -- Find the car by plate
             if carToExit <> nil then
               controllerRef.leaveGarage(carToExit)  -- Remove the car from the garage
+            
         )
     )
 );
 
+public report: () ==> ()
+report() ==
+(
+    IO`println("Report: Cars Leaving and Payments Summary");
+    IO`println("------------------------------------------");    
+
+);
 
 
 end environment
