@@ -1,15 +1,8 @@
 {
     "configurations": [
+        
         {
-            "name": "Launch ParkGarage Debug",
-            "type": "vdm",
-            "request": "launch",
-            "noDebug": false,
-            "defaultName": "World",
-            "command": "print new world().Run()"
-        },
-        {
-            "name": "Lens config: Launch world`Run",
+            "name": "Launch World with startup.txt",
             "type": "vdm",
             "request": "launch",
             "noDebug": true,
