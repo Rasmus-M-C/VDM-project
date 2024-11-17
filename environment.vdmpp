@@ -8,7 +8,7 @@ types
 
 instance variables
     io : IO := new IO();
-    endSimTime : Time := 5;
+    endSimTime : Time := 6;
     carSchedule : seq of carEntry := [];
     outlines : seq of outline := [];
     parked : seq of carEntry := [];
@@ -23,6 +23,7 @@ environment(file, controllerInit) ==
     def mk_(-, input) = io.freadval[seq of carEntry](file) 
     in
         carSchedule := input;
+    controllerRef.initGarage();
 );
 public Simulate : () ==> ()
     Simulate() ==
@@ -31,6 +32,7 @@ public Simulate : () ==> ()
     (
         updateGarage();
         world`timerRef.Step();
+        
         printParkedCars();
     );
 
@@ -42,10 +44,12 @@ public printParkedCars: () ==> ()
 printParkedCars() ==
 (
     IO`println("Current time: " ^ natToString(world`timerRef.getTime()));
+    IO`println("Cars in the garage amount: " ^ natToString(len parked));
+    IO`println("Current bank balance: " ^ realToString(controllerRef.getBankBalance()));
     IO`println("-----------------------------------------------");
     IO`println("Plate      | Type     | Enter Time | Leave Time");
     IO`println("-----------------------------------------------");
-
+    
     for car in parked do
     (
         IO`println(
@@ -66,14 +70,11 @@ printParkedCars() ==
     IO`println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
 );
 
-public static natToString : nat ==> seq of char 
-		natToString(n) ==
-		(
-			return VDMUtil`val2seq_of_char[nat](n);
-		);
+
 public updateGarage: () ==> ()
 updateGarage() ==
-(
+(   
+    
     -- Process any cars scheduled to enter at the current time
     if carSchedule <> [] then
     (
@@ -110,5 +111,14 @@ report() ==
     IO`println("------------------------------------------");    
 
 );
-
+public static natToString : nat ==> seq of char 
+		natToString(n) ==
+		(
+			return VDMUtil`val2seq_of_char[nat](n);
+		);
+public static realToString : real ==> seq of char
+        realToString(n) ==
+        (
+            return VDMUtil`val2seq_of_char[real](n);
+        );
 end environment

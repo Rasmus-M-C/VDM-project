@@ -7,18 +7,21 @@ public parkingLot ::
         typeOfSlot : <electric> | <gas>
         time : nat
 instance variables
-dimensions: nat := 2;
-maxCapacity: nat := dimensions**3;
+    dimensions: nat := 2;
+    maxCapacity: nat := dimensions**3;
 
-fee: real :=1.15; -- % added to the price of parking
-electricParkingPrice: real := 2.0;
-gasParkingPrice: real := 3.0;
+    fee: real :=1.15; -- % added to the price of parking
+    electricParkingPrice: real := 1.0;
+    gasParkingPrice: real := 5.0;
 
-parkedCars: set of car := {};
-gasSlots : map location to parkingLot := {|->};
-electricSlots : map location to parkingLot := {|->};
+    
+    gasSlots : map location to parkingLot := {|->};
+    electricSlots : map location to parkingLot := {|->};
 
-bank: real := 0.0;
+    parkedCarsPlates: set of car`licenseplate := {};
+    parkedCars: set of car := {};
+
+    bank: real := 0.0;
 
 operations
 
@@ -41,6 +44,20 @@ initGarage() == (
             else
                 gasSlots := gasSlots ++ {mk_(i, j, k) |-> mk_parkingLot(nil, mk_(i, j, k), <gas>, 0 )} -- other slots are gas
 );
+
+--public initGarage: () ==> ()
+--initGarage() ==
+--(
+--    electricSlots := {mk_(i, j, k) |-> mk_parkingLot(nil, mk_(i, j, k), <electric>, 0) |
+--                        i, j, k in set {0,...,dimensions} & 
+--                        (i = dimensions or j = dimensions or k = dimensions)};
+--
+--    gasSlots := {mk_(i, j, k) |-> mk_parkingLot(nil, mk_(i, j, k), <gas>, 0) |
+--                    i, j, k in set {0,...,dimensions} & 
+--                    not (i = dimensions or j = dimensions or k = dimensions)};
+--);
+
+
 -- operation to park a car in a slot
 public parkCar: car * location ==> ()
 parkCar(car, loc) ==
@@ -48,12 +65,14 @@ parkCar(car, loc) ==
     if loc in set dom gasSlots then
     (
         parkedCars := parkedCars union {car};
+        parkedCarsPlates := parkedCarsPlates union {car.getPlate()};
         car.setLocation(loc.#1, loc.#2, loc.#3);
         gasSlots(loc).time := world`timerRef.getTime(); -- Update the time
     )
     elseif loc in set dom electricSlots then
     (
         parkedCars := parkedCars union {car};
+        parkedCarsPlates := parkedCarsPlates union {car.getPlate()};
         car.setLocation(loc.#1, loc.#2, loc.#3);
         electricSlots(loc).time := world`timerRef.getTime();  -- Update the time
     )
@@ -68,7 +87,8 @@ enterGarage(car) == (
         parkCar(car, loc);
     )
     -- else would like to error handle here
-);
+)
+pre car.getPlate() <> [] and car.getPlate() not in set parkedCarsPlates;
 
 -- find available slot
 public findSlot: car ==> location
@@ -88,7 +108,8 @@ findSlot(car) == (
             return loc;
     return mk_(-1,-1,-1); 
 )
-pre card parkedCars < maxCapacity;
+pre card parkedCarsPlates < maxCapacity+1;
+
 
 -- operation to check that no parkingSlot has a parked car for too long
 -- if a car has been parked too long, a fee is added to its final bill
@@ -108,15 +129,12 @@ checkSlots() == (
 -- TODO
 
 -- operation to check if car exists in garage already
-public carExists: car ==> bool
-carExists(car) == (
-    return exists c in set parkedCars & c.getPlate() = car.getPlate();
-);
+
 
 -- operation to check if car can park
 public canPark: car ==> bool
 canPark(car) == (
-    return not carExists(car) and findSlot(car) <> mk_(-1,-1,-1);
+    return not carAlreadyExists(car.getPlate()) and findSlot(car) <> mk_(-1,-1,-1);
 );
 
 -- operation to remove a car from garage
@@ -133,7 +151,7 @@ public lookupCar: car`licenseplate ==> [car]
 public leaveGarage: car ==> ()
 leaveGarage(car) == (
     parkedCars := parkedCars \ {car};
-
+    parkedCarsPlates := parkedCarsPlates \ {car.getPlate()};
     if car.getType() = <electric> then
     (
         for all loc in set dom electricSlots do
@@ -162,7 +180,7 @@ leaveGarage(car) == (
     )
 )
 pre car in set parkedCars
-post parkedCars = parkedCars \ {car};
+post parkedCars = parkedCars \ {car} and car.getLocation() = mk_(-1,-1,-1);
 
 
 -- operation to get status of slot
@@ -186,20 +204,27 @@ pay(car) ==
         return timeSpent * priceTypeCar(car);
 );
 
-public priceTypeCar: car ==> real
-priceTypeCar(car)==
-(
+public priceTypeCar : car ==> real
+priceTypeCar(car) ==
     if car.getType() = <electric> then
         return electricParkingPrice
     else
-        return gasParkingPrice
-);
+        return gasParkingPrice;
 
 private updateBankBalance: real ==> ()
 updateBankBalance(amount) == (
     bank := bank + amount;
 );
 
+pure public carAlreadyExists: car`licenseplate ==> bool
+carAlreadyExists(plate) == (
+    return plate in set parkedCarsPlates;
+);
+
 -- operation to pay when leaving the garage
+pure public getBankBalance: () ==> real
+getBankBalance() == (
+    return bank;
+);
 
 end controller

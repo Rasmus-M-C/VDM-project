@@ -1,8 +1,15 @@
 {
     "configurations": [
-        
         {
             "name": "Launch World with startup.txt",
+            "type": "vdm",
+            "request": "launch",
+            "noDebug": true,
+            "defaultName": "world",
+            "command": "p new world().Run()"
+        },
+        {
+            "name": "Lens config: Launch world`Run",
             "type": "vdm",
             "request": "launch",
             "noDebug": true,
