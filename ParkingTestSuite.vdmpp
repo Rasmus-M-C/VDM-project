@@ -1,0 +1,22 @@
+class ParkingTestSuite
+
+operations
+    
+    public run: () ==> ()
+    run() ==
+        let testsuite : TestSuite = new TestSuite(),
+            result : TestResult = new TestResult() 
+        in
+        (
+            testsuite.addTest(new TestEnterGarage("testEnterGarage"));
+            --testsuite.addTest(new TestCapacityLimit("testCapacityLimit"));
+            --testsuite.addTest(new TestLeaveGarage("testLeaveGarage"));
+            --testsuite.addTest(new TestCapacityLimitGasCars("testCapacityLimitGasCars"));
+            --testsuite.addTest(new TestPaymentCalculation("testPaymentCalculation"));
+
+            
+            testsuite.run(result);
+            IO`println(result.toString());
+        
+        );
+end ParkingTestSuite

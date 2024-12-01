@@ -1,0 +1,145 @@
+class TestEnterGarage is subclass of TestCase
+instance variables
+    controller : controller := new controller();
+
+operations
+    -- Constructor
+    public TestEnterGarage: seq of char ==> TestEnterGarage
+    TestEnterGarage(name) == TestCase(name);
+
+    -- Set up before each test
+    public setUp: () ==> ()
+    setUp() == 
+    (
+        controller := new controller();
+        controller.initGarage();
+    );
+
+    -- Tear down after each test (optional)
+    public tearDown: () ==> ()
+    tearDown() == skip;
+
+    public runTest: () ==> ()
+    runTest() == (testEnterGarage());
+    -- Example test case: Enter Garage
+    public testEnterGarage: () ==> ()
+    testEnterGarage() ==
+    (
+        dcl car1 : car := new car("AB12345", mk_(-1, -1, -1), 0, <electric>);
+        Assert`assertTrue(not controller.carAlreadyExists(car1.getPlate()));
+        controller.enterGarage(car1);
+        Assert`assertTrue(controller.carAlreadyExists(car1.getPlate()));
+        controller.leaveGarage(car1.getPlate());
+    );
+    end TestEnterGarage
+
+class TestLeaveGarage is subclass of TestCase
+instance variables
+    controller : controller := new controller();
+operations
+    -- Constructor
+    public TestLeaveGarage: seq of char ==> TestLeaveGarage
+    TestLeaveGarage(name) == TestCase(name);
+
+    public runTest: () ==> ()
+    runTest() == (testLeaveGarage());
+    -- Example test case: Leave Garage
+    public testLeaveGarage: () ==> ()
+    testLeaveGarage() ==
+    (
+        dcl car1 : car := new car("AB123456", mk_(-1, -1, -1), 0, <gas>);
+        controller.enterGarage(car1);
+        Assert`assertFalse(controller.carAlreadyExists(car1.getPlate()));
+        controller.leaveGarage(car1.getPlate());
+        
+    );
+end TestLeaveGarage
+
+class TestCapacityLimit is subclass of TestCase
+instance variables
+    controller : controller := new controller();
+
+operations
+    -- Constructor
+    public TestCapacityLimit: seq of char ==> TestCapacityLimit
+    TestCapacityLimit(name) == TestCase(name);
+
+    public runTest: () ==> ()
+    runTest() == (testCapacityLimit());
+    -- Example test case: Capacity Limit
+    public testCapacityLimit: () ==> ()
+    testCapacityLimit() ==
+    (
+        controller.enterGarage(new car("AB", mk_(-1, -1, -1), 0, <gas>));
+        
+    
+    );
+end TestCapacityLimit
+
+class TestCapacityLimitGasCars is subclass of TestCase
+instance variables
+    controller : controller := new controller();
+
+operations
+--Constructor
+public TestCapacityLimitGasCars: seq of char ==> TestCapacityLimitGasCars
+TestCapacityLimitGasCars(name) == TestCase(name);
+public runTest: () ==> ()
+runTest() == (testCapacityLimitGasCars());
+
+
+public testCapacityLimitGasCars: () ==> ()
+testCapacityLimitGasCars() ==
+(   
+    -- Calculate maximum gas car capacity based on garage slots
+    dcl maxGasCars : nat := card dom controller.gasSlots;
+    
+        -- Add gas cars up to the maximum capacity for gas slots
+        for i = 1 to maxGasCars+1 do
+        (
+            dcl car : car := new car("CAR" ^ controller.natToString(i), mk_(-1, -1, -1), 0, <gas>);
+            controller.enterGarage(car);
+        );
+
+        -- Assert that all gas slots are filled
+        Assert`assertTrue(card dom controller.parkedCarsMap = maxGasCars);
+    
+);
+end TestCapacityLimitGasCars
+
+class TestPaymentCalculation is subclass of TestCase
+instance variables
+    controller : controller := new controller();
+
+operations
+--Constructor
+public TestPaymentCalculation: seq of char ==> TestPaymentCalculation
+TestPaymentCalculation(name) == TestCase(name);
+public runTest: () ==> ()
+runTest() == (testPaymentCalculation());
+
+    public testPaymentCalculation: () ==> ()
+testPaymentCalculation() ==
+(
+    -- Initialize the test car
+    dcl car1 : car := new car("AB12345", mk_(-1, -1, -1), 0, <electric>);
+     -- Ensure car is not in garage
+    
+    -- Enter the garage
+    controller.enterGarage(car1);
+    
+    world`timerRef.Step(); 
+    world`timerRef.Step();  
+    
+    controller.leaveGarage(car1.getPlate());
+
+    --Assert`assertTrue(not controller.carAlreadyExists(car1.getPlate()));  -- Ensure car is removed
+    
+    let priceCar = controller.priceTypeCar(car1) in
+    let expectedPayment = priceCar * 2 in
+      -- 2 hours * price per hour
+    Assert`assertTrue(controller.getBankBalance() = expectedPayment);  -- Ensure car is removed
+
+    
+);
+end TestPaymentCalculation

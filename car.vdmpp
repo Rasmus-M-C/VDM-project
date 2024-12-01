@@ -13,6 +13,8 @@ ptime: time := 0;
 plate: licenseplate := [];
 type: typeCar := <gas>;
 feeApplied: bool := false;
+inv ptime >= 0;
+
 operations
 public car : licenseplate * location * time * typeCar ==> car
 car(licenseplate, location, time, carType) ==
@@ -23,6 +25,7 @@ car(licenseplate, location, time, carType) ==
     type := carType;      -- Set the car type
   )
   pre licenseplate <> [] and location.#1 >= -1 and location.#2 >= -1 and location.#3 >= -1;
+  
 
 -- getters
 
@@ -51,7 +54,7 @@ getFeeApplied() == (
 return feeApplied
 );
 -- setters
-public setLocation: nat * nat * nat ==> ()
+public setLocation: rat * rat * rat ==> ()
 setLocation(x,y,z) == (
     loc:= mk_(x,y,z)
 )

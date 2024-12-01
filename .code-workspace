@@ -1,0 +1,18 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+			"vdm-vscode.server.development.experimentalServer": false,
+			"vdm-vscode.server.plugins": [
+				{
+					"classname": "quickcheck.plugin.QuickCheckLSPPlugin",
+					"dialects": [ "vdmsl", "vdmpp" ],
+					"jar": "/Users/rasmu/.vscode/extensions/overturetool.vdm-vscode-1.5.0/resources/jars/vdmj/plugins/quickcheck-4.6.0.jar",
+					"name": "QuickCheck Plugin"
+				}
+			]
+	}
+}

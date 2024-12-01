@@ -1,6 +1,12 @@
-[mk_("AB12345", <electric>, 0, 3),
- mk_("AB1234", <gas>, 1, 5),
- mk_("CD12345", <gas>, 2, 3),
- mk_("AB123", <electric>, 4, 5),
- mk_("EF12345", <gas>, 5, 6)
- ]
+[   
+    mk_("AB12345", <electric>, 0, 25),
+    mk_("EF56789", <electric>, 2, 25),
+    mk_("EF5678", <electric>, 3, 25),
+    mk_("EF567", <electric>, 4, 25),
+    mk_("EF56", <electric>, 5, 25),
+    mk_("EF", <electric>, 6, 25),
+    mk_("EF567891", <electric>, 7, 25),
+    mk_("EF5678912", <electric>, 8, 25),
+    mk_("EF56789123", <electric>, 9, 25)
+
+]

@@ -32,7 +32,7 @@ class car
 	+getTime() : time
 	+getType() : typeCar
 	+getFeeApplied() : bool
-	+setLocation(nat, nat, nat)
+	+setLocation(rat, rat, rat)
 	+setTime(nat)
 	+addTime(nat)
 	+setFeeApplied(bool)
@@ -42,6 +42,7 @@ class controller
 {
 	+location : real * real * real <<type>>
 	+parkingLot : {car : pos : typeOfSlot : time} <<type>>
+	-io : IO
 	-dimensions : nat
 	-maxCapacity : nat
 	-fee : real
@@ -49,20 +50,25 @@ class controller
 	-gasParkingPrice : real
 	-gasSlots : map location to parkingLot
 	-electricSlots : map location to parkingLot
+	-parkedCarsPlates : set of licenseplate
 	-bank : real
 	+initGarage()
 	+parkCar(car, location)
 	+enterGarage(car)
 	+findSlot(car) : location
 	+checkSlots()
-	+carExists(car) : bool
 	+canPark(car) : bool
 	+lookupCar(licenseplate) : [car]
-	+leaveGarage(car)
+	+leaveGarage(licenseplate)
 	+isSlotFree(location) : bool
 	+pay(car) : real
 	+priceTypeCar(car) : real
 	-updateBankBalance(real)
+	+carAlreadyExists(licenseplate) : bool
+	+getBankBalance() : real
+	+natToString(nat) : seq of char
+	+realToString(real) : seq of char
+	+getMaxCapacity() : nat
 }
 
 class environment
@@ -83,9 +89,189 @@ class environment
 	+printParkedCars()
 	+updateGarage()
 	+report()
+	+natToString(nat) : seq of char
+	+realToString(real) : seq of char
 }
 
+class IO
+{
+	+filedirective : <append> | <start> <<type>>
+	+writeval(@p) : bool <<function>>
+	+fwriteval(seq1 of char, @p, filedirective) : bool <<function>>
+	+freadval(seq1 of char) : bool * [@p] <<function>>
+	+echo(seq of char) : bool
+	+fecho(seq of char, seq of char, [filedirective]) : bool
+	+ferror() : seq of char
+	+print(?)
+	+println(?)
+	+printf(seq of char, seq of ?)
+}
 
+class MATH
+{
+	+sin(real) : real <<function>>
+	+cos(real) : real <<function>>
+	+tan(real) : real <<function>>
+	+cot(real) : real <<function>>
+	+asin(real) : real <<function>>
+	+acos(real) : real <<function>>
+	+atan(real) : real <<function>>
+	+acot(real) : real <<function>>
+	+sqrt(real) : real <<function>>
+	+pi_f() : real <<function>>
+	+srand(int)
+	+rand(int) : int
+	+srand2(int) : int
+	+exp(real) : real <<function>>
+	+ln(real) : real <<function>>
+	+log(real) : real <<function>>
+	+fac(nat) : nat1 <<function>>
+	+pi : real <<value>>
+	-euler : real <<value>>
+}
+
+class Throwable
+{
+}
+
+class Error
+{
+	#fMessage : seq of char
+	+Error() : Error
+	+Error(seq of char) : Error
+	+hasMessage() : bool
+	+getMessage() : seq of char
+	+throw(seq of char)
+}
+
+class AssertionFailedError
+{
+	+AssertionFailedError() : AssertionFailedError
+	+AssertionFailedError(seq of char) : AssertionFailedError
+}
+
+class Assert
+{
+	+assertTrue(bool)
+	+assertTrue(seq of char, bool)
+	+assertFalse(bool)
+	+assertFalse(seq of char, bool)
+	+fail()
+	+fail(seq of char)
+}
+
+class Test
+{
+	-fName : seq of char
+	+getName() : seq of char
+	+setName(seq of char)
+	+run(TestResult)
+	+runOnly(seq of char, TestResult)
+}
+
+class TestCase
+{
+	+run() : TestResult
+	+run(TestResult)
+	+runOnly(seq of char, TestResult)
+	#createResult() : TestResult
+	+TestCase(seq of char) : TestCase
+	+TestCase() : TestCase
+	+setUp()
+	#runTest()
+	-reflectionRunTest(TestCase, seq of char)
+	+runBare()
+	+tearDown()
+}
+
+class TestSuite
+{
+	+TestSuite(seq of char) : TestSuite
+	+TestSuite() : TestSuite
+	+TestSuite(set of Test, seq of char) : TestSuite
+	+TestSuite(set of Test) : TestSuite
+	+TestSuite(Test) : TestSuite
+	+TestSuite(Test, seq of char) : TestSuite
+	+addTest(Test)
+	+run(TestResult)
+	+runOnly(seq of char, TestResult)
+	+run(Test, TestResult)
+	+tests() : seq of Test
+	+testCount() : int
+	+testAt(int) : Test
+	-getTestMethodNamed(Test) : seq of seq of char
+	+createTests(Test) : seq of Test
+}
+
+class TestListener
+{
+	+initListener()
+	+exitListener()
+	+addFailure(Test, AssertionFailedError)
+	+addError(Test, Throwable)
+	+startTest(Test)
+	+endTest(Test)
+}
+
+class TestResult
+{
+	-InternalError : {tcname : except} <<type>>
+	-fErrors : seq of InternalError
+	-fRunTests : nat
+	+addListener(TestListener)
+	+removeListener(TestListener)
+	+addFailure(Test, AssertionFailedError)
+	+addError(Test, Throwable)
+	+startTest(Test)
+	+endTest(Test)
+	+run(TestCase)
+	+runProtected(TestCase)
+	+runCount() : nat
+	+failureCount() : nat
+	+errorCount() : nat
+	+wasSuccessful() : bool
+	+toString() : seq of char
+	+ToStringInt(int) : seq of char <<function>>
+	-ToStringIntMeasure(nat) : nat <<function>>
+	+GetStringFromNum(int) : seq of char <<function>>
+}
+
+class TestRunner
+{
+	+run()
+	-collectTests(TestRunner) : set of Test
+}
+
+class VDMUtil
+{
+	+set2seq(set of @T) : seq of @T <<function>>
+	+get_file_pos() : [****] <<function>>
+	+val2seq_of_char(@T) : seq of char <<function>>
+	+seq_of_char2val(seq1 of char) : bool * [@p] <<function>>
+	-seq_of_char2val_(seq1 of char) : bool * ? <<function>>
+	+classname(@T) : [seq1 of char] <<function>>
+}
+
+class ParkingTest
+{
+	-controller : controller
+	+ParkingTest(seq of char) : ParkingTest
+	+setUp()
+	+tearDown()
+	+testEnterGarage()
+	+testLeaveGarage()
+	+testCapacityLimit()
+	+testPaymentCalculation()
+}
+
+class ParkingTestSuite
+{
+	+run()
+}
+
+class ParkingTraces
+{
+}
 
 class Timer
 {
@@ -103,7 +289,18 @@ class world
 	+Run()
 }
 
+controller "[licenseplate]" --> car : +parkedCarsMap
 controller --> "*" car : -parkedCars
+Throwable <|-- Error
+Error <|-- AssertionFailedError
+Assert <|-- Test
+Test <|-- TestCase
+TestSuite --> "(*)" Test : -fTests
+Test <|-- TestSuite
+TestResult --> "(*)" AssertionFailedError : -fFailures
+TestResult --> "*" TestListener : -fListeners
+TestCase <|-- ParkingTest
+ParkingTraces --> "0..1" controller : -system
 world --> "0..1" environment : +env
 world --> "0..1" controller : +controller
 world --> "0..1" Timer : +timerRef
