@@ -9,12 +9,12 @@
             "command": "p new world().Run()"
         },
         {
-            "name": "Lens config: Launch ParkingTestSuite`run",
+            "name": "Lens config: Launch world`Run",
             "type": "vdm",
             "request": "launch",
             "noDebug": true,
-            "defaultName": "ParkingTestSuite",
-            "command": "p new ParkingTestSuite().run()"
+            "defaultName": "world",
+            "command": "p new world().Run()"
         }
     ]
 }

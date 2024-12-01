@@ -18,6 +18,8 @@ instance variables
     
     public gasSlots : map location to parkingLot := {|->};
     public electricSlots : map location to parkingLot := {|->};
+    electricSlotsSeq : seq of location := [];
+    gasSlotsSeq : seq of location := [];
 
     public parkedCarsMap : map car`licenseplate to car := {|->};  -- Map for parked cars
     parkedCarsPlates: set of car`licenseplate := {};
@@ -40,16 +42,27 @@ operations
 -- 6. pay when leaving
 
 -- operation to init garage (garage is currently the controller, should make new class)
-public initGarage: () ==>()
-initGarage() == (
+public initGarage: () ==> ()
+initGarage() ==
+(
+    -- Iterate through the dimensions and add slots to the maps and sequences
     for i = 0 to dimensions do
         for j = 0 to dimensions do
             for k = 0 to dimensions do
-            if i = dimensions  or j = dimensions or k = dimensions then 
-                electricSlots := electricSlots ++ {mk_(i, j, k) |-> mk_parkingLot(nil, mk_(i, j, k), <electric>, 0 )} -- edge slots are electric
-            else
-                gasSlots := gasSlots ++ {mk_(i, j, k) |-> mk_parkingLot(nil, mk_(i, j, k), <gas>, 0 )} -- other slots are gas
+                if i = dimensions or j = dimensions or k = dimensions then 
+                (
+                    -- Add electric slot
+                    electricSlots := electricSlots ++ {mk_(i, j, k) |-> mk_parkingLot(nil, mk_(i, j, k), <electric>, 0)};
+                    electricSlotsSeq := electricSlotsSeq ^ [mk_(i, j, k)];
+                )
+                else
+                (
+                    -- Add gas slot
+                    gasSlots := gasSlots ++ {mk_(i, j, k) |-> mk_parkingLot(nil, mk_(i, j, k), <gas>, 0)};
+                    gasSlotsSeq := gasSlotsSeq ^ [mk_(i, j, k)];
+                );
 );
+
 
 --public initGarage: () ==> ()
 --initGarage() ==
@@ -98,10 +111,12 @@ public enterGarage: car ==> ()
 enterGarage(car) ==
 (   
     IO`println("parkedCarMap+1 " ^ natToString(card dom parkedCarsMap));
+    IO`println("CAPACIOTY " ^ natToString(getMaxCapacity()));
+
     if canPark(car) then
     (   
         
-        let loc = findSlot(car) in
+        let loc = findSlotSeq(car) in
         parkCar(car, loc);
         parkedCarsMap := parkedCarsMap ++ {car.getPlate() |-> car};  -- Add to map
         IO`println("parkedCarMap+1 AFTER" ^ natToString(card dom parkedCarsMap));
@@ -109,25 +124,62 @@ enterGarage(car) ==
     else
         IO`println("Car " ^ car.getPlate() ^ " cannot park.");
 )
-pre card dom parkedCarsMap+1 < maxCapacity;
+pre card dom parkedCarsMap < maxCapacity;
 
 
 -- find available slot
-public findSlot: car ==> location
-findSlot(car) == (
+public findSlot: car * seq of location * seq of location ==> location
+findSlot(car, electricSlotSeq, gasSlotSeq) ==
+(
     if car.getType() = <electric> then
-        for all loc in set dom electricSlots do
-        if isSlotFree(loc)  then
-            return loc
-
+    (
+        if electricSlotSeq <> [] then
+        (
+            let first = hd electricSlotSeq in
+            if isSlotFree(first) then
+                return first
+            else
+                return findSlot(car, tl electricSlotSeq, gasSlotSeq)  -- Recurse to check the next electric slot
+        )
+        elseif gasSlotSeq <> [] then
+        (
+            let first = hd gasSlotSeq in
+            if isSlotFree(first) then
+                return first
+            else
+                return findSlot(car, electricSlotSeq, tl gasSlotSeq)  -- Recurse to check the next gas slot
+        )
+        else
+            return mk_(-1, -1, -1);  -- No available slot found
+    )
     elseif car.getType() = <gas> then
-        for all loc in set dom gasSlots do
-        if isSlotFree(loc) then
-            return loc;
-    
-    return mk_(-1,-1,-1); 
-)
-pre card dom parkedCarsMap+1 < maxCapacity;
+    (
+        if gasSlotSeq <> [] then
+        (
+            let first = hd gasSlotSeq in
+            if isSlotFree(first) then
+                return first
+            else
+                return findSlot(car, electricSlotSeq, tl gasSlotSeq)  -- Recurse to check the next gas slot
+        )
+        else
+            return mk_(-1, -1, -1);  -- No available slot found
+    )
+    else
+        return mk_(-1, -1, -1)  -- Default case for unhandled types
+);
+
+
+public findSlotSeq : car ==> location
+findSlotSeq(car) ==
+(
+    let electricSlotsSeqCopy = electricSlotsSeq, gasSlotsSeqCopy = gasSlotsSeq in
+    return findSlot(car, electricSlotsSeqCopy, gasSlotsSeqCopy);
+);
+
+
+
+
 
 
 -- operation to check that no parkingSlot has a parked car for too long
@@ -153,7 +205,7 @@ checkSlots() == (
 -- operation to check if car can park
 public canPark: car ==> bool
 canPark(car) == (
-    return not carAlreadyExists(car.getPlate()) and findSlot(car) <> mk_(-1,-1,-1);
+    return not carAlreadyExists(car.getPlate()) and findSlotSeq(car) <> mk_(-1,-1,-1);
 )
 pre card dom parkedCarsMap+1 <= maxCapacity;
 
@@ -237,9 +289,10 @@ pre plate in set dom parkedCarsMap;
 public isSlotFree: location ==> bool
 isSlotFree(loc) == (
     if loc in set dom gasSlots then
-        return gasSlots(loc).car = nil  -- returns true if slot is free
-    else
-        return  electricSlots(loc).car = nil  -- returns true if slot is free
+        return gasSlots(loc).car = nil  -- Check if gas slot is free
+    elseif loc in set dom electricSlots then
+        return electricSlots(loc).car = nil  -- Check if electric slot is free
+    else return false;  -- Location is not part of the garage slots
 );
 
 -- operation to pay when leaving

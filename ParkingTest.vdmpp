@@ -70,7 +70,8 @@ operations
     public testCapacityLimit: () ==> ()
     testCapacityLimit() ==
     (
-        controller.enterGarage(new car("AB", mk_(-1, -1, -1), 0, <gas>));
+        dcl car1 : car := new car("AB", mk_(-1, -1, -1), 0, <electric>);
+        controller.enterGarage(car1);
         
     
     );

@@ -8,8 +8,8 @@ operations
             result : TestResult = new TestResult() 
         in
         (
-            testsuite.addTest(new TestEnterGarage("testEnterGarage"));
-            --testsuite.addTest(new TestCapacityLimit("testCapacityLimit"));
+            --testsuite.addTest(new TestEnterGarage("testEnterGarage"));
+            testsuite.addTest(new TestCapacityLimit("testCapacityLimit"));
             --testsuite.addTest(new TestLeaveGarage("testLeaveGarage"));
             --testsuite.addTest(new TestCapacityLimitGasCars("testCapacityLimitGasCars"));
             --testsuite.addTest(new TestPaymentCalculation("testPaymentCalculation"));
