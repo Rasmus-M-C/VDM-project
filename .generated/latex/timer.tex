@@ -11,34 +11,54 @@ class Timer
 
 instance variables
 
-  currentTime : nat := 0;
-  endSimTime : nat := 0;
+  currentTime : nat := (*@\vdmnotcovered{}@*)0;
+  endSimTime : nat := (*@\vdmnotcovered{}@*)0;
 
 values 
 
-  stepLength : nat = 1;
+  stepLength : nat = (*@\vdmnotcovered{}@*)1;
 
 operations
 
 public 
   Step:() ==> ()
   Step() == 
-    currentTime := currentTime + stepLength;
+    (*@\vdmnotcovered{currentTim}@*)e := (*@\vdmnotcovered{currentTim}@*)e (*@\vdmnotcovered{}@*)+ (*@\vdmnotcovered{stepLengt}@*)h;
 
 pure public
   getTime: () ==> nat 
   getTime() == 
-  return currentTime;
+  (*@\vdmnotcovered{retur}@*)n (*@\vdmnotcovered{currentTim}@*)e;
   
 public
   GetEndSimTime: () ==> nat
   GetEndSimTime() == 
-  return endSimTime;
+  (*@\vdmnotcovered{retur}@*)n (*@\vdmnotcovered{endSimTim}@*)e;
 
 public SetEndSimTime: nat ==> ()
 SetEndSimTime(newEndTime) == 
-  endSimTime := newEndTime;
+  (*@\vdmnotcovered{endSimTim}@*)e := (*@\vdmnotcovered{newEndTim}@*)e;
 
 end Timer
 \end{vdm_al}
+\bigskip
+\begin{longtable}{|l|r|r|}
+\hline
+Function or operation & Coverage & Calls \\
+\hline
+\hline
+GetEndSimTime & 0.0\% & 0 \\
+\hline
+SetEndSimTime & 0.0\% & 0 \\
+\hline
+Step & 0.0\% & 0 \\
+\hline
+Timer & 0.0\% & 0 \\
+\hline
+getTime & 0.0\% & 0 \\
+\hline
+\hline
+timer.vdmpp & 0.0\% & 0 \\
+\hline
+\end{longtable}
 \end{document}

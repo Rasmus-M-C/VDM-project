@@ -39,9 +39,9 @@ val2seq_of_char(x) == is not yet specified;
 -- RESULT.#1 = false implies a conversion failure
 static public seq_of_char2val[@p]:seq1 of char -> bool * [@p]
 seq_of_char2val(s) ==
-let mk_(b, v) = seq_of_char2val_(s) in
-    if is_(v, @p) then mk_(b, v) else mk_(false, nil)
-post let mk_(b,t) = RESULT in not b => t = nil;
+(*@\vdmnotcovered{le}@*)t mk_(b, v) = (*@\vdmnotcovered{seq\_of\_char2val}@*)_((*@\vdmnotcovered{}@*)s) in
+    (*@\vdmnotcovered{i}@*)f (*@\vdmnotcovered{is}@*)_((*@\vdmnotcovered{}@*)v, @p) then (*@\vdmnotcovered{mk}@*)_((*@\vdmnotcovered{}@*)b, (*@\vdmnotcovered{}@*)v) else (*@\vdmnotcovered{mk}@*)_((*@\vdmnotcovered{fals}@*)e, (*@\vdmnotcovered{ni}@*)l)
+post (*@\vdmnotcovered{le}@*)t mk_(b,t) = (*@\vdmnotcovered{RESUL}@*)T in (*@\vdmnotcovered{no}@*)t (*@\vdmnotcovered{}@*)b (*@\vdmnotcovered{=}@*)> (*@\vdmnotcovered{}@*)t (*@\vdmnotcovered{}@*)= (*@\vdmnotcovered{ni}@*)l;
  
 static seq_of_char2val_:seq1 of char -> bool * ?
 seq_of_char2val_(s) == is not yet specified;
@@ -51,4 +51,28 @@ static public classname[@T] : @T -> [seq1 of char]
 
 end VDMUtil
 \end{vdm_al}
+\bigskip
+\begin{longtable}{|l|r|r|}
+\hline
+Function or operation & Coverage & Calls \\
+\hline
+\hline
+VDMUtil & 0.0\% & 0 \\
+\hline
+classname & 0.0\% & 0 \\
+\hline
+get\_file\_pos & 0.0\% & 0 \\
+\hline
+seq\_of\_char2val & 0.0\% & 0 \\
+\hline
+seq\_of\_char2val\_ & 0.0\% & 0 \\
+\hline
+set2seq & 0.0\% & 0 \\
+\hline
+val2seq\_of\_char & 0.0\% & 0 \\
+\hline
+\hline
+VDMUtil.vdmpp & 0.0\% & 0 \\
+\hline
+\end{longtable}
 \end{document}

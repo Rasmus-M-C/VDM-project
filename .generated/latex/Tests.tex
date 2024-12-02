@@ -9,175 +9,252 @@
 \begin{vdm_al}
 class TestEnterGarage is subclass of TestCase
 instance variables
-    controller : controller := new controller();
+    controller : controller := (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{controlle}@*)r();
 
 operations
     -- Constructor
     public TestEnterGarage: seq of char ==> TestEnterGarage
-    TestEnterGarage(name) == TestCase(name);
+    TestEnterGarage(name) == (*@\vdmnotcovered{TestCas}@*)e((*@\vdmnotcovered{nam}@*)e);
 
     -- Set up before each test
     public setUp: () ==> ()
     setUp() == 
     (
-        controller := new controller();
-        controller.initGarage();
+        (*@\vdmnotcovered{controlle}@*)r := (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{controlle}@*)r();
+        (*@\vdmnotcovered{controlle}@*)r.initGarage();
     );
 
     -- Tear down after each test (optional)
     public tearDown: () ==> ()
-    tearDown() == skip;
+    tearDown() == (*@\vdmnotcovered{ski}@*)p;
 
   
     -- Example test case: Enter Garage
     public testEnterGarage: () ==> ()
     testEnterGarage() ==
     (
-        dcl car1 : car := new car("AB12345", mk_(-1, -1, -1), 0, <electric>);
-        Assert`assertTrue(not controller.carAlreadyExists(car1.getPlate()));
-        controller.enterGarage(car1);
-        Assert`assertTrue(controller.carAlreadyExists(car1.getPlate()));
+        dcl car1 : car := (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{ca}@*)r((*@\vdmnotcovered{"AB12345}@*)", (*@\vdmnotcovered{mk}@*)_((*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1), (*@\vdmnotcovered{}@*)0, (*@\vdmnotcovered{<electric}@*)>);
+        (*@\vdmnotcovered{Assert`assertTru}@*)e((*@\vdmnotcovered{no}@*)t (*@\vdmnotcovered{controlle}@*)r.(*@\vdmnotcovered{carAlreadyExist}@*)s((*@\vdmnotcovered{car}@*)1.(*@\vdmnotcovered{getPlat}@*)e()));
+        (*@\vdmnotcovered{controlle}@*)r.enterGarage((*@\vdmnotcovered{car}@*)1);
+        (*@\vdmnotcovered{Assert`assertTru}@*)e((*@\vdmnotcovered{controlle}@*)r.(*@\vdmnotcovered{carAlreadyExist}@*)s((*@\vdmnotcovered{car}@*)1.(*@\vdmnotcovered{getPlat}@*)e()));
     );
 end TestEnterGarage
 
 class TestLeaveGarage is subclass of TestCase
 instance variables
-    controller : controller := new controller();
+    controller : controller := (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{controlle}@*)r();
 
 operations
     -- Constructor
     public TestLeaveGarage: seq of char ==> TestLeaveGarage
-    TestLeaveGarage(name) == TestCase(name);
+    TestLeaveGarage(name) == (*@\vdmnotcovered{TestCas}@*)e((*@\vdmnotcovered{nam}@*)e);
 
     -- Set up before each test
     public setUp: () ==> ()
     setUp() == 
     (
-        controller := new controller();
-        controller.initGarage();
+        (*@\vdmnotcovered{controlle}@*)r := (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{controlle}@*)r();
+        (*@\vdmnotcovered{controlle}@*)r.initGarage();
     );
 
     -- Tear down after each test (optional)
     public tearDown: () ==> ()
-    tearDown() == skip;
+    tearDown() == (*@\vdmnotcovered{ski}@*)p;
 
   
     -- Example test case: Leave Garage
     public testLeaveGarage: () ==> ()
     testLeaveGarage() ==
     (
-        dcl car1 : car := new car("AB12345", mk_(-1, -1, -1), 0, <electric>);
-        controller.enterGarage(car1);
-        controller.leaveGarage(car1.getPlate());
-        Assert`assertTrue(not controller.carAlreadyExists(car1.getPlate()));
+        dcl car1 : car := (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{ca}@*)r((*@\vdmnotcovered{"AB12345}@*)", (*@\vdmnotcovered{mk}@*)_((*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1), (*@\vdmnotcovered{}@*)0, (*@\vdmnotcovered{<electric}@*)>);
+        (*@\vdmnotcovered{controlle}@*)r.enterGarage((*@\vdmnotcovered{car}@*)1);
+        (*@\vdmnotcovered{controlle}@*)r.leaveGarage((*@\vdmnotcovered{car}@*)1.(*@\vdmnotcovered{getPlat}@*)e());
+        (*@\vdmnotcovered{Assert`assertTru}@*)e((*@\vdmnotcovered{no}@*)t (*@\vdmnotcovered{controlle}@*)r.(*@\vdmnotcovered{carAlreadyExist}@*)s((*@\vdmnotcovered{car}@*)1.(*@\vdmnotcovered{getPlat}@*)e()));
     );
 end TestLeaveGarage
 
 class TestCapacityLimit is subclass of TestCase
 instance variables
-    controller : controller := new controller();
+    controller : controller := (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{controlle}@*)r();
 
 operations
     -- Constructor
     public TestCapacityLimit: seq of char ==> TestCapacityLimit
-    TestCapacityLimit(name) == TestCase(name);
+    TestCapacityLimit(name) == (*@\vdmnotcovered{TestCas}@*)e((*@\vdmnotcovered{nam}@*)e);
 
     public setUp: () ==> ()
     setUp() == 
     (
-        controller := new controller();
-        controller.initGarage();
+        (*@\vdmnotcovered{controlle}@*)r := (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{controlle}@*)r();
+        (*@\vdmnotcovered{controlle}@*)r.initGarage();
     );
 
     -- Tear down after each test (optional)
     public tearDown: () ==> ()
-    tearDown() == skip;
+    tearDown() == (*@\vdmnotcovered{ski}@*)p;
 
     public testCapacityLimit: () ==> ()
     testCapacityLimit() ==
     (
-        dcl car1 : car := new car("CAR1", mk_(-1, -1, -1), 0, <electric>);
-        dcl car2 : car := new car("CAR2", mk_(-1, -1, -1), 0, <electric>);
-        dcl car3 : car := new car("CAR3", mk_(-1, -1, -1), 0, <electric>);
-        dcl car4 : car := new car("CAR4", mk_(-1, -1, -1), 0, <electric>);
-        dcl car5 : car := new car("CAR5", mk_(-1, -1, -1), 0, <electric>);
-        dcl car6 : car := new car("CAR6", mk_(-1, -1, -1), 0, <electric>);
-        dcl car7 : car := new car("CAR7", mk_(-1, -1, -1), 0, <electric>);
-        dcl car8 : car := new car("CAR8", mk_(-1, -1, -1), 0, <electric>);
+        dcl car1 : car := (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{ca}@*)r((*@\vdmnotcovered{"CAR1}@*)", (*@\vdmnotcovered{mk}@*)_((*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1), (*@\vdmnotcovered{}@*)0, (*@\vdmnotcovered{<electric}@*)>);
+        dcl car2 : car := (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{ca}@*)r((*@\vdmnotcovered{"CAR2}@*)", (*@\vdmnotcovered{mk}@*)_((*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1), (*@\vdmnotcovered{}@*)0, (*@\vdmnotcovered{<electric}@*)>);
+        dcl car3 : car := (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{ca}@*)r((*@\vdmnotcovered{"CAR3}@*)", (*@\vdmnotcovered{mk}@*)_((*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1), (*@\vdmnotcovered{}@*)0, (*@\vdmnotcovered{<electric}@*)>);
+        dcl car4 : car := (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{ca}@*)r((*@\vdmnotcovered{"CAR4}@*)", (*@\vdmnotcovered{mk}@*)_((*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1), (*@\vdmnotcovered{}@*)0, (*@\vdmnotcovered{<electric}@*)>);
+        dcl car5 : car := (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{ca}@*)r((*@\vdmnotcovered{"CAR5}@*)", (*@\vdmnotcovered{mk}@*)_((*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1), (*@\vdmnotcovered{}@*)0, (*@\vdmnotcovered{<electric}@*)>);
+        dcl car6 : car := (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{ca}@*)r((*@\vdmnotcovered{"CAR6}@*)", (*@\vdmnotcovered{mk}@*)_((*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1), (*@\vdmnotcovered{}@*)0, (*@\vdmnotcovered{<electric}@*)>);
+        dcl car7 : car := (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{ca}@*)r((*@\vdmnotcovered{"CAR7}@*)", (*@\vdmnotcovered{mk}@*)_((*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1), (*@\vdmnotcovered{}@*)0, (*@\vdmnotcovered{<electric}@*)>);
+        dcl car8 : car := (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{ca}@*)r((*@\vdmnotcovered{"CAR8}@*)", (*@\vdmnotcovered{mk}@*)_((*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1), (*@\vdmnotcovered{}@*)0, (*@\vdmnotcovered{<electric}@*)>);
         
 
-        controller.enterGarage(car1);
-        controller.enterGarage(car2);
-        controller.enterGarage(car3);
-        controller.enterGarage(car4);
-        controller.enterGarage(car5);
-        controller.enterGarage(car6);
-        controller.enterGarage(car7);
-        controller.enterGarage(car8);
+        (*@\vdmnotcovered{controlle}@*)r.enterGarage((*@\vdmnotcovered{car}@*)1);
+        (*@\vdmnotcovered{controlle}@*)r.enterGarage((*@\vdmnotcovered{car}@*)2);
+        (*@\vdmnotcovered{controlle}@*)r.enterGarage((*@\vdmnotcovered{car}@*)3);
+        (*@\vdmnotcovered{controlle}@*)r.enterGarage((*@\vdmnotcovered{car}@*)4);
+        (*@\vdmnotcovered{controlle}@*)r.enterGarage((*@\vdmnotcovered{car}@*)5);
+        (*@\vdmnotcovered{controlle}@*)r.enterGarage((*@\vdmnotcovered{car}@*)6);
+        (*@\vdmnotcovered{controlle}@*)r.enterGarage((*@\vdmnotcovered{car}@*)7);
+        (*@\vdmnotcovered{controlle}@*)r.enterGarage((*@\vdmnotcovered{car}@*)8);
         
 
-        Assert`assertTrue(card dom controller.parkedCarsMap = controller.getMaxCapacity());
+        (*@\vdmnotcovered{Assert`assertTru}@*)e((*@\vdmnotcovered{car}@*)d (*@\vdmnotcovered{do}@*)m (*@\vdmnotcovered{controlle}@*)r.(*@\vdmnotcovered{parkedCarsMa}@*)p (*@\vdmnotcovered{}@*)= (*@\vdmnotcovered{controlle}@*)r.(*@\vdmnotcovered{getMaxCapacit}@*)y());
     
     );
 
 end TestCapacityLimit
 
-class TestElectricCarFee is subclass of TestCase
+class TestCarFee is subclass of TestCase
 instance variables
-    controller : controller := new controller();
+    controller : controller := (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{controlle}@*)r();
 
 operations
     -- Constructor
-    public TestElectricCarFee: seq of char ==> TestElectricCarFee
-    TestElectricCarFee(name) == TestCase(name);
+    public TestCarFee: seq of char ==> TestCarFee
+    TestCarFee(name) == (*@\vdmnotcovered{TestCas}@*)e((*@\vdmnotcovered{nam}@*)e);
 
     public setUp: () ==> ()
     setUp() == 
     (
-        controller := new controller();
-        controller.initGarage();
+        (*@\vdmnotcovered{controlle}@*)r := (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{controlle}@*)r();
+        (*@\vdmnotcovered{controlle}@*)r.initGarage();
     );
 
     -- Tear down after each test (optional)
     public tearDown: () ==> ()
-    tearDown() == skip;
+    tearDown() == (*@\vdmnotcovered{ski}@*)p;
 
-    public testElectricCarFee: () ==> ()
-    testElectricCarFee() ==
+    public testCarFee: () ==> ()
+    testCarFee() ==
     (
-        dcl car1 : car := new car("AB12345", mk_(-1, -1, -1), 0, <electric>);
-        controller.enterGarage(car1);
-        controller.leaveGarage(car1.getPlate());
-        Assert`assertTrue(controller.getBankBalance() = 0.5);
+        dcl car1 : car := (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{ca}@*)r((*@\vdmnotcovered{"AB12345}@*)", (*@\vdmnotcovered{mk}@*)_((*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1), (*@\vdmnotcovered{}@*)0, (*@\vdmnotcovered{<electric}@*)>);
+        dcl car2 : car := (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{ca}@*)r((*@\vdmnotcovered{"AB12346}@*)", (*@\vdmnotcovered{mk}@*)_((*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1), (*@\vdmnotcovered{}@*)0, (*@\vdmnotcovered{<electric}@*)>);
+        dcl car3 : car := (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{ca}@*)r((*@\vdmnotcovered{"AB12347}@*)", (*@\vdmnotcovered{mk}@*)_((*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1), (*@\vdmnotcovered{}@*)0, (*@\vdmnotcovered{<electric}@*)>);
+        dcl car4 : car := (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{ca}@*)r((*@\vdmnotcovered{"AB12348}@*)", (*@\vdmnotcovered{mk}@*)_((*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1), (*@\vdmnotcovered{}@*)0, (*@\vdmnotcovered{<electric}@*)>);
+        dcl car5 : car := (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{ca}@*)r((*@\vdmnotcovered{"AB12349}@*)", (*@\vdmnotcovered{mk}@*)_((*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1), (*@\vdmnotcovered{}@*)0, (*@\vdmnotcovered{<electric}@*)>);
+        dcl car6 : car := (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{ca}@*)r((*@\vdmnotcovered{"AB12350}@*)", (*@\vdmnotcovered{mk}@*)_((*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1), (*@\vdmnotcovered{}@*)0, (*@\vdmnotcovered{<electric}@*)>);
+
+        (*@\vdmnotcovered{controlle}@*)r.enterGarage((*@\vdmnotcovered{car}@*)1);
+        (*@\vdmnotcovered{controlle}@*)r.enterGarage((*@\vdmnotcovered{car}@*)2);
+        (*@\vdmnotcovered{controlle}@*)r.enterGarage((*@\vdmnotcovered{car}@*)3);
+        (*@\vdmnotcovered{controlle}@*)r.enterGarage((*@\vdmnotcovered{car}@*)4);
+        (*@\vdmnotcovered{controlle}@*)r.enterGarage((*@\vdmnotcovered{car}@*)5);
+        (*@\vdmnotcovered{controlle}@*)r.enterGarage((*@\vdmnotcovered{car}@*)6);
+        
+        -- garage is now 75% full, therefore car6 should have a fee applied
+
+        (*@\vdmnotcovered{world`timerRe}@*)f.Step();
+
+        (*@\vdmnotcovered{controlle}@*)r.leaveGarage((*@\vdmnotcovered{car}@*)6.(*@\vdmnotcovered{getPlat}@*)e());
+       
+        (*@\vdmnotcovered{Assert`assertTru}@*)e((*@\vdmnotcovered{controlle}@*)r.(*@\vdmnotcovered{getBankBalanc}@*)e() (*@\vdmnotcovered{}@*)= (*@\vdmnotcovered{1.}@*)5 );
     );
 
-end TestElectricCarFee
+end TestCarFee
 
 class TestDimensionArePositive is subclass of TestCase
 instance variables
-    controller : controller := new controller();
+    controller : controller := (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{controlle}@*)r();
 
 operations
     -- Constructor
     public TestDimensionArePositive: seq of char ==> TestDimensionArePositive
-    TestDimensionArePositive(name) == TestCase(name);
+    TestDimensionArePositive(name) == (*@\vdmnotcovered{TestCas}@*)e((*@\vdmnotcovered{nam}@*)e);
 
     public setUp: () ==> ()
     setUp() == 
     (
-        controller := new controller();
-        controller.initGarage();
+        (*@\vdmnotcovered{controlle}@*)r := (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{controlle}@*)r();
+        (*@\vdmnotcovered{controlle}@*)r.initGarage();
     );
 
     -- Tear down after each test (optional)
     public tearDown: () ==> ()
-    tearDown() == skip;
+    tearDown() == (*@\vdmnotcovered{ski}@*)p;
 
     public testDimensionArePositive: () ==> ()
     testDimensionArePositive() ==
     (
-        Assert`assertTrue(controller.dimensions > 0);
+        (*@\vdmnotcovered{Assert`assertTru}@*)e((*@\vdmnotcovered{controlle}@*)r.(*@\vdmnotcovered{dimension}@*)s (*@\vdmnotcovered{}@*)> (*@\vdmnotcovered{}@*)0);
     );
 end TestDimensionArePositive 
 \end{vdm_al}
+\bigskip
+\begin{longtable}{|l|r|r|}
+\hline
+Function or operation & Coverage & Calls \\
+\hline
+\hline
+TestCapacityLimit & 0.0\% & 0 \\
+\hline
+TestCapacityLimit & 0.0\% & 0 \\
+\hline
+TestCarFee & 0.0\% & 0 \\
+\hline
+TestCarFee & 0.0\% & 0 \\
+\hline
+TestDimensionArePositive & 0.0\% & 0 \\
+\hline
+TestDimensionArePositive & 0.0\% & 0 \\
+\hline
+TestEnterGarage & 0.0\% & 0 \\
+\hline
+TestEnterGarage & 0.0\% & 0 \\
+\hline
+TestLeaveGarage & 0.0\% & 0 \\
+\hline
+TestLeaveGarage & 0.0\% & 0 \\
+\hline
+setUp & 0.0\% & 0 \\
+\hline
+setUp & 0.0\% & 0 \\
+\hline
+setUp & 0.0\% & 0 \\
+\hline
+setUp & 0.0\% & 0 \\
+\hline
+setUp & 0.0\% & 0 \\
+\hline
+tearDown & 0.0\% & 0 \\
+\hline
+tearDown & 0.0\% & 0 \\
+\hline
+tearDown & 0.0\% & 0 \\
+\hline
+tearDown & 0.0\% & 0 \\
+\hline
+tearDown & 0.0\% & 0 \\
+\hline
+testCapacityLimit & 0.0\% & 0 \\
+\hline
+testCarFee & 0.0\% & 0 \\
+\hline
+testDimensionArePositive & 0.0\% & 0 \\
+\hline
+testEnterGarage & 0.0\% & 0 \\
+\hline
+testLeaveGarage & 0.0\% & 0 \\
+\hline
+\hline
+Tests.vdmpp & 0.0\% & 0 \\
+\hline
+\end{longtable}
 \end{document}

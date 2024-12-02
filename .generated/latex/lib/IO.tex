@@ -51,7 +51,7 @@ public
 freadval[@p]:seq1 of char -> bool * [@p]
 freadval(filename) ==
   is not yet specified
-  post let mk_(b,t) = RESULT in not b => t = nil;
+  post (*@\vdmnotcovered{le}@*)t mk_(b,t) = (*@\vdmnotcovered{RESUL}@*)T in (*@\vdmnotcovered{no}@*)t (*@\vdmnotcovered{}@*)b (*@\vdmnotcovered{=}@*)> (*@\vdmnotcovered{}@*)t (*@\vdmnotcovered{}@*)= (*@\vdmnotcovered{ni}@*)l;
 
 operations
 
@@ -60,14 +60,14 @@ operations
 public
 echo: seq of char ==> bool
 echo(text) ==
-  fecho ("",text,nil);
+  (*@\vdmnotcovered{fech}@*)o ((*@\vdmnotcovered{"}@*)",(*@\vdmnotcovered{tex}@*)t,(*@\vdmnotcovered{ni}@*)l);
 
 -- Write text to file like 'echo'
 public
 fecho: seq of char * seq of char * [filedirective] ==> bool
 fecho (filename,text,fdir) ==
   is not yet specified
-  pre filename = "" <=> fdir = nil;
+  pre (*@\vdmnotcovered{filenam}@*)e (*@\vdmnotcovered{}@*)= (*@\vdmnotcovered{"}@*)" (*@\vdmnotcovered{<=}@*)> (*@\vdmnotcovered{fdi}@*)r (*@\vdmnotcovered{}@*)= (*@\vdmnotcovered{ni}@*)l;
 
 -- The in/out functions  will return false if an error occur. In this
 -- case an internal error string will be set. 'ferror' returns this
@@ -93,4 +93,34 @@ printf(format, args) ==
 
 end IO
 \end{vdm_al}
+\bigskip
+\begin{longtable}{|l|r|r|}
+\hline
+Function or operation & Coverage & Calls \\
+\hline
+\hline
+IO & 0.0\% & 0 \\
+\hline
+echo & 0.0\% & 0 \\
+\hline
+fecho & 0.0\% & 0 \\
+\hline
+ferror & 0.0\% & 0 \\
+\hline
+freadval & 0.0\% & 0 \\
+\hline
+fwriteval & 0.0\% & 0 \\
+\hline
+print & 0.0\% & 0 \\
+\hline
+printf & 0.0\% & 0 \\
+\hline
+println & 0.0\% & 0 \\
+\hline
+writeval & 0.0\% & 0 \\
+\hline
+\hline
+IO.vdmpp & 0.0\% & 0 \\
+\hline
+\end{longtable}
 \end{document}

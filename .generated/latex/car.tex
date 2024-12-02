@@ -17,75 +17,107 @@ public time = nat;
 public typeCar = <electric> | <gas>;
 
 instance variables
-loc: location := mk_(-1,-1,-1); -- -1, -1, -1 represents everywhere outside the garage
-ptime: time := 0;
-plate: licenseplate := [];
-type: typeCar := <gas>;
-feeApplied: bool := false;
-inv ptime >= 0;
+loc: location := (*@\vdmnotcovered{mk}@*)_((*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1,(*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1,(*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1); -- -1, -1, -1 represents everywhere outside the garage
+ptime: time := (*@\vdmnotcovered{}@*)0;
+plate: licenseplate := (*@\vdmnotcovered{}@*)[];
+type: typeCar := (*@\vdmnotcovered{<gas}@*)>;
+feeApplied: bool := (*@\vdmnotcovered{fals}@*)e;
+inv (*@\vdmnotcovered{ptim}@*)e (*@\vdmnotcovered{>}@*)= (*@\vdmnotcovered{}@*)0;
 
 operations
 public car : licenseplate * location * time * typeCar ==> car
 car(licenseplate, location, time, carType) ==
   (
-    plate := licenseplate;   -- Set the license plate
-    loc := location;         -- Set the location
-    ptime := time;           -- Set the entry time
-    type := carType;      -- Set the car type
+    (*@\vdmnotcovered{plat}@*)e := (*@\vdmnotcovered{licenseplat}@*)e;   -- Set the license plate
+    (*@\vdmnotcovered{lo}@*)c := (*@\vdmnotcovered{locatio}@*)n;         -- Set the location
+    (*@\vdmnotcovered{ptim}@*)e := (*@\vdmnotcovered{tim}@*)e;           -- Set the entry time
+    (*@\vdmnotcovered{typ}@*)e := (*@\vdmnotcovered{carTyp}@*)e;      -- Set the car type
   )
-  pre licenseplate <> [] and location.#1 >= -1 and location.#2 >= -1 and location.#3 >= -1;
+  pre (*@\vdmnotcovered{licenseplat}@*)e (*@\vdmnotcovered{<}@*)> (*@\vdmnotcovered{}@*)[] (*@\vdmnotcovered{an}@*)d (*@\vdmnotcovered{locatio}@*)n.#(*@\vdmnotcovered{}@*)1 (*@\vdmnotcovered{>}@*)= (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1 (*@\vdmnotcovered{an}@*)d (*@\vdmnotcovered{locatio}@*)n.#(*@\vdmnotcovered{}@*)2 (*@\vdmnotcovered{>}@*)= (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1 (*@\vdmnotcovered{an}@*)d (*@\vdmnotcovered{locatio}@*)n.#(*@\vdmnotcovered{}@*)3 (*@\vdmnotcovered{>}@*)= (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1;
   
 
 -- getters
 
 pure public getPlate: () ==> licenseplate
 getPlate() == (
-    return plate
+    (*@\vdmnotcovered{retur}@*)n (*@\vdmnotcovered{plat}@*)e
 );
 
 pure public getLocation: () ==> location
 getLocation() == (
-return loc
+(*@\vdmnotcovered{retur}@*)n (*@\vdmnotcovered{lo}@*)c
 );
 
 pure public getTime: () ==> time
 getTime() == (
-return ptime
+(*@\vdmnotcovered{retur}@*)n (*@\vdmnotcovered{ptim}@*)e
 );
 
 pure public getType: () ==> typeCar 
 getType() == (
-return type 
+(*@\vdmnotcovered{retur}@*)n (*@\vdmnotcovered{typ}@*)e 
 );
 
 pure public getFeeApplied: () ==> bool
 getFeeApplied() == (
-return feeApplied
+(*@\vdmnotcovered{retur}@*)n (*@\vdmnotcovered{feeApplie}@*)d
 );
 -- setters
 public setLocation: rat * rat * rat ==> ()
 setLocation(x,y,z) == (
-    loc:= mk_(x,y,z)
+    (*@\vdmnotcovered{lo}@*)c:= (*@\vdmnotcovered{mk}@*)_((*@\vdmnotcovered{}@*)x,(*@\vdmnotcovered{}@*)y,(*@\vdmnotcovered{}@*)z)
 )
-post loc = mk_(x,y,z);
+post (*@\vdmnotcovered{lo}@*)c (*@\vdmnotcovered{}@*)= (*@\vdmnotcovered{mk}@*)_((*@\vdmnotcovered{}@*)x,(*@\vdmnotcovered{}@*)y,(*@\vdmnotcovered{}@*)z);
 
 public setTime: nat ==> ()
 setTime(newTime) ==(
-ptime := newTime
+(*@\vdmnotcovered{ptim}@*)e := (*@\vdmnotcovered{newTim}@*)e
 )
-pre newTime >= 0
-post ptime = newTime;
+pre (*@\vdmnotcovered{newTim}@*)e (*@\vdmnotcovered{>}@*)= (*@\vdmnotcovered{}@*)0
+post (*@\vdmnotcovered{ptim}@*)e (*@\vdmnotcovered{}@*)= (*@\vdmnotcovered{newTim}@*)e;
 
 public addTime: nat ==> ()
 addTime(addedTime) ==(
-ptime := ptime + addedTime
+(*@\vdmnotcovered{ptim}@*)e := (*@\vdmnotcovered{ptim}@*)e (*@\vdmnotcovered{}@*)+ (*@\vdmnotcovered{addedTim}@*)e
 );
 
 public setFeeApplied: bool ==> ()
 setFeeApplied(boolean) == (
-    feeApplied := boolean
+    (*@\vdmnotcovered{feeApplie}@*)d := (*@\vdmnotcovered{boolea}@*)n
 )
 
 end car
 \end{vdm_al}
+\bigskip
+\begin{longtable}{|l|r|r|}
+\hline
+Function or operation & Coverage & Calls \\
+\hline
+\hline
+addTime & 0.0\% & 0 \\
+\hline
+car & 0.0\% & 0 \\
+\hline
+car & 0.0\% & 0 \\
+\hline
+getFeeApplied & 0.0\% & 0 \\
+\hline
+getLocation & 0.0\% & 0 \\
+\hline
+getPlate & 0.0\% & 0 \\
+\hline
+getTime & 0.0\% & 0 \\
+\hline
+getType & 0.0\% & 0 \\
+\hline
+setFeeApplied & 0.0\% & 0 \\
+\hline
+setLocation & 0.0\% & 0 \\
+\hline
+setTime & 0.0\% & 0 \\
+\hline
+\hline
+car.vdmpp & 0.0\% & 0 \\
+\hline
+\end{longtable}
 \end{document}

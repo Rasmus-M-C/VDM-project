@@ -81,25 +81,25 @@ end Throwable
 class Error is subclass of Throwable
 
 instance variables
-  protected fMessage : seq of char := []
+  protected fMessage : seq of char := (*@\vdmnotcovered{}@*)[]
   
 operations
   public Error: () ==> Error
-  Error () == skip;
+  Error () == (*@\vdmnotcovered{ski}@*)p;
   
   public Error: seq of char ==> Error
-  Error (pmessage) == fMessage := pmessage;
+  Error (pmessage) == (*@\vdmnotcovered{fMessag}@*)e := (*@\vdmnotcovered{pmessag}@*)e;
 
   public hasMessage: () ==> bool
-  hasMessage () == return len fMessage > 0;
+  hasMessage () == (*@\vdmnotcovered{retur}@*)n (*@\vdmnotcovered{le}@*)n (*@\vdmnotcovered{fMessag}@*)e (*@\vdmnotcovered{}@*)> (*@\vdmnotcovered{}@*)0;
     
   public getMessage: () ==> seq of char
-  getMessage () == return fMessage
-    pre len fMessage > 0;--hasMessage()
+  getMessage () == (*@\vdmnotcovered{retur}@*)n (*@\vdmnotcovered{fMessag}@*)e
+    pre (*@\vdmnotcovered{le}@*)n (*@\vdmnotcovered{fMessag}@*)e (*@\vdmnotcovered{}@*)> (*@\vdmnotcovered{}@*)0;--hasMessage()
 
 
   public static throw: seq of char ==> ()
-  throw (pmessage) == exit new Error(pmessage)
+  throw (pmessage) == (*@\vdmnotcovered{exi}@*)t (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{Erro}@*)r((*@\vdmnotcovered{pmessag}@*)e)
 end Error
 
 --
@@ -110,10 +110,10 @@ class AssertionFailedError is subclass of Error
 
 operations
   public AssertionFailedError: () ==> AssertionFailedError
-  AssertionFailedError () == skip;
+  AssertionFailedError () == (*@\vdmnotcovered{ski}@*)p;
   
   public AssertionFailedError: seq of char ==> AssertionFailedError
-  AssertionFailedError (pmessage) == fMessage := pmessage;
+  AssertionFailedError (pmessage) == (*@\vdmnotcovered{fMessag}@*)e := (*@\vdmnotcovered{pmessag}@*)e;
    
 end AssertionFailedError
 
@@ -126,25 +126,25 @@ class Assert
 operations
   public static assertTrue: bool ==> ()
   assertTrue (pbool) ==
-    if not pbool then exit new AssertionFailedError();
+    (*@\vdmnotcovered{i}@*)f (*@\vdmnotcovered{no}@*)t (*@\vdmnotcovered{pboo}@*)l then (*@\vdmnotcovered{exi}@*)t (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{AssertionFailedErro}@*)r();
   
   public static assertTrue: seq of char * bool ==> ()
   assertTrue (pmessage, pbool) ==
-    if not pbool then exit new AssertionFailedError(pmessage);
+    (*@\vdmnotcovered{i}@*)f (*@\vdmnotcovered{no}@*)t (*@\vdmnotcovered{pboo}@*)l then (*@\vdmnotcovered{exi}@*)t (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{AssertionFailedErro}@*)r((*@\vdmnotcovered{pmessag}@*)e);
     
   public static assertFalse: bool ==> ()
   assertFalse (pbool) ==
-    if pbool then exit new AssertionFailedError();
+    (*@\vdmnotcovered{i}@*)f (*@\vdmnotcovered{pboo}@*)l then (*@\vdmnotcovered{exi}@*)t (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{AssertionFailedErro}@*)r();
   
   public static assertFalse: seq of char * bool ==> ()
   assertFalse (pmessage, pbool) ==
-    if pbool then exit new AssertionFailedError(pmessage);
+    (*@\vdmnotcovered{i}@*)f (*@\vdmnotcovered{pboo}@*)l then (*@\vdmnotcovered{exi}@*)t (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{AssertionFailedErro}@*)r((*@\vdmnotcovered{pmessag}@*)e);
     
   public static fail: () ==> ()
-  fail () == exit new AssertionFailedError();
+  fail () == (*@\vdmnotcovered{exi}@*)t (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{AssertionFailedErro}@*)r();
   
   public static fail: seq of char ==> ()
-  fail (pmessage) == exit new AssertionFailedError(pmessage)
+  fail (pmessage) == (*@\vdmnotcovered{exi}@*)t (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{AssertionFailedErro}@*)r((*@\vdmnotcovered{pmessag}@*)e)
     
 end Assert
 
@@ -155,15 +155,15 @@ end Assert
 class Test is subclass of Assert
 
 instance variables
-  private fName : seq of char := []
+  private fName : seq of char := (*@\vdmnotcovered{}@*)[]
   
 operations
   -- instance variables access operations
   public getName: () ==> seq of char
-  getName () == return fName;
+  getName () == (*@\vdmnotcovered{retur}@*)n (*@\vdmnotcovered{fNam}@*)e;
   
   public setName: seq of char ==> ()
-  setName (name) == fName := name;
+  setName (name) == (*@\vdmnotcovered{fNam}@*)e := (*@\vdmnotcovered{nam}@*)e;
   
   public run: TestResult ==> ()
   run (-) == is subclass responsibility;
@@ -190,9 +190,9 @@ operations
     public run :() ==> TestResult
     run() ==
     (
-        let result : TestResult = createResult() in (
-        run(result);
-        return result);
+        (*@\vdmnotcovered{le}@*)t result : TestResult = (*@\vdmnotcovered{createResul}@*)t() in (
+        (*@\vdmnotcovered{ru}@*)n((*@\vdmnotcovered{resul}@*)t);
+        (*@\vdmnotcovered{retur}@*)n (*@\vdmnotcovered{resul}@*)t);
     );
 --  /**
 --   * Runs the test case and collects the results in TestResult.
@@ -200,35 +200,35 @@ operations
     public run : TestResult ==> ()
     run(result) ==
     (
-        result.run(self);
+        (*@\vdmnotcovered{resul}@*)t.run((*@\vdmnotcovered{sel}@*)f);
     );
  
  public runOnly: seq of char * TestResult ==> ()
  runOnly (name,result) ==
- if name = getName() then
-  result.run(self);
+ (*@\vdmnotcovered{i}@*)f (*@\vdmnotcovered{nam}@*)e (*@\vdmnotcovered{}@*)= (*@\vdmnotcovered{getNam}@*)e() then
+  (*@\vdmnotcovered{resul}@*)t.run((*@\vdmnotcovered{sel}@*)f);
   
     protected createResult : () ==> TestResult
-    createResult() == return new TestResult();
+    createResult() == (*@\vdmnotcovered{retur}@*)n (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{TestResul}@*)t();
  
 operations
   -- constructor
   public TestCase: seq of char ==> TestCase
-  TestCase (name) == setName(name);
+  TestCase (name) == (*@\vdmnotcovered{setNam}@*)e((*@\vdmnotcovered{nam}@*)e);
 
   public TestCase: () ==> TestCase
-  TestCase () == skip;
+  TestCase () == (*@\vdmnotcovered{ski}@*)p;
     
   -- template method pattern
   public setUp: () ==> ()
-  setUp () == skip;
+  setUp () == (*@\vdmnotcovered{ski}@*)p;
   
   --
   -- This method might be overriden in a sub class or it will
   --  use reflection to call the test method as specified in the name
   --
   protected runTest: () ==> ()
-  runTest () == reflectionRunTest(self,getName());
+  runTest () == (*@\vdmnotcovered{reflectionRunTes}@*)t((*@\vdmnotcovered{sel}@*)f,(*@\vdmnotcovered{getNam}@*)e());
 
   --
   -- External Method
@@ -239,32 +239,32 @@ operations
   public runBare : () ==> ()
   runBare() ==
   (
-    dcl exception : [Throwable] := nil;
+    dcl exception : [Throwable] := (*@\vdmnotcovered{ni}@*)l;
     
-    setUp();
+    (*@\vdmnotcovered{setU}@*)p();
     
-    trap exc :Throwable
+    (*@\vdmnotcovered{tra}@*)p exc :Throwable
         with  
-            exception := exc
+            (*@\vdmnotcovered{exceptio}@*)n := (*@\vdmnotcovered{ex}@*)c
         in
         (
-            runTest();
+            (*@\vdmnotcovered{runTes}@*)t();
         );
 
-    trap exc :Throwable
+    (*@\vdmnotcovered{tra}@*)p exc :Throwable
         with  
-            if exception = nil then
-                exception := exc
+            (*@\vdmnotcovered{i}@*)f (*@\vdmnotcovered{exceptio}@*)n (*@\vdmnotcovered{}@*)= (*@\vdmnotcovered{ni}@*)l then
+                (*@\vdmnotcovered{exceptio}@*)n := (*@\vdmnotcovered{ex}@*)c
         in
         (
-            tearDown();
+            (*@\vdmnotcovered{tearDow}@*)n();
         );
         
-    if exception <> nil then exit exception;
+    (*@\vdmnotcovered{i}@*)f (*@\vdmnotcovered{exceptio}@*)n (*@\vdmnotcovered{<}@*)> (*@\vdmnotcovered{ni}@*)l then (*@\vdmnotcovered{exi}@*)t (*@\vdmnotcovered{exceptio}@*)n;
    );
   
   public tearDown: () ==> ()
-  tearDown () == skip;
+  tearDown () == (*@\vdmnotcovered{ski}@*)p;
            
 end TestCase
 
@@ -275,24 +275,24 @@ end TestCase
 class TestSuite is subclass of Test
 
 instance variables
-  private fTests : seq of Test := []
+  private fTests : seq of Test := (*@\vdmnotcovered{}@*)[]
   
 operations
   public TestSuite: seq of char ==> TestSuite
-  TestSuite (name) == setName(name);
+  TestSuite (name) == (*@\vdmnotcovered{setNam}@*)e((*@\vdmnotcovered{nam}@*)e);
 
   public TestSuite: () ==> TestSuite
-  TestSuite () == setName("");
+  TestSuite () == (*@\vdmnotcovered{setNam}@*)e((*@\vdmnotcovered{"}@*)");
 
   public TestSuite: set of Test * seq of char ==> TestSuite
   TestSuite (tests,name) == 
   (
-    setName(name);
-    for all test in set tests do
+    (*@\vdmnotcovered{setNam}@*)e((*@\vdmnotcovered{nam}@*)e);
+    (*@\vdmnotcovered{fo}@*)r all test in set (*@\vdmnotcovered{test}@*)s do
     (
-       for all t in set elems createTests(test) do
+       (*@\vdmnotcovered{fo}@*)r all t in set (*@\vdmnotcovered{elem}@*)s (*@\vdmnotcovered{createTest}@*)s((*@\vdmnotcovered{tes}@*)t) do
        (
-         addTest(t); 
+         (*@\vdmnotcovered{addTes}@*)t((*@\vdmnotcovered{}@*)t); 
        );
     );
     
@@ -301,12 +301,12 @@ operations
   public TestSuite: set of Test ==> TestSuite
   TestSuite (tests) == 
   (
-    setName("");
-    for all test in set tests do
+    (*@\vdmnotcovered{setNam}@*)e((*@\vdmnotcovered{"}@*)");
+    (*@\vdmnotcovered{fo}@*)r all test in set (*@\vdmnotcovered{test}@*)s do
     (
-       for all t in set elems createTests(test) do
+       (*@\vdmnotcovered{fo}@*)r all t in set (*@\vdmnotcovered{elem}@*)s (*@\vdmnotcovered{createTest}@*)s((*@\vdmnotcovered{tes}@*)t) do
        (
-         addTest(t); 
+         (*@\vdmnotcovered{addTes}@*)t((*@\vdmnotcovered{}@*)t); 
        );
     );
     
@@ -315,48 +315,48 @@ operations
   public TestSuite: Test ==> TestSuite
   TestSuite (test) == 
   (
-    setName("");
-    for all t in set elems createTests(test) do
+    (*@\vdmnotcovered{setNam}@*)e((*@\vdmnotcovered{"}@*)");
+    (*@\vdmnotcovered{fo}@*)r all t in set (*@\vdmnotcovered{elem}@*)s (*@\vdmnotcovered{createTest}@*)s((*@\vdmnotcovered{tes}@*)t) do
      (
-       addTest(t); 
+       (*@\vdmnotcovered{addTes}@*)t((*@\vdmnotcovered{}@*)t); 
      );
   );
 
   public TestSuite: Test * seq of char ==> TestSuite
   TestSuite (test,name) == 
   (
-    setName(name);
-    for all t in set elems createTests(test) do
+    (*@\vdmnotcovered{setNam}@*)e((*@\vdmnotcovered{nam}@*)e);
+    (*@\vdmnotcovered{fo}@*)r all t in set (*@\vdmnotcovered{elem}@*)s (*@\vdmnotcovered{createTest}@*)s((*@\vdmnotcovered{tes}@*)t) do
      (
-       addTest(t); 
+       (*@\vdmnotcovered{addTes}@*)t((*@\vdmnotcovered{}@*)t); 
      );
   );
   
   public addTest: Test ==> ()
-  addTest (ptst) == fTests := fTests ^ [ptst];
+  addTest (ptst) == (*@\vdmnotcovered{fTest}@*)s := (*@\vdmnotcovered{fTest}@*)s (*@\vdmnotcovered{}@*)^ (*@\vdmnotcovered{}@*)[(*@\vdmnotcovered{pts}@*)t];
   
   -- implementing the abstract run operation 
   public run: TestResult ==> ()
-  run (ptr) ==for ptst in fTests do ptst.run(ptr);
+  run (ptr) ==(*@\vdmnotcovered{fo}@*)r ptst in (*@\vdmnotcovered{fTest}@*)s do (*@\vdmnotcovered{pts}@*)t.run((*@\vdmnotcovered{pt}@*)r);
 
   public runOnly: seq of char * TestResult ==> ()
   runOnly (name,ptr) ==
-  for ptst in fTests do
-  if ptst.getName() = name then
- ptst.run(ptr);
+  (*@\vdmnotcovered{fo}@*)r ptst in (*@\vdmnotcovered{fTest}@*)s do
+  (*@\vdmnotcovered{i}@*)f (*@\vdmnotcovered{pts}@*)t.(*@\vdmnotcovered{getNam}@*)e() (*@\vdmnotcovered{}@*)= (*@\vdmnotcovered{nam}@*)e then
+ (*@\vdmnotcovered{pts}@*)t.run((*@\vdmnotcovered{pt}@*)r);
   
   public run: Test * TestResult ==> ()
-  run (test, ptr) == test.run(ptr);
+  run (test, ptr) == (*@\vdmnotcovered{tes}@*)t.run((*@\vdmnotcovered{pt}@*)r);
       
     public tests : () ==> seq of Test
-    tests()==return fTests;
+    tests()==(*@\vdmnotcovered{retur}@*)n (*@\vdmnotcovered{fTest}@*)s;
     
     public testCount : () ==> int
-    testCount()== return len fTests;
+    testCount()== (*@\vdmnotcovered{retur}@*)n (*@\vdmnotcovered{le}@*)n (*@\vdmnotcovered{fTest}@*)s;
     
     public testAt : int ==> Test
-    testAt(index) == return fTests(index)
-    pre index >0 and index < len fTests;
+    testAt(index) == (*@\vdmnotcovered{retur}@*)n (*@\vdmnotcovered{fTest}@*)s((*@\vdmnotcovered{inde}@*)x)
+    pre (*@\vdmnotcovered{inde}@*)x (*@\vdmnotcovered{}@*)>(*@\vdmnotcovered{}@*)0 (*@\vdmnotcovered{an}@*)d (*@\vdmnotcovered{inde}@*)x (*@\vdmnotcovered{}@*)< (*@\vdmnotcovered{le}@*)n (*@\vdmnotcovered{fTest}@*)s;
 
 
   private getTestMethodNamed : Test ==> seq of seq of char
@@ -407,134 +407,134 @@ types
                    
 instance variables
   -- keep track of assertions failed
-  private fFailures : seq of AssertionFailedError := [];
+  private fFailures : seq of AssertionFailedError := (*@\vdmnotcovered{}@*)[];
   
   -- keep track of exceptions thrown
-  private fErrors : seq of InternalError := [];
+  private fErrors : seq of InternalError := (*@\vdmnotcovered{}@*)[];
   
   -- count the number of executed tests
-  private fRunTests : nat := 0;
+  private fRunTests : nat := (*@\vdmnotcovered{}@*)0;
   
   -- the list of interested listeners
-  private fListeners : set of TestListener := {}
+  private fListeners : set of TestListener := (*@\vdmnotcovered{}@*){}
   
 operations
   public addListener: TestListener ==> ()
   addListener (ptl) == 
     ( -- first add the listener to the set
-      fListeners := fListeners union {ptl};
+      (*@\vdmnotcovered{fListener}@*)s := (*@\vdmnotcovered{fListener}@*)s (*@\vdmnotcovered{unio}@*)n (*@\vdmnotcovered{}@*){(*@\vdmnotcovered{pt}@*)l};
       -- execute the initializer for the listener
-      ptl.initListener() )
-    pre ptl not in set fListeners;
+      (*@\vdmnotcovered{pt}@*)l.initListener() )
+    pre (*@\vdmnotcovered{pt}@*)l (*@\vdmnotcovered{no}@*)t in set (*@\vdmnotcovered{fListener}@*)s;
   
   public removeListener: TestListener ==> ()
   removeListener (ptl) ==
     ( -- execute the exit operation for the listener
-      ptl.exitListener();
+      (*@\vdmnotcovered{pt}@*)l.exitListener();
       -- remove the listener from the set
-      fListeners := fListeners \ {ptl} )
-    pre ptl in set fListeners;
+      (*@\vdmnotcovered{fListener}@*)s := (*@\vdmnotcovered{fListener}@*)s (*@\vdmnotcovered{}@*)\ (*@\vdmnotcovered{}@*){(*@\vdmnotcovered{pt}@*)l} )
+    pre (*@\vdmnotcovered{pt}@*)l (*@\vdmnotcovered{i}@*)n set (*@\vdmnotcovered{fListener}@*)s;
   
   public addFailure: Test * AssertionFailedError ==> ()
   addFailure (ptst, pafe) == 
     ( -- first handle the failed assertion locally
-      if pafe.hasMessage()
-      then fFailures := fFailures ^ [pafe]
-      else let str = "Assertion failed in test "^ptst.getName() in
-             fFailures := fFailures ^ [new AssertionFailedError(str)];
+      (*@\vdmnotcovered{i}@*)f (*@\vdmnotcovered{paf}@*)e.(*@\vdmnotcovered{hasMessag}@*)e()
+      then (*@\vdmnotcovered{fFailure}@*)s := (*@\vdmnotcovered{fFailure}@*)s (*@\vdmnotcovered{}@*)^ (*@\vdmnotcovered{}@*)[(*@\vdmnotcovered{paf}@*)e]
+      else (*@\vdmnotcovered{le}@*)t str = (*@\vdmnotcovered{"Assertion failed in test }@*)"(*@\vdmnotcovered{}@*)^(*@\vdmnotcovered{pts}@*)t.(*@\vdmnotcovered{getNam}@*)e() in
+             (*@\vdmnotcovered{fFailure}@*)s := (*@\vdmnotcovered{fFailure}@*)s (*@\vdmnotcovered{}@*)^ (*@\vdmnotcovered{}@*)[(*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{AssertionFailedErro}@*)r((*@\vdmnotcovered{st}@*)r)];
       -- now inform all listeners
-      for all listener in set fListeners do
-        listener.addFailure(ptst, pafe) );
+      (*@\vdmnotcovered{fo}@*)r all listener in set (*@\vdmnotcovered{fListener}@*)s do
+        (*@\vdmnotcovered{listene}@*)r.addFailure((*@\vdmnotcovered{pts}@*)t, (*@\vdmnotcovered{paf}@*)e) );
   
   public addError: Test * Throwable ==> ()
   addError (ptst, perr) ==
     ( -- add the error to the list of exceptions caught so far
-      fErrors := fErrors ^ [mk_InternalError(ptst.getName(), perr)];
+      (*@\vdmnotcovered{fError}@*)s := (*@\vdmnotcovered{fError}@*)s (*@\vdmnotcovered{}@*)^ (*@\vdmnotcovered{}@*)[(*@\vdmnotcovered{mk\_InternalErro}@*)r((*@\vdmnotcovered{pts}@*)t.(*@\vdmnotcovered{getNam}@*)e(), (*@\vdmnotcovered{per}@*)r)];
       -- now inform all listeners
-      for all listener in set fListeners do
-        listener.addError(ptst, perr) );
+      (*@\vdmnotcovered{fo}@*)r all listener in set (*@\vdmnotcovered{fListener}@*)s do
+        (*@\vdmnotcovered{listene}@*)r.addError((*@\vdmnotcovered{pts}@*)t, (*@\vdmnotcovered{per}@*)r) );
 
   public startTest: Test ==> ()
   startTest (ptst) ==
     ( -- first increase the local run test counter
-      fRunTests := fRunTests + 1;
+      (*@\vdmnotcovered{fRunTest}@*)s := (*@\vdmnotcovered{fRunTest}@*)s (*@\vdmnotcovered{}@*)+ (*@\vdmnotcovered{}@*)1;
       -- now inform all listeners
-      for all listener in set fListeners do
-        listener.startTest(ptst) );
+      (*@\vdmnotcovered{fo}@*)r all listener in set (*@\vdmnotcovered{fListener}@*)s do
+        (*@\vdmnotcovered{listene}@*)r.startTest((*@\vdmnotcovered{pts}@*)t) );
   
   public endTest: Test ==> ()
   endTest (ptst) ==
-    for all listener in set fListeners do
-      listener.endTest(ptst);
+    (*@\vdmnotcovered{fo}@*)r all listener in set (*@\vdmnotcovered{fListener}@*)s do
+      (*@\vdmnotcovered{listene}@*)r.endTest((*@\vdmnotcovered{pts}@*)t);
 
   public run : TestCase ==> ()
   run(test)==
   ( 
-    startTest(test);
-    runProtected(test);
-    endTest(test);
+    (*@\vdmnotcovered{startTes}@*)t((*@\vdmnotcovered{tes}@*)t);
+    (*@\vdmnotcovered{runProtecte}@*)d((*@\vdmnotcovered{tes}@*)t);
+    (*@\vdmnotcovered{endTes}@*)t((*@\vdmnotcovered{tes}@*)t);
 
   );
   public runProtected : TestCase ==> () 
   runProtected(test) ==
   (
-    trap exc :Throwable
+    (*@\vdmnotcovered{tra}@*)p exc :Throwable
         with
-          if isofclass(AssertionFailedError,exc)
-          then addFailure(test, exc)
-          else if isofbaseclass(Throwable, exc)
-               then addError(test, exc)
-               else error -- We hope this never happens
+          (*@\vdmnotcovered{i}@*)f (*@\vdmnotcovered{isofclas}@*)s(AssertionFailedError,(*@\vdmnotcovered{ex}@*)c)
+          then (*@\vdmnotcovered{addFailur}@*)e((*@\vdmnotcovered{tes}@*)t, (*@\vdmnotcovered{ex}@*)c)
+          else (*@\vdmnotcovered{i}@*)f (*@\vdmnotcovered{isofbaseclas}@*)s(Throwable, (*@\vdmnotcovered{ex}@*)c)
+               then (*@\vdmnotcovered{addErro}@*)r((*@\vdmnotcovered{tes}@*)t, (*@\vdmnotcovered{ex}@*)c)
+               else (*@\vdmnotcovered{erro}@*)r -- We hope this never happens
         in (
-              test.runBare();
+              (*@\vdmnotcovered{tes}@*)t.runBare();
             ); 
   );
   
   public runCount: () ==> nat
-  runCount () == return fRunTests;
+  runCount () == (*@\vdmnotcovered{retur}@*)n (*@\vdmnotcovered{fRunTest}@*)s;
     
   public failureCount: () ==> nat
-  failureCount () == return len fFailures;
+  failureCount () == (*@\vdmnotcovered{retur}@*)n (*@\vdmnotcovered{le}@*)n (*@\vdmnotcovered{fFailure}@*)s;
   
   public errorCount: () ==> nat
-  errorCount () == return len fErrors;
+  errorCount () == (*@\vdmnotcovered{retur}@*)n (*@\vdmnotcovered{le}@*)n (*@\vdmnotcovered{fError}@*)s;
   
   public wasSuccessful: () ==> bool
-  wasSuccessful () == return failureCount() = 0 and errorCount() = 0;
+  wasSuccessful () == (*@\vdmnotcovered{retur}@*)n (*@\vdmnotcovered{failureCoun}@*)t() (*@\vdmnotcovered{}@*)= (*@\vdmnotcovered{}@*)0 (*@\vdmnotcovered{an}@*)d (*@\vdmnotcovered{errorCoun}@*)t() (*@\vdmnotcovered{}@*)= (*@\vdmnotcovered{}@*)0;
 
   public toString : () ==> seq of char
   toString()==
   (
     dcl tmp: seq of char :=     
-        "----------------------------------------\n"^
-        "|    TEST RESULTS                      |\n"^
-        "|--------------------------------------|\n"^
-        "| Executed: "^ToStringInt(runCount())^"\n"^
-        "| Failures: "^ToStringInt(failureCount())^"\n"^
-        "| Errors:   "^ToStringInt(errorCount())^"\n";
+        (*@\vdmnotcovered{"----------------------------------------\textbackslash n}@*)"(*@\vdmnotcovered{}@*)^
+        (*@\vdmnotcovered{"|    TEST RESULTS                      |\textbackslash n}@*)"(*@\vdmnotcovered{}@*)^
+        (*@\vdmnotcovered{"|--------------------------------------|\textbackslash n}@*)"(*@\vdmnotcovered{}@*)^
+        (*@\vdmnotcovered{"| Executed: }@*)"(*@\vdmnotcovered{}@*)^(*@\vdmnotcovered{ToStringIn}@*)t((*@\vdmnotcovered{runCoun}@*)t())(*@\vdmnotcovered{}@*)^(*@\vdmnotcovered{"\textbackslash n}@*)"(*@\vdmnotcovered{}@*)^
+        (*@\vdmnotcovered{"| Failures: }@*)"(*@\vdmnotcovered{}@*)^(*@\vdmnotcovered{ToStringIn}@*)t((*@\vdmnotcovered{failureCoun}@*)t())(*@\vdmnotcovered{}@*)^(*@\vdmnotcovered{"\textbackslash n}@*)"(*@\vdmnotcovered{}@*)^
+        (*@\vdmnotcovered{"| Errors:   }@*)"(*@\vdmnotcovered{}@*)^(*@\vdmnotcovered{ToStringIn}@*)t((*@\vdmnotcovered{errorCoun}@*)t())(*@\vdmnotcovered{}@*)^(*@\vdmnotcovered{"\textbackslash n}@*)";
     
-    tmp := tmp^"|______________________________________|\n|";
-    for all i in set inds fFailures do
-        tmp := tmp^"\n| "^fFailures(i).getMessage();
+    (*@\vdmnotcovered{tm}@*)p := (*@\vdmnotcovered{tm}@*)p(*@\vdmnotcovered{}@*)^(*@\vdmnotcovered{"|\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_|\textbackslash n|}@*)";
+    (*@\vdmnotcovered{fo}@*)r all i in set (*@\vdmnotcovered{ind}@*)s (*@\vdmnotcovered{fFailure}@*)s do
+        (*@\vdmnotcovered{tm}@*)p := (*@\vdmnotcovered{tm}@*)p(*@\vdmnotcovered{}@*)^(*@\vdmnotcovered{"\textbackslash n| }@*)"(*@\vdmnotcovered{}@*)^(*@\vdmnotcovered{fFailure}@*)s((*@\vdmnotcovered{}@*)i).(*@\vdmnotcovered{getMessag}@*)e();
     
-    tmp := tmp^"\n|";
+    (*@\vdmnotcovered{tm}@*)p := (*@\vdmnotcovered{tm}@*)p(*@\vdmnotcovered{}@*)^(*@\vdmnotcovered{"\textbackslash n|}@*)";
 
-    for all i in set inds fErrors do
-        tmp := tmp^"\n| Error in test "^fErrors(i).tcname^" "^fErrors(i).except.getMessage();
+    (*@\vdmnotcovered{fo}@*)r all i in set (*@\vdmnotcovered{ind}@*)s (*@\vdmnotcovered{fError}@*)s do
+        (*@\vdmnotcovered{tm}@*)p := (*@\vdmnotcovered{tm}@*)p(*@\vdmnotcovered{}@*)^(*@\vdmnotcovered{"\textbackslash n| Error in test }@*)"(*@\vdmnotcovered{}@*)^(*@\vdmnotcovered{fError}@*)s((*@\vdmnotcovered{}@*)i).(*@\vdmnotcovered{tcnam}@*)e(*@\vdmnotcovered{}@*)^(*@\vdmnotcovered{" }@*)"(*@\vdmnotcovered{}@*)^(*@\vdmnotcovered{fError}@*)s((*@\vdmnotcovered{}@*)i).(*@\vdmnotcovered{excep}@*)t.(*@\vdmnotcovered{getMessag}@*)e();
  
-    tmp := tmp^"\n|--------------------------------------|\n";
+    (*@\vdmnotcovered{tm}@*)p := (*@\vdmnotcovered{tm}@*)p(*@\vdmnotcovered{}@*)^(*@\vdmnotcovered{"\textbackslash n|--------------------------------------|\textbackslash n}@*)";
 
-    if wasSuccessful() 
+    (*@\vdmnotcovered{i}@*)f (*@\vdmnotcovered{wasSuccessfu}@*)l() 
     then
     (
-        tmp := tmp^"|              SUCCESS                 |";
+        (*@\vdmnotcovered{tm}@*)p := (*@\vdmnotcovered{tm}@*)p(*@\vdmnotcovered{}@*)^(*@\vdmnotcovered{"|              SUCCESS                 |}@*)";
     )
     else
     (
-        tmp := tmp^"|              FAILURE                 |";
+        (*@\vdmnotcovered{tm}@*)p := (*@\vdmnotcovered{tm}@*)p(*@\vdmnotcovered{}@*)^(*@\vdmnotcovered{"|              FAILURE                 |}@*)";
     );
-        tmp := tmp^"\n|______________________________________|";
-        return tmp;
+        (*@\vdmnotcovered{tm}@*)p := (*@\vdmnotcovered{tm}@*)p(*@\vdmnotcovered{}@*)^(*@\vdmnotcovered{"\textbackslash n|\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_|}@*)";
+        (*@\vdmnotcovered{retur}@*)n (*@\vdmnotcovered{tm}@*)p;
   );
 functions
 -------------------------------------
@@ -542,23 +542,23 @@ functions
 -------------------------------------
 public static ToStringInt : int | nat1 | nat -> seq of char
 ToStringInt(val) ==
-  let result : int = val mod 10,
-      rest : int = val div 10
-  in if rest > 0 then
-       ToStringInt(rest) ^ GetStringFromNum(result)
-     else GetStringFromNum(result)
-pre val >= 0
+  (*@\vdmnotcovered{le}@*)t result : int = (*@\vdmnotcovered{va}@*)l (*@\vdmnotcovered{mo}@*)d (*@\vdmnotcovered{1}@*)0,
+      rest : int = (*@\vdmnotcovered{va}@*)l (*@\vdmnotcovered{di}@*)v (*@\vdmnotcovered{1}@*)0
+  in (*@\vdmnotcovered{i}@*)f (*@\vdmnotcovered{res}@*)t (*@\vdmnotcovered{}@*)> (*@\vdmnotcovered{}@*)0 then
+       (*@\vdmnotcovered{ToStringIn}@*)t((*@\vdmnotcovered{res}@*)t) (*@\vdmnotcovered{}@*)^ (*@\vdmnotcovered{GetStringFromNu}@*)m((*@\vdmnotcovered{resul}@*)t)
+     else (*@\vdmnotcovered{GetStringFromNu}@*)m((*@\vdmnotcovered{resul}@*)t)
+pre (*@\vdmnotcovered{va}@*)l (*@\vdmnotcovered{>}@*)= (*@\vdmnotcovered{}@*)0
 measure ToStringIntMeasure;
 
 private ToStringIntMeasure : nat -> nat
-ToStringIntMeasure(a) == a;
+ToStringIntMeasure(a) == (*@\vdmnotcovered{}@*)a;
     
 -------------------------------------
 -- Convert a int < 10 to a String
 -------------------------------------
 public static GetStringFromNum : int  -> seq of char --| nat | real
-GetStringFromNum(val) == ["0123456789"(val+1)]
-pre val < 10;
+GetStringFromNum(val) == (*@\vdmnotcovered{}@*)[(*@\vdmnotcovered{"0123456789}@*)"((*@\vdmnotcovered{va}@*)l(*@\vdmnotcovered{}@*)+(*@\vdmnotcovered{}@*)1)]
+pre (*@\vdmnotcovered{va}@*)l (*@\vdmnotcovered{}@*)< (*@\vdmnotcovered{1}@*)0;
   
 end TestResult  
 
@@ -569,13 +569,13 @@ class TestRunner
 operations
 public run : () ==> ()
 run() ==
-      let tests : set of Test = collectTests(new TestRunner()),
-          ts : TestSuite = new TestSuite(tests),
-          result : TestResult = new TestResult()
+      (*@\vdmnotcovered{le}@*)t tests : set of Test = (*@\vdmnotcovered{collectTest}@*)s((*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{TestRunne}@*)r()),
+          ts : TestSuite = (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{TestSuit}@*)e((*@\vdmnotcovered{test}@*)s),
+          result : TestResult = (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{TestResul}@*)t()
       in
       (
-          ts.run(result);
-          IO`print(result.toString());
+          (*@\vdmnotcovered{t}@*)s.run((*@\vdmnotcovered{resul}@*)t);
+          (*@\vdmnotcovered{IO`prin}@*)t((*@\vdmnotcovered{resul}@*)t.(*@\vdmnotcovered{toStrin}@*)g());
       );
 
 collectTests : TestRunner ==> set of Test
@@ -583,4 +583,168 @@ collectTests(obj) == is not yet specified;
 
 end TestRunner
 \end{vdm_al}
+\bigskip
+\begin{longtable}{|l|r|r|}
+\hline
+Function or operation & Coverage & Calls \\
+\hline
+\hline
+Assert & 0.0\% & 0 \\
+\hline
+AssertionFailedError & 0.0\% & 0 \\
+\hline
+AssertionFailedError & 0.0\% & 0 \\
+\hline
+AssertionFailedError:106 & 0.0\% & 0 \\
+\hline
+Error & 0.0\% & 0 \\
+\hline
+Error & 0.0\% & 0 \\
+\hline
+Error:81 & 0.0\% & 0 \\
+\hline
+GetStringFromNum & 0.0\% & 0 \\
+\hline
+Test & 28.5\% & 0 \\
+\hline
+TestCase & 0.0\% & 0 \\
+\hline
+TestCase & 0.0\% & 0 \\
+\hline
+TestCase:210 & 0.0\% & 0 \\
+\hline
+TestListener & 100.0\% & 1 \\
+\hline
+TestResult & 0.0\% & 0 \\
+\hline
+TestRunner & 0.0\% & 0 \\
+\hline
+TestSuite & 0.0\% & 0 \\
+\hline
+TestSuite & 0.0\% & 0 \\
+\hline
+TestSuite:275 & 0.0\% & 0 \\
+\hline
+TestSuite:278 & 0.0\% & 0 \\
+\hline
+TestSuite:292 & 0.0\% & 0 \\
+\hline
+TestSuite:306 & 0.0\% & 0 \\
+\hline
+TestSuite:316 & 0.0\% & 0 \\
+\hline
+Throwable & 0.0\% & 0 \\
+\hline
+ToStringInt & 0.0\% & 0 \\
+\hline
+ToStringIntMeasure & 0.0\% & 0 \\
+\hline
+addError & 100.0\% & 1 \\
+\hline
+addError & 0.0\% & 0 \\
+\hline
+addFailure & 100.0\% & 1 \\
+\hline
+addFailure & 0.0\% & 0 \\
+\hline
+addListener & 0.0\% & 0 \\
+\hline
+addTest & 0.0\% & 0 \\
+\hline
+assertFalse & 0.0\% & 0 \\
+\hline
+assertFalse:130 & 0.0\% & 0 \\
+\hline
+assertTrue & 0.0\% & 0 \\
+\hline
+assertTrue:122 & 0.0\% & 0 \\
+\hline
+collectTests & 0.0\% & 0 \\
+\hline
+createResult & 0.0\% & 0 \\
+\hline
+createTests & 0.0\% & 0 \\
+\hline
+endTest & 0.0\% & 0 \\
+\hline
+endTest & 100.0\% & 1 \\
+\hline
+errorCount & 0.0\% & 0 \\
+\hline
+exitListener & 100.0\% & 1 \\
+\hline
+fail & 0.0\% & 0 \\
+\hline
+fail:137 & 0.0\% & 0 \\
+\hline
+failureCount & 0.0\% & 0 \\
+\hline
+getMessage & 0.0\% & 0 \\
+\hline
+getName & 0.0\% & 0 \\
+\hline
+getTestMethodNamed & 0.0\% & 0 \\
+\hline
+hasMessage & 0.0\% & 0 \\
+\hline
+initListener & 100.0\% & 1 \\
+\hline
+reflectionRunTest & 0.0\% & 0 \\
+\hline
+removeListener & 0.0\% & 0 \\
+\hline
+run & 0.0\% & 0 \\
+\hline
+run & 0.0\% & 0 \\
+\hline
+run & 100.0\% & 1 \\
+\hline
+run & 0.0\% & 0 \\
+\hline
+run & 0.0\% & 0 \\
+\hline
+run:191 & 0.0\% & 0 \\
+\hline
+run:339 & 0.0\% & 0 \\
+\hline
+runBare & 0.0\% & 0 \\
+\hline
+runCount & 0.0\% & 0 \\
+\hline
+runOnly & 0.0\% & 0 \\
+\hline
+runOnly & 0.0\% & 0 \\
+\hline
+runOnly & 100.0\% & 1 \\
+\hline
+runProtected & 0.0\% & 0 \\
+\hline
+runTest & 0.0\% & 0 \\
+\hline
+setName & 0.0\% & 0 \\
+\hline
+setUp & 0.0\% & 0 \\
+\hline
+startTest & 100.0\% & 1 \\
+\hline
+startTest & 0.0\% & 0 \\
+\hline
+tearDown & 0.0\% & 0 \\
+\hline
+testAt & 0.0\% & 0 \\
+\hline
+testCount & 0.0\% & 0 \\
+\hline
+tests & 0.0\% & 0 \\
+\hline
+throw & 0.0\% & 0 \\
+\hline
+toString & 0.0\% & 0 \\
+\hline
+wasSuccessful & 0.0\% & 0 \\
+\hline
+\hline
+VDMUnit.vdmpp & 1.8\% & 9 \\
+\hline
+\end{longtable}
 \end{document}

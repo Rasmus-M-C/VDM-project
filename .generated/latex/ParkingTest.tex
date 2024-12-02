@@ -9,71 +9,72 @@
 \begin{vdm_al}
 class ParkingTest is subclass of TestCase
 instance variables
-    controller : controller := new controller();
+    controller : controller := (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{controlle}@*)r();
 
 operations
     -- Constructor
     public ParkingTest: seq of char ==> ParkingTest
-    ParkingTest(name) == TestCase(name);
+    ParkingTest(name) == (*@\vdmnotcovered{TestCas}@*)e((*@\vdmnotcovered{nam}@*)e);
 
     -- Set up before each test
     public setUp: () ==> ()
     setUp() == 
     (
-        controller := new controller();
-        controller.initGarage();
+        (*@\vdmnotcovered{controlle}@*)r := (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{controlle}@*)r();
+        (*@\vdmnotcovered{controlle}@*)r.initGarage();
     );
 
     -- Tear down after each test (optional)
     public tearDown: () ==> ()
-    tearDown() == skip;
+    tearDown() == (*@\vdmnotcovered{ski}@*)p;
 
   
     -- Example test case: Enter Garage
     public testEnterGarage: () ==> ()
     testEnterGarage() ==
     (
-        dcl car1 : car := new car("AB12345", mk_(-1, -1, -1), 0, <electric>);
-        Assert`assertTrue(not controller.carAlreadyExists(car1.getPlate()));
-        controller.enterGarage(car1);
-        Assert`assertTrue(controller.carAlreadyExists(car1.getPlate()));
+        dcl car1 : car := (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{ca}@*)r((*@\vdmnotcovered{"AB12345}@*)", (*@\vdmnotcovered{mk}@*)_((*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1), (*@\vdmnotcovered{}@*)0, (*@\vdmnotcovered{<electric}@*)>);
+        (*@\vdmnotcovered{Assert`assertTru}@*)e((*@\vdmnotcovered{no}@*)t (*@\vdmnotcovered{controlle}@*)r.(*@\vdmnotcovered{carAlreadyExist}@*)s((*@\vdmnotcovered{car}@*)1.(*@\vdmnotcovered{getPlat}@*)e()));
+        (*@\vdmnotcovered{controlle}@*)r.enterGarage((*@\vdmnotcovered{car}@*)1);
+        (*@\vdmnotcovered{Assert`assertTru}@*)e((*@\vdmnotcovered{controlle}@*)r.(*@\vdmnotcovered{carAlreadyExist}@*)s((*@\vdmnotcovered{car}@*)1.(*@\vdmnotcovered{getPlat}@*)e()));
     );
 
     -- Example test case: Leave Garage
     public testLeaveGarage: () ==> ()
     testLeaveGarage() ==
     (
-        dcl car1 : car := new car("AB12345", mk_(-1, -1, -1), 0, <electric>);
-        controller.enterGarage(car1);
-        controller.leaveGarage(car1.getPlate());
-        Assert`assertTrue(not controller.carAlreadyExists(car1.getPlate()));
+        dcl car1 : car := (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{ca}@*)r((*@\vdmnotcovered{"AB12345}@*)", (*@\vdmnotcovered{mk}@*)_((*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1), (*@\vdmnotcovered{}@*)0, (*@\vdmnotcovered{<electric}@*)>);
+        (*@\vdmnotcovered{controlle}@*)r.enterGarage((*@\vdmnotcovered{car}@*)1);
+        (*@\vdmnotcovered{Assert`assertTru}@*)e((*@\vdmnotcovered{controlle}@*)r.(*@\vdmnotcovered{carAlreadyExist}@*)s((*@\vdmnotcovered{car}@*)1.(*@\vdmnotcovered{getPlat}@*)e()));
+        (*@\vdmnotcovered{controlle}@*)r.leaveGarage((*@\vdmnotcovered{car}@*)1.(*@\vdmnotcovered{getPlat}@*)e());
+        
     );
 
     -- Example test case: Capacity Limit
     public testCapacityLimit: () ==> ()
     testCapacityLimit() ==
     (
-        dcl car1 : car := new car("CAR1", mk_(-1, -1, -1), 0, <electric>);
-        dcl car2 : car := new car("CAR2", mk_(-1, -1, -1), 0, <electric>);
-        dcl car3 : car := new car("CAR3", mk_(-1, -1, -1), 0, <electric>);
-        dcl car4 : car := new car("CAR4", mk_(-1, -1, -1), 0, <electric>);
-        dcl car5 : car := new car("CAR5", mk_(-1, -1, -1), 0, <electric>);
-        dcl car6 : car := new car("CAR6", mk_(-1, -1, -1), 0, <electric>);
-        dcl car7 : car := new car("CAR7", mk_(-1, -1, -1), 0, <electric>);
-        dcl car8 : car := new car("CAR8", mk_(-1, -1, -1), 0, <electric>);
+        dcl car1 : car := (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{ca}@*)r((*@\vdmnotcovered{"CAR1}@*)", (*@\vdmnotcovered{mk}@*)_((*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1), (*@\vdmnotcovered{}@*)0, (*@\vdmnotcovered{<electric}@*)>);
+        dcl car2 : car := (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{ca}@*)r((*@\vdmnotcovered{"CAR2}@*)", (*@\vdmnotcovered{mk}@*)_((*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1), (*@\vdmnotcovered{}@*)0, (*@\vdmnotcovered{<electric}@*)>);
+        dcl car3 : car := (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{ca}@*)r((*@\vdmnotcovered{"CAR3}@*)", (*@\vdmnotcovered{mk}@*)_((*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1), (*@\vdmnotcovered{}@*)0, (*@\vdmnotcovered{<electric}@*)>);
+        dcl car4 : car := (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{ca}@*)r((*@\vdmnotcovered{"CAR4}@*)", (*@\vdmnotcovered{mk}@*)_((*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1), (*@\vdmnotcovered{}@*)0, (*@\vdmnotcovered{<electric}@*)>);
+        dcl car5 : car := (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{ca}@*)r((*@\vdmnotcovered{"CAR5}@*)", (*@\vdmnotcovered{mk}@*)_((*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1), (*@\vdmnotcovered{}@*)0, (*@\vdmnotcovered{<electric}@*)>);
+        dcl car6 : car := (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{ca}@*)r((*@\vdmnotcovered{"CAR6}@*)", (*@\vdmnotcovered{mk}@*)_((*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1), (*@\vdmnotcovered{}@*)0, (*@\vdmnotcovered{<electric}@*)>);
+        dcl car7 : car := (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{ca}@*)r((*@\vdmnotcovered{"CAR7}@*)", (*@\vdmnotcovered{mk}@*)_((*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1), (*@\vdmnotcovered{}@*)0, (*@\vdmnotcovered{<electric}@*)>);
+        dcl car8 : car := (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{ca}@*)r((*@\vdmnotcovered{"CAR8}@*)", (*@\vdmnotcovered{mk}@*)_((*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1), (*@\vdmnotcovered{}@*)0, (*@\vdmnotcovered{<electric}@*)>);
         
 
-        controller.enterGarage(car1);
-        controller.enterGarage(car2);
-        controller.enterGarage(car3);
-        controller.enterGarage(car4);
-        controller.enterGarage(car5);
-        controller.enterGarage(car6);
-        controller.enterGarage(car7);
-        controller.enterGarage(car8);
+        (*@\vdmnotcovered{controlle}@*)r.enterGarage((*@\vdmnotcovered{car}@*)1);
+        (*@\vdmnotcovered{controlle}@*)r.enterGarage((*@\vdmnotcovered{car}@*)2);
+        (*@\vdmnotcovered{controlle}@*)r.enterGarage((*@\vdmnotcovered{car}@*)3);
+        (*@\vdmnotcovered{controlle}@*)r.enterGarage((*@\vdmnotcovered{car}@*)4);
+        (*@\vdmnotcovered{controlle}@*)r.enterGarage((*@\vdmnotcovered{car}@*)5);
+        (*@\vdmnotcovered{controlle}@*)r.enterGarage((*@\vdmnotcovered{car}@*)6);
+        (*@\vdmnotcovered{controlle}@*)r.enterGarage((*@\vdmnotcovered{car}@*)7);
+        (*@\vdmnotcovered{controlle}@*)r.enterGarage((*@\vdmnotcovered{car}@*)8);
         
 
-        Assert`assertTrue(card dom controller.parkedCarsMap = controller.getMaxCapacity());
+        (*@\vdmnotcovered{Assert`assertTru}@*)e((*@\vdmnotcovered{car}@*)d (*@\vdmnotcovered{do}@*)m (*@\vdmnotcovered{controlle}@*)r.(*@\vdmnotcovered{parkedCarsMa}@*)p (*@\vdmnotcovered{}@*)= (*@\vdmnotcovered{controlle}@*)r.(*@\vdmnotcovered{getMaxCapacit}@*)y());
     
     );
     
@@ -81,29 +82,29 @@ public testCapacityLimitGasCars: () ==> ()
 testCapacityLimitGasCars() ==
 (   
     -- Calculate maximum gas car capacity based on garage slots
-    dcl maxGasCars : nat := len controller.gasSlotsSeq;
+    dcl maxGasCars : nat := (*@\vdmnotcovered{le}@*)n (*@\vdmnotcovered{controlle}@*)r.(*@\vdmnotcovered{gasSlotsSe}@*)q;
     
-        dcl car4 : car := new car("CAR4", mk_(-1, -1, -1), 0, <gas>);
-        dcl car5 : car := new car("CAR5", mk_(-1, -1, -1), 0, <gas>);
-        dcl car6 : car := new car("CAR6", mk_(-1, -1, -1), 0, <gas>);
-        dcl car7 : car := new car("CAR7", mk_(-1, -1, -1), 0, <gas>);
-        dcl car8 : car := new car("CAR8", mk_(-1, -1, -1), 0, <gas>);
-        dcl car9 : car := new car("CAR9", mk_(-1, -1, -1), 0, <gas>);
-        dcl car10 : car := new car("CAR10", mk_(-1, -1, -1), 0, <gas>);
+        dcl car4 : car := (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{ca}@*)r((*@\vdmnotcovered{"CAR4}@*)", (*@\vdmnotcovered{mk}@*)_((*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1), (*@\vdmnotcovered{}@*)0, (*@\vdmnotcovered{<gas}@*)>);
+        dcl car5 : car := (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{ca}@*)r((*@\vdmnotcovered{"CAR5}@*)", (*@\vdmnotcovered{mk}@*)_((*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1), (*@\vdmnotcovered{}@*)0, (*@\vdmnotcovered{<gas}@*)>);
+        dcl car6 : car := (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{ca}@*)r((*@\vdmnotcovered{"CAR6}@*)", (*@\vdmnotcovered{mk}@*)_((*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1), (*@\vdmnotcovered{}@*)0, (*@\vdmnotcovered{<gas}@*)>);
+        dcl car7 : car := (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{ca}@*)r((*@\vdmnotcovered{"CAR7}@*)", (*@\vdmnotcovered{mk}@*)_((*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1), (*@\vdmnotcovered{}@*)0, (*@\vdmnotcovered{<gas}@*)>);
+        dcl car8 : car := (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{ca}@*)r((*@\vdmnotcovered{"CAR8}@*)", (*@\vdmnotcovered{mk}@*)_((*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1), (*@\vdmnotcovered{}@*)0, (*@\vdmnotcovered{<gas}@*)>);
+        dcl car9 : car := (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{ca}@*)r((*@\vdmnotcovered{"CAR9}@*)", (*@\vdmnotcovered{mk}@*)_((*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1), (*@\vdmnotcovered{}@*)0, (*@\vdmnotcovered{<gas}@*)>);
+        dcl car10 : car := (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{ca}@*)r((*@\vdmnotcovered{"CAR10}@*)", (*@\vdmnotcovered{mk}@*)_((*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1), (*@\vdmnotcovered{}@*)0, (*@\vdmnotcovered{<gas}@*)>);
         
         
         
         
-        controller.enterGarage(car4);
-        controller.enterGarage(car5);
-        controller.enterGarage(car6);
-        controller.enterGarage(car7);
-        controller.enterGarage(car8);
-        controller.enterGarage(car9);
-        controller.enterGarage(car10);
+        (*@\vdmnotcovered{controlle}@*)r.enterGarage((*@\vdmnotcovered{car}@*)4);
+        (*@\vdmnotcovered{controlle}@*)r.enterGarage((*@\vdmnotcovered{car}@*)5);
+        (*@\vdmnotcovered{controlle}@*)r.enterGarage((*@\vdmnotcovered{car}@*)6);
+        (*@\vdmnotcovered{controlle}@*)r.enterGarage((*@\vdmnotcovered{car}@*)7);
+        (*@\vdmnotcovered{controlle}@*)r.enterGarage((*@\vdmnotcovered{car}@*)8);
+        (*@\vdmnotcovered{controlle}@*)r.enterGarage((*@\vdmnotcovered{car}@*)9);
+        (*@\vdmnotcovered{controlle}@*)r.enterGarage((*@\vdmnotcovered{car1}@*)0);
     
         -- Assert that all gas slots are filled
-        Assert`assertTrue(card dom controller.parkedCarsMap = maxGasCars);
+        (*@\vdmnotcovered{Assert`assertTru}@*)e((*@\vdmnotcovered{car}@*)d (*@\vdmnotcovered{do}@*)m (*@\vdmnotcovered{controlle}@*)r.(*@\vdmnotcovered{parkedCarsMa}@*)p (*@\vdmnotcovered{}@*)= (*@\vdmnotcovered{maxGasCar}@*)s);
 
 );
 
@@ -112,23 +113,23 @@ testCapacityLimitGasCars() ==
 testPaymentCalculation() ==
 (
     -- Initialize the test car
-    dcl car1 : car := new car("AB12345", mk_(-1, -1, -1), 0, <electric>);
+    dcl car1 : car := (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{ca}@*)r((*@\vdmnotcovered{"AB12345}@*)", (*@\vdmnotcovered{mk}@*)_((*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1), (*@\vdmnotcovered{}@*)0, (*@\vdmnotcovered{<electric}@*)>);
      -- Ensure car is not in garage
     
     -- Enter the garage
-    controller.enterGarage(car1);
+    (*@\vdmnotcovered{controlle}@*)r.enterGarage((*@\vdmnotcovered{car}@*)1);
     
-    world`timerRef.Step(); 
-    world`timerRef.Step();  
+    (*@\vdmnotcovered{world`timerRe}@*)f.Step(); 
+    (*@\vdmnotcovered{world`timerRe}@*)f.Step();  
     
-    controller.leaveGarage(car1.getPlate());
+    (*@\vdmnotcovered{controlle}@*)r.leaveGarage((*@\vdmnotcovered{car}@*)1.(*@\vdmnotcovered{getPlat}@*)e());
 
     --Assert`assertTrue(not controller.carAlreadyExists(car1.getPlate()));  -- Ensure car is removed
     
-    let priceCar = controller.priceTypeCar(car1) in
-    let expectedPayment = priceCar * 2 in
+    (*@\vdmnotcovered{le}@*)t priceCar = (*@\vdmnotcovered{controlle}@*)r.(*@\vdmnotcovered{priceTypeCa}@*)r((*@\vdmnotcovered{car}@*)1) in
+    (*@\vdmnotcovered{le}@*)t expectedPayment = (*@\vdmnotcovered{priceCa}@*)r (*@\vdmnotcovered{}@*)* (*@\vdmnotcovered{}@*)2 in
       -- 2 hours * price per hour
-    Assert`assertTrue(controller.getBankBalance() = expectedPayment);  -- Ensure car is removed
+    (*@\vdmnotcovered{Assert`assertTru}@*)e((*@\vdmnotcovered{controlle}@*)r.(*@\vdmnotcovered{getBankBalanc}@*)e() (*@\vdmnotcovered{}@*)= (*@\vdmnotcovered{expectedPaymen}@*)t);  -- Ensure car is removed
 
     
 );
@@ -136,4 +137,32 @@ testPaymentCalculation() ==
 
 end ParkingTest
 \end{vdm_al}
+\bigskip
+\begin{longtable}{|l|r|r|}
+\hline
+Function or operation & Coverage & Calls \\
+\hline
+\hline
+ParkingTest & 0.0\% & 0 \\
+\hline
+ParkingTest & 0.0\% & 0 \\
+\hline
+setUp & 0.0\% & 0 \\
+\hline
+tearDown & 0.0\% & 0 \\
+\hline
+testCapacityLimit & 0.0\% & 0 \\
+\hline
+testCapacityLimitGasCars & 0.0\% & 0 \\
+\hline
+testEnterGarage & 0.0\% & 0 \\
+\hline
+testLeaveGarage & 0.0\% & 0 \\
+\hline
+testPaymentCalculation & 0.0\% & 0 \\
+\hline
+\hline
+ParkingTest.vdmpp & 0.0\% & 0 \\
+\hline
+\end{longtable}
 \end{document}

@@ -7,11 +7,11 @@ public parkingLot ::
         typeOfSlot : <electric> | <gas>
         time : nat
 instance variables
-    io : IO := new IO();
+   
     public dimensions: nat := 2;
     maxCapacity: nat := (dimensions**3);
 
-    fee: real :=10; --  50% added to the price of parking
+    fee: real :=1.5; --  50% added to the price of parking
     electricParkingPrice: real := 1.0;
     gasParkingPrice: real := 5.0;
 
@@ -120,9 +120,9 @@ public enterGarage: car ==> ()
 enterGarage(car) ==
 (      
            
-        if (fullnessRatio(card dom parkedCarsMap, getMaxCapacity()) > 0.7)  then
+        if (fullnessRatio(card dom parkedCarsMap+1, getMaxCapacity()) > 0.7)  then
                     car.setFeeApplied(true);
-        let loc = findSlotSeq(car) in
+        let loc = findSlotSeq(car) in 
         parkCar(car, loc);
         IO`println("Car with license plate " ^ car.getPlate() ^ " has entered the garage");
         parkedCarsMap := parkedCarsMap ++ {car.getPlate() |-> car};  -- Add to map
@@ -211,8 +211,7 @@ lookupCar(plate) ==
 public leaveGarage: car`licenseplate ==> ()
 leaveGarage(plate) ==
 (
-        for all x in set dom parkedCarsMap do
-            IO`println("Car with license plate " ^ x ^ " xxxx");
+       
         let car = parkedCarsMap(plate) in
         
         (
@@ -241,13 +240,13 @@ leaveGarage(plate) ==
             (
                 if gasSlots(loc).car = car then
                 (
-                    dcl timeSpent : nat := world`timerRef.getTime() - electricSlots(loc).time;
+                    dcl timeSpent : nat := world`timerRef.getTime() - gasSlots(loc).time;
          
                     car.addTime(timeSpent);
                     
                     let amount = pay(car) in  -- payment
                     updateBankBalance(amount);
-                    electricSlots(loc).car := nil;  -- free slot
+                    gasSlots(loc).car := nil;  -- free slot
                     car.setLocation(-1, -1, -1);  -- move car to outside garage
                     parkedCarsMap := {plate} <-: parkedCarsMap;
                     return;

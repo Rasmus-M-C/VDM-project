@@ -4,17 +4,26 @@
             "name": "Launch World with startup.txt",
             "type": "vdm",
             "request": "launch",
-            "noDebug": true,
+            "noDebug": false,
             "defaultName": "world",
-            "command": "p new world().Run()"
+            "command": "p new world().Run()",
+            "settings": {
+                "dynamicTypeChecks": true,
+                "invariantsChecks": true,
+                "preConditionChecks": true,
+                "postConditionChecks": true,
+                "measureChecks": true,
+                "enableLogging": true,
+                "precision": 100
+            }
         },
         {
-            "name": "Lens config: Launch ParkingTestSuite`run",
+            "name": "Lens config: Launch world`Run",
             "type": "vdm",
             "request": "launch",
             "noDebug": true,
-            "defaultName": "ParkingTestSuite",
-            "command": "p new ParkingTestSuite().run()"
+            "defaultName": "world",
+            "command": "p new world().Run()"
         }
     ]
 }

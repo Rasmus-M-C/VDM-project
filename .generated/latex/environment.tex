@@ -16,67 +16,67 @@ types
 
 
 instance variables
-    io : IO := new IO();
-    endSimTime : Time := 26;
-    carSchedule : seq of carEntry := [];
-    outlines : seq of outline := [];
-    parked : seq of carEntry := [];
+    io : IO := (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{I}@*)O();
+    endSimTime : Time := (*@\vdmnotcovered{2}@*)6;
+    carSchedule : seq of carEntry := (*@\vdmnotcovered{}@*)[];
+    outlines : seq of outline := (*@\vdmnotcovered{}@*)[];
+    parked : seq of carEntry := (*@\vdmnotcovered{}@*)[];
     controllerRef : controller;
-    alreadyPrintedEmpty : bool := false;
+    alreadyPrintedEmpty : bool := (*@\vdmnotcovered{fals}@*)e;
 operations
 
 public environment : seq of char * controller ==> environment
 environment(file, controllerInit) ==
 (
-    controllerRef := controllerInit;
-    def mk_(-, input) = io.freadval[seq of carEntry](file) 
+    (*@\vdmnotcovered{controllerRe}@*)f := (*@\vdmnotcovered{controllerIni}@*)t;
+    (*@\vdmnotcovered{de}@*)f mk_(-, input) = (*@\vdmnotcovered{i}@*)o.(*@\vdmnotcovered{freadva}@*)l[seq of carEntry]((*@\vdmnotcovered{fil}@*)e) 
     in
-        carSchedule := input;
-    controllerRef.initGarage();
+        (*@\vdmnotcovered{carSchedul}@*)e := (*@\vdmnotcovered{inpu}@*)t;
+    (*@\vdmnotcovered{controllerRe}@*)f.initGarage();
 );
 public Simulate : () ==> ()
     Simulate() ==
-    (world`timerRef.SetEndSimTime(endSimTime);
-    while world`timerRef.getTime() < endSimTime do
+    ((*@\vdmnotcovered{world`timerRe}@*)f.SetEndSimTime((*@\vdmnotcovered{endSimTim}@*)e);
+    (*@\vdmnotcovered{whil}@*)e (*@\vdmnotcovered{world`timerRe}@*)f.(*@\vdmnotcovered{getTim}@*)e() (*@\vdmnotcovered{}@*)< (*@\vdmnotcovered{endSimTim}@*)e do
     (
-        updateGarage();
-        world`timerRef.Step();
+        (*@\vdmnotcovered{updateGarag}@*)e();
+        (*@\vdmnotcovered{world`timerRe}@*)f.Step();
         
-        printParkedCars();
+        (*@\vdmnotcovered{printParkedCar}@*)s();
     );
 
-    report();
+    (*@\vdmnotcovered{repor}@*)t();
     
     );
 
 public printParkedCars: () ==> ()
 printParkedCars() ==
 (
-    IO`println("Current time: " ^ natToString(world`timerRef.getTime()));
-    IO`println("Cars in the garage amount: " ^ natToString(len parked));
-    IO`println("Current bank balance: " ^ realToString(controllerRef.getBankBalance()));
-    IO`println("-----------------------------------------------");
-    IO`println("Plate      | Type     | Enter Time | Leave Time");
-    IO`println("-----------------------------------------------");
+    (*@\vdmnotcovered{IO`printl}@*)n((*@\vdmnotcovered{"Current time: }@*)" (*@\vdmnotcovered{}@*)^ (*@\vdmnotcovered{natToStrin}@*)g((*@\vdmnotcovered{world`timerRe}@*)f.(*@\vdmnotcovered{getTim}@*)e()));
+    (*@\vdmnotcovered{IO`printl}@*)n((*@\vdmnotcovered{"Cars in the garage amount: }@*)" (*@\vdmnotcovered{}@*)^ (*@\vdmnotcovered{natToStrin}@*)g((*@\vdmnotcovered{le}@*)n (*@\vdmnotcovered{parke}@*)d));
+    (*@\vdmnotcovered{IO`printl}@*)n((*@\vdmnotcovered{"Current bank balance: }@*)" (*@\vdmnotcovered{}@*)^ (*@\vdmnotcovered{realToStrin}@*)g((*@\vdmnotcovered{controllerRe}@*)f.(*@\vdmnotcovered{getBankBalanc}@*)e()));
+    (*@\vdmnotcovered{IO`printl}@*)n((*@\vdmnotcovered{"-----------------------------------------------}@*)");
+    (*@\vdmnotcovered{IO`printl}@*)n((*@\vdmnotcovered{"Plate      | Type     | Enter Time | Leave Time}@*)");
+    (*@\vdmnotcovered{IO`printl}@*)n((*@\vdmnotcovered{"-----------------------------------------------}@*)");
     
-    for car in parked do
+    (*@\vdmnotcovered{fo}@*)r car in (*@\vdmnotcovered{parke}@*)d do
     (
-        IO`println(
-            car.#1 ^ " | " ^
-            (if car.#2 = <electric> then "Electric " else "Gas      ") ^ " | " ^
-            natToString(car.#3) ^ "         | " ^
-            natToString(car.#4)
+        (*@\vdmnotcovered{IO`printl}@*)n(
+            (*@\vdmnotcovered{ca}@*)r.#(*@\vdmnotcovered{}@*)1 (*@\vdmnotcovered{}@*)^ (*@\vdmnotcovered{" | }@*)" (*@\vdmnotcovered{}@*)^
+            ((*@\vdmnotcovered{i}@*)f (*@\vdmnotcovered{ca}@*)r.#(*@\vdmnotcovered{}@*)2 (*@\vdmnotcovered{}@*)= (*@\vdmnotcovered{<electric}@*)> then (*@\vdmnotcovered{"Electric }@*)" else (*@\vdmnotcovered{"Gas      }@*)") (*@\vdmnotcovered{}@*)^ (*@\vdmnotcovered{" | }@*)" (*@\vdmnotcovered{}@*)^
+            (*@\vdmnotcovered{natToStrin}@*)g((*@\vdmnotcovered{ca}@*)r.#(*@\vdmnotcovered{}@*)3) (*@\vdmnotcovered{}@*)^ (*@\vdmnotcovered{"         | }@*)" (*@\vdmnotcovered{}@*)^
+            (*@\vdmnotcovered{natToStrin}@*)g((*@\vdmnotcovered{ca}@*)r.#(*@\vdmnotcovered{}@*)4)
         );
     );
 
     
 
-    if parked = [] and not alreadyPrintedEmpty then
+    (*@\vdmnotcovered{i}@*)f (*@\vdmnotcovered{parke}@*)d (*@\vdmnotcovered{}@*)= (*@\vdmnotcovered{}@*)[] (*@\vdmnotcovered{an}@*)d (*@\vdmnotcovered{no}@*)t (*@\vdmnotcovered{alreadyPrintedEmpt}@*)y then
     (
-        IO`println("No cars in the garage.");
-        alreadyPrintedEmpty := true;
+        (*@\vdmnotcovered{IO`printl}@*)n((*@\vdmnotcovered{"No cars in the garage.}@*)");
+        (*@\vdmnotcovered{alreadyPrintedEmpt}@*)y := (*@\vdmnotcovered{tru}@*)e;
     );
-    IO`println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+    (*@\vdmnotcovered{IO`printl}@*)n((*@\vdmnotcovered{"\^{}\^{}\^{}\^{}\^{}\^{}\^{}\^{}\^{}\^{}\^{}\^{}\^{}\^{}\^{}\^{}\^{}\^{}\^{}\^{}\^{}\^{}\^{}\^{}\^{}\^{}\^{}\^{}\^{}\^{}\^{}\^{}\^{}\^{}\^{}\^{}\^{}\^{}\^{}\^{}\^{}\^{}\^{}\^{}\^{}\^{}\^{}}@*)");
 );
 
 
@@ -84,25 +84,25 @@ public updateGarage: () ==> ()
 updateGarage() ==
 (   
     -- Process any cars scheduled to enter at the current time
-    if carSchedule <> [] then
+    (*@\vdmnotcovered{i}@*)f (*@\vdmnotcovered{carSchedul}@*)e (*@\vdmnotcovered{<}@*)> (*@\vdmnotcovered{}@*)[] then
     (
-        let carEntry = hd carSchedule in
-        if carEntry.#3 = world`timerRef.getTime() then
+        (*@\vdmnotcovered{le}@*)t carEntry = (*@\vdmnotcovered{h}@*)d (*@\vdmnotcovered{carSchedul}@*)e in
+        (*@\vdmnotcovered{i}@*)f (*@\vdmnotcovered{carEntr}@*)y.#(*@\vdmnotcovered{}@*)3 (*@\vdmnotcovered{}@*)= (*@\vdmnotcovered{world`timerRe}@*)f.(*@\vdmnotcovered{getTim}@*)e() then
         (
-            dcl newCar : car := new car(carEntry.#1, mk_(-1, -1, -1), 0, carEntry.#2);
-            controllerRef.enterGarage(newCar);  -- Add car to garage
-            parked := parked ^ [carEntry];      -- Add car to parked
-            carSchedule := tl carSchedule;      -- Remove from schedule
+            dcl newCar : car := (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{ca}@*)r((*@\vdmnotcovered{carEntr}@*)y.#(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{mk}@*)_((*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1), (*@\vdmnotcovered{}@*)0, (*@\vdmnotcovered{carEntr}@*)y.#(*@\vdmnotcovered{}@*)2);
+            (*@\vdmnotcovered{controllerRe}@*)f.enterGarage((*@\vdmnotcovered{newCa}@*)r);  -- Add car to garage
+            (*@\vdmnotcovered{parke}@*)d := (*@\vdmnotcovered{parke}@*)d (*@\vdmnotcovered{}@*)^ (*@\vdmnotcovered{}@*)[(*@\vdmnotcovered{carEntr}@*)y];      -- Add car to parked
+            (*@\vdmnotcovered{carSchedul}@*)e := (*@\vdmnotcovered{t}@*)l (*@\vdmnotcovered{carSchedul}@*)e;      -- Remove from schedule
         )
     );
 
     -- Process cars scheduled to exit at the current time
-    for parkedCar in parked do
+    (*@\vdmnotcovered{fo}@*)r parkedCar in (*@\vdmnotcovered{parke}@*)d do
     (
-        if parkedCar.#4 = world`timerRef.getTime() then
+        (*@\vdmnotcovered{i}@*)f (*@\vdmnotcovered{parkedCa}@*)r.#(*@\vdmnotcovered{}@*)4 (*@\vdmnotcovered{}@*)= (*@\vdmnotcovered{world`timerRe}@*)f.(*@\vdmnotcovered{getTim}@*)e() then
         (
-            controllerRef.leaveGarage(parkedCar.#1);  -- Remove the car from the garage
-            parked := [p | p in seq parked & p.#4 <> world`timerRef.getTime()];
+            (*@\vdmnotcovered{controllerRe}@*)f.leaveGarage((*@\vdmnotcovered{parkedCa}@*)r.#(*@\vdmnotcovered{}@*)1);  -- Remove the car from the garage
+            (*@\vdmnotcovered{parke}@*)d := (*@\vdmnotcovered{}@*)[(*@\vdmnotcovered{}@*)p | p in seq (*@\vdmnotcovered{parke}@*)d & (*@\vdmnotcovered{}@*)p.#(*@\vdmnotcovered{}@*)4 (*@\vdmnotcovered{<}@*)> (*@\vdmnotcovered{world`timerRe}@*)f.(*@\vdmnotcovered{getTim}@*)e()];
         )
     );
 
@@ -115,19 +115,45 @@ updateGarage() ==
 public report: () ==> ()
 report() ==
 (
-   IO`println("Simulation ended at time: " ^ natToString(world`timerRef.getTime()));
-    IO`println("Final bank balance: " ^ realToString(controllerRef.getBankBalance()));
+   (*@\vdmnotcovered{IO`printl}@*)n((*@\vdmnotcovered{"Simulation ended at time: }@*)" (*@\vdmnotcovered{}@*)^ (*@\vdmnotcovered{natToStrin}@*)g((*@\vdmnotcovered{world`timerRe}@*)f.(*@\vdmnotcovered{getTim}@*)e()));
+    (*@\vdmnotcovered{IO`printl}@*)n((*@\vdmnotcovered{"Final bank balance: }@*)" (*@\vdmnotcovered{}@*)^ (*@\vdmnotcovered{realToStrin}@*)g((*@\vdmnotcovered{controllerRe}@*)f.(*@\vdmnotcovered{getBankBalanc}@*)e()));
 );
 public static natToString : nat ==> seq of char 
   natToString(n) ==
   (
-   return VDMUtil`val2seq_of_char[nat](n);
+   (*@\vdmnotcovered{retur}@*)n (*@\vdmnotcovered{VDMUtil`val2seq\_of\_cha}@*)r[nat]((*@\vdmnotcovered{}@*)n);
   );
 public static realToString : real ==> seq of char
         realToString(n) ==
         (
-            return VDMUtil`val2seq_of_char[real](n);
+            (*@\vdmnotcovered{retur}@*)n (*@\vdmnotcovered{VDMUtil`val2seq\_of\_cha}@*)r[real]((*@\vdmnotcovered{}@*)n);
         );
 end environment
 \end{vdm_al}
+\bigskip
+\begin{longtable}{|l|r|r|}
+\hline
+Function or operation & Coverage & Calls \\
+\hline
+\hline
+Simulate & 0.0\% & 0 \\
+\hline
+environment & 0.0\% & 0 \\
+\hline
+environment & 0.0\% & 0 \\
+\hline
+natToString & 0.0\% & 0 \\
+\hline
+printParkedCars & 0.0\% & 0 \\
+\hline
+realToString & 0.0\% & 0 \\
+\hline
+report & 0.0\% & 0 \\
+\hline
+updateGarage & 0.0\% & 0 \\
+\hline
+\hline
+environment.vdmpp & 0.0\% & 0 \\
+\hline
+\end{longtable}
 \end{document}

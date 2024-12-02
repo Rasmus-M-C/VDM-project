@@ -13,24 +13,40 @@ operations
     
     public run: () ==> ()
     run() ==
-        let testsuite : TestSuite = new TestSuite(),
-            result : TestResult = new TestResult() 
+        (*@\vdmnotcovered{le}@*)t ts : TestSuite = (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{TestSuit}@*)e(),
+            result : TestResult = (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{TestResul}@*)t() 
         in
         (
-            testsuite.addTest(new ParkingTest("testEnterGarage"));
-            testsuite.addTest(new ParkingTest("testCapacityLimit"));
-            testsuite.addTest(new ParkingTest("testLeaveGarage"));
-            testsuite.addTest(new ParkingTest("testCapacityLimitGasCars"));
-            testsuite.addTest(new ParkingTest("testPaymentCalculation"));
-            --testsuite.addTest(new TestEnterGarage("testEnterGarage"));
-            --testsuite.addTest(new TestLeaveGarage("testLeaveGarage"));
-            --testsuite.addTest(new TestCapacityLimit("testCapacityLimit"));
-            testsuite.addTest(new TestElectricCarFee("testElectricCarFee"));
-            testsuite.addTest(new TestDimensionArePositive("testDimensionArePositive"));
-            testsuite.run(result);
-            IO`println(result.toString());
+            --ts.addTest(new ParkingTest("testEnterGarage"));
+            --ts.addTest(new ParkingTest("testCapacityLimit"));
+            --ts.addTest(new ParkingTest("testLeaveGarage"));
+            --ts.addTest(new ParkingTest("testCapacityLimitGasCars"));
+            --ts.addTest(new ParkingTest("testPaymentCalculation"));
+            --ts.addTest(new TestEnterGarage("testEnterGarage"));
+            --ts.addTest(new TestLeaveGarage("testLeaveGarage"));
+            --ts.addTest(new TestCapacityLimit("testCapacityLimit"));
+            (*@\vdmnotcovered{t}@*)s.addTest((*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{TestCarFe}@*)e((*@\vdmnotcovered{"testCarFee}@*)"));
+            --ts.addTest(new TestDimensionArePositive("testDimensionArePositive"));
+            
+            
+            (*@\vdmnotcovered{t}@*)s.run((*@\vdmnotcovered{resul}@*)t);
+            (*@\vdmnotcovered{IO`printl}@*)n((*@\vdmnotcovered{resul}@*)t.(*@\vdmnotcovered{toStrin}@*)g());
         
         );
 end ParkingTestSuite
 \end{vdm_al}
+\bigskip
+\begin{longtable}{|l|r|r|}
+\hline
+Function or operation & Coverage & Calls \\
+\hline
+\hline
+ParkingTestSuite & 0.0\% & 0 \\
+\hline
+run & 0.0\% & 0 \\
+\hline
+\hline
+ParkingTestSuite.vdmpp & 0.0\% & 0 \\
+\hline
+\end{longtable}
 \end{document}

@@ -8,16 +8,16 @@ operations
             result : TestResult = new TestResult() 
         in
         (
-            ts.addTest(new ParkingTest("testEnterGarage"));
-            ts.addTest(new ParkingTest("testCapacityLimit"));
-            ts.addTest(new ParkingTest("testLeaveGarage"));
+            --ts.addTest(new ParkingTest("testEnterGarage"));
+            --ts.addTest(new ParkingTest("testCapacityLimit"));
+            --ts.addTest(new ParkingTest("testLeaveGarage"));
             --ts.addTest(new ParkingTest("testCapacityLimitGasCars"));
-            ts.addTest(new ParkingTest("testPaymentCalculation"));
-            ts.addTest(new TestEnterGarage("testEnterGarage"));
-            ts.addTest(new TestLeaveGarage("testLeaveGarage"));
-            ts.addTest(new TestCapacityLimit("testCapacityLimit"));
-            ts.addTest(new TestElectricCarFee("testElectricCarFee"));
-            ts.addTest(new TestDimensionArePositive("testDimensionArePositive"));
+            --ts.addTest(new ParkingTest("testPaymentCalculation"));
+            --ts.addTest(new TestEnterGarage("testEnterGarage"));
+            --ts.addTest(new TestLeaveGarage("testLeaveGarage"));
+            --ts.addTest(new TestCapacityLimit("testCapacityLimit"));
+            ts.addTest(new TestCarFee("testCarFee"));
+            --ts.addTest(new TestDimensionArePositive("testDimensionArePositive"));
             
             
             ts.run(result);

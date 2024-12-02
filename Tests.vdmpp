@@ -113,14 +113,14 @@ operations
 
 end TestCapacityLimit
 
-class TestElectricCarFee is subclass of TestCase
+class TestCarFee is subclass of TestCase
 instance variables
     controller : controller := new controller();
 
 operations
     -- Constructor
-    public TestElectricCarFee: seq of char ==> TestElectricCarFee
-    TestElectricCarFee(name) == TestCase(name);
+    public TestCarFee: seq of char ==> TestCarFee
+    TestCarFee(name) == TestCase(name);
 
     public setUp: () ==> ()
     setUp() == 
@@ -133,16 +133,33 @@ operations
     public tearDown: () ==> ()
     tearDown() == skip;
 
-    public testElectricCarFee: () ==> ()
-    testElectricCarFee() ==
+    public testCarFee: () ==> ()
+    testCarFee() ==
     (
         dcl car1 : car := new car("AB12345", mk_(-1, -1, -1), 0, <electric>);
+        dcl car2 : car := new car("AB12346", mk_(-1, -1, -1), 0, <electric>);
+        dcl car3 : car := new car("AB12347", mk_(-1, -1, -1), 0, <electric>);
+        dcl car4 : car := new car("AB12348", mk_(-1, -1, -1), 0, <electric>);
+        dcl car5 : car := new car("AB12349", mk_(-1, -1, -1), 0, <electric>);
+        dcl car6 : car := new car("AB12350", mk_(-1, -1, -1), 0, <electric>);
+
         controller.enterGarage(car1);
-        controller.leaveGarage(car1.getPlate());
-        Assert`assertTrue(controller.getBankBalance() = 0);
+        controller.enterGarage(car2);
+        controller.enterGarage(car3);
+        controller.enterGarage(car4);
+        controller.enterGarage(car5);
+        controller.enterGarage(car6);
+        
+        -- garage is now 75% full, therefore car6 should have a fee applied
+
+        world`timerRef.Step();
+
+        controller.leaveGarage(car6.getPlate());
+       
+        Assert`assertTrue(controller.getBankBalance() = 1.5 );
     );
 
-end TestElectricCarFee
+end TestCarFee
 
 class TestDimensionArePositive is subclass of TestCase
 instance variables

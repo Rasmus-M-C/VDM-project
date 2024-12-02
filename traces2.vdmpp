@@ -1,0 +1,17 @@
+class Traces2
+values 
+    system2 : controller = new controller();
+
+traces
+FullnessRatioTest:
+(
+    let car = new car("1E1", mk_(-1, -1, -1), 0, <electric>) in
+    (
+        system2.initGarage();
+        system2.enterGarage(car);
+        system2.leaveGarage("1E1");
+    );
+    
+);
+
+end Traces2

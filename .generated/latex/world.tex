@@ -12,9 +12,9 @@ class world
 instance variables  
   
 
-public static  env : [environment] := nil;
-public static  controller : [controller] :=  new controller();
-public static  timerRef : [Timer] := new Timer();    
+public static  env : [environment] := (*@\vdmnotcovered{ni}@*)l;
+public static  controller : [controller] :=  (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{controlle}@*)r();
+public static  timerRef : [Timer] := (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{Time}@*)r();    
 
   
    
@@ -23,9 +23,23 @@ operations
 public 
   Run : () ==> ()
   Run() ==(
-    env := new environment("startup.txt", controller);
-    env.Simulate();
+    (*@\vdmnotcovered{en}@*)v := (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{environmen}@*)t((*@\vdmnotcovered{"startup.txt}@*)", (*@\vdmnotcovered{controlle}@*)r);
+    (*@\vdmnotcovered{en}@*)v.Simulate();
     );
 end world
 \end{vdm_al}
+\bigskip
+\begin{longtable}{|l|r|r|}
+\hline
+Function or operation & Coverage & Calls \\
+\hline
+\hline
+Run & 0.0\% & 0 \\
+\hline
+world & 0.0\% & 0 \\
+\hline
+\hline
+world.vdmpp & 0.0\% & 0 \\
+\hline
+\end{longtable}
 \end{document}

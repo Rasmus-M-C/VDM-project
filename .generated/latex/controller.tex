@@ -16,366 +16,372 @@ public parkingLot ::
         typeOfSlot : <electric> | <gas>
         time : nat
 instance variables
-    io : IO := new IO();
-    public dimensions: nat := 2;
-    maxCapacity: nat := (dimensions**3);
+   
+    public dimensions: nat := (*@\vdmnotcovered{}@*)2;
+    maxCapacity: nat := ((*@\vdmnotcovered{dimension}@*)s(*@\vdmnotcovered{*}@*)*(*@\vdmnotcovered{}@*)3);
 
-    fee: real :=10; --  50% added to the price of parking
-    electricParkingPrice: real := 1.0;
-    gasParkingPrice: real := 5.0;
+    fee: real :=(*@\vdmnotcovered{1.}@*)5; --  50% added to the price of parking
+    electricParkingPrice: real := (*@\vdmnotcovered{1.}@*)0;
+    gasParkingPrice: real := (*@\vdmnotcovered{5.}@*)0;
 
     
-    public gasSlots : map location to parkingLot := {|->};
-    public electricSlots : map location to parkingLot := {|->};
-    public electricSlotsSeq : seq of location := [];
-    public gasSlotsSeq : seq of location := [];
+    public gasSlots : map location to parkingLot := (*@\vdmnotcovered{}@*){|->};
+    public electricSlots : map location to parkingLot := (*@\vdmnotcovered{}@*){|->};
+    public electricSlotsSeq : seq of location := (*@\vdmnotcovered{}@*)[];
+    public gasSlotsSeq : seq of location := (*@\vdmnotcovered{}@*)[];
 
-    public parkedCarsMap : map car`licenseplate to car := {|->};  -- Map for parked cars
-    parkedCarsPlates: set of car`licenseplate := {};
-    parkedCars: set of car := {};
-    --parkedCars: map car`licenseplate to car := {|->};
+    public parkedCarsMap : map car`licenseplate to car := (*@\vdmnotcovered{}@*){|->};  -- Map for parked cars
 
-    bank: real := 0.0;
 
-inv bank >= 0.0;
-inv dimensions > 0;
+    bank: real := (*@\vdmnotcovered{0.}@*)0;
+
+inv (*@\vdmnotcovered{ban}@*)k (*@\vdmnotcovered{>}@*)= (*@\vdmnotcovered{0.}@*)0;
+inv (*@\vdmnotcovered{dimension}@*)s (*@\vdmnotcovered{}@*)> (*@\vdmnotcovered{}@*)0;
 
 operations
 
 -- flow of program
 -- 1. initGarage
 -- 2. can a car park
+-- set fee if garage is too populated
 -- 3  park car
 -- 4. remove car when leaving
 -- 5. get time spent in garage
 -- 6. pay when leaving
 
 -- operation to init garage (garage is currently the controller, should make new class)
-public initGarage: () ==> ()
-initGarage() ==
-(
-    -- Initialize empty sequences
-    electricSlotsSeq := [];
-    gasSlotsSeq := [];
-
-    -- Create electric and gas slots
-    for i = 0 to dimensions-1 do
-        for j = 0 to dimensions-1 do
-            for k = 0 to dimensions-1 do
-                if (i + j + k) mod 3 = 0 then
-                (
-                    -- Add to electric slots
-                    let loc = mk_(i, j, k) in
-                    (
-                        electricSlots := electricSlots ++ {loc |-> mk_parkingLot(nil, loc, <electric>, 0)};
-                        electricSlotsSeq := electricSlotsSeq ^ [loc];
-                    )
-                )
-                else
-                (
-                    -- Add to gas slots
-                    let loc = mk_(i, j, k) in
-                    (
-                        gasSlots := gasSlots ++ {loc |-> mk_parkingLot(nil, loc, <gas>, 0)};
-                        gasSlotsSeq := gasSlotsSeq ^ [loc];
-                    )
-                );
-);
-
-
-
 --public initGarage: () ==> ()
 --initGarage() ==
 --(
---    -- Create electric slots for every 3rd spot
---    electricSlots := {mk_(i, j, k) |-> mk_parkingLot(nil, mk_(i, j, k), <electric>, 0) |
---                        i, j, k in set {0,...,dimensions} &
---                        ((i + j + k) mod 3 = 0)};
---    for all x in set dom electricSlots do
---        electricSlotsSeq := electricSlotsSeq ^ [x];
+--    -- Initialize empty sequences
+--    electricSlotsSeq := [];
+--    gasSlotsSeq := [];
 --
---    -- All other spots are gas
---    gasSlots := {mk_(i, j, k) |-> mk_parkingLot(nil, mk_(i, j, k), <gas>, 0) |
---                    i, j, k in set {0,...,dimensions}};
---
---    for all y in set dom gasSlots do
---        gasSlotsSeq := gasSlotsSeq ^ [y];
---
+--    -- Create electric and gas slots
+--    for i = 0 to dimensions-1 do
+--        for j = 0 to dimensions-1 do
+--            for k = 0 to dimensions-1 do
+--                if (i + j + k) mod 3 = 0 then
+--                (
+--                    -- Add to electric slots
+--                    let loc = mk_(i, j, k) in
+--                    (
+--                        electricSlots := electricSlots ++ {loc |-> mk_parkingLot(nil, loc, <electric>, 0)};
+--                        electricSlotsSeq := electricSlotsSeq ^ [loc];
+--                    )
+--                )
+--                else
+--                (
+--                    -- Add to gas slots
+--                    let loc = mk_(i, j, k) in
+--                    (
+--                        gasSlots := gasSlots ++ {loc |-> mk_parkingLot(nil, loc, <gas>, 0)};
+--                        gasSlotsSeq := gasSlotsSeq ^ [loc];
+--                    )
+--                );
 --);
 
 
 
+public initGarage: () ==> ()
+initGarage() ==
+(
+    (*@\vdmnotcovered{electricSlot}@*)s := (*@\vdmnotcovered{}@*){(*@\vdmnotcovered{mk}@*)_((*@\vdmnotcovered{}@*)i,(*@\vdmnotcovered{}@*)j,(*@\vdmnotcovered{}@*)k) |-> (*@\vdmnotcovered{mk\_parkingLo}@*)t((*@\vdmnotcovered{ni}@*)l, (*@\vdmnotcovered{mk}@*)_((*@\vdmnotcovered{}@*)i,(*@\vdmnotcovered{}@*)j,(*@\vdmnotcovered{}@*)k), (*@\vdmnotcovered{<electric}@*)>, (*@\vdmnotcovered{}@*)0) | 
+    i in set (*@\vdmnotcovered{}@*){(*@\vdmnotcovered{}@*)0,...,(*@\vdmnotcovered{dimension}@*)s(*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1}, 
+    j in set (*@\vdmnotcovered{}@*){(*@\vdmnotcovered{}@*)0,...,(*@\vdmnotcovered{dimension}@*)s(*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1}, 
+    k in set (*@\vdmnotcovered{}@*){(*@\vdmnotcovered{}@*)0,...,(*@\vdmnotcovered{dimension}@*)s(*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1} 
+    & ((*@\vdmnotcovered{}@*)i (*@\vdmnotcovered{}@*)+ (*@\vdmnotcovered{}@*)j (*@\vdmnotcovered{}@*)+ (*@\vdmnotcovered{}@*)k) (*@\vdmnotcovered{mo}@*)d (*@\vdmnotcovered{}@*)3 (*@\vdmnotcovered{}@*)= (*@\vdmnotcovered{}@*)0};
+
+    (*@\vdmnotcovered{gasSlot}@*)s := (*@\vdmnotcovered{}@*){(*@\vdmnotcovered{mk}@*)_((*@\vdmnotcovered{}@*)i,(*@\vdmnotcovered{}@*)j,(*@\vdmnotcovered{}@*)k) |-> (*@\vdmnotcovered{mk\_parkingLo}@*)t((*@\vdmnotcovered{ni}@*)l, (*@\vdmnotcovered{mk}@*)_((*@\vdmnotcovered{}@*)i,(*@\vdmnotcovered{}@*)j,(*@\vdmnotcovered{}@*)k), (*@\vdmnotcovered{<gas}@*)>, (*@\vdmnotcovered{}@*)0) | i in 
+    set (*@\vdmnotcovered{}@*){(*@\vdmnotcovered{}@*)0,...,(*@\vdmnotcovered{dimension}@*)s(*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1}, 
+    j in set (*@\vdmnotcovered{}@*){(*@\vdmnotcovered{}@*)0,...,(*@\vdmnotcovered{dimension}@*)s(*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1}, 
+    k in set (*@\vdmnotcovered{}@*){(*@\vdmnotcovered{}@*)0,...,(*@\vdmnotcovered{dimension}@*)s(*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1} 
+    & (*@\vdmnotcovered{no}@*)t ((*@\vdmnotcovered{}@*)i (*@\vdmnotcovered{}@*)+ (*@\vdmnotcovered{}@*)j (*@\vdmnotcovered{}@*)+ (*@\vdmnotcovered{}@*)k) (*@\vdmnotcovered{mo}@*)d (*@\vdmnotcovered{}@*)3 (*@\vdmnotcovered{}@*)= (*@\vdmnotcovered{}@*)0};
+
+    (*@\vdmnotcovered{fo}@*)r all loc in set (*@\vdmnotcovered{do}@*)m (*@\vdmnotcovered{electricSlot}@*)s do
+        (*@\vdmnotcovered{electricSlotsSe}@*)q := (*@\vdmnotcovered{electricSlotsSe}@*)q (*@\vdmnotcovered{}@*)^ (*@\vdmnotcovered{}@*)[(*@\vdmnotcovered{lo}@*)c];
+    (*@\vdmnotcovered{fo}@*)r all loc in set (*@\vdmnotcovered{do}@*)m (*@\vdmnotcovered{gasSlot}@*)s do
+        (*@\vdmnotcovered{gasSlotsSe}@*)q := (*@\vdmnotcovered{gasSlotsSe}@*)q (*@\vdmnotcovered{}@*)^ (*@\vdmnotcovered{}@*)[(*@\vdmnotcovered{lo}@*)c];
+);
 
 -- operation to park a car in a slot
 public parkCar: car * location ==> ()
 parkCar(car, loc) ==
 (   
     
-    if loc in set dom gasSlots then
+    (*@\vdmnotcovered{i}@*)f (*@\vdmnotcovered{lo}@*)c (*@\vdmnotcovered{i}@*)n set (*@\vdmnotcovered{do}@*)m (*@\vdmnotcovered{gasSlot}@*)s then
     (
-        --IO`println("Parking car " ^ car.getPlate() ^ " in gas slot at " ^ natToString(loc.#1) ^ "," ^ natToString(loc.#2) ^ "," ^ natToString(loc.#3));
-        --IO`println("Car " ^ car.getPlate() ^ " parked at time: " ^ natToString(world`timerRef.getTime()));
 
-        gasSlots(loc).car := car;
-        gasSlots(loc).time := world`timerRef.getTime();
-        --IO`println("CarCurrentTime: " ^ natToString(car.getTime()));
-        --car.setTime(world`timerRef.getTime());
+        (*@\vdmnotcovered{gasSlot}@*)s((*@\vdmnotcovered{lo}@*)c).car := (*@\vdmnotcovered{ca}@*)r;
+        (*@\vdmnotcovered{gasSlot}@*)s((*@\vdmnotcovered{lo}@*)c).time := (*@\vdmnotcovered{world`timerRe}@*)f.(*@\vdmnotcovered{getTim}@*)e();
+
     )
-    elseif loc in set dom electricSlots then
+    (*@\vdmnotcovered{elsei}@*)f (*@\vdmnotcovered{lo}@*)c (*@\vdmnotcovered{i}@*)n set (*@\vdmnotcovered{do}@*)m (*@\vdmnotcovered{electricSlot}@*)s then
     (
-        --IO`println("Parking car " ^ car.getPlate() ^ " in electric slot at " ^ natToString(loc.#1) ^ "," ^ natToString(loc.#2) ^ "," ^ natToString(loc.#3));
-        --IO`println("Car " ^ car.getPlate() ^ " parked at time: " ^ natToString(world`timerRef.getTime()));
-
-        electricSlots(loc).car := car;
-        electricSlots(loc).time := world`timerRef.getTime();
-        --IO`println("CarCurrentTime: " ^ natToString(car.getTime()));
-
-        --car.setTime(world`timerRef.getTime());
-
+        (*@\vdmnotcovered{electricSlot}@*)s((*@\vdmnotcovered{lo}@*)c).car := (*@\vdmnotcovered{ca}@*)r;
+        (*@\vdmnotcovered{electricSlot}@*)s((*@\vdmnotcovered{lo}@*)c).time := (*@\vdmnotcovered{world`timerRe}@*)f.(*@\vdmnotcovered{getTim}@*)e();
     );
 )
 
-pre loc.#1 >=0 and loc.#2 >=0 and loc.#3 >=0 and loc.#1 < dimensions+1 and loc.#2 < dimensions+1 and loc.#3 < dimensions+1;
+pre (*@\vdmnotcovered{lo}@*)c.#(*@\vdmnotcovered{}@*)1 (*@\vdmnotcovered{>}@*)=(*@\vdmnotcovered{}@*)0 (*@\vdmnotcovered{an}@*)d (*@\vdmnotcovered{lo}@*)c.#(*@\vdmnotcovered{}@*)2 (*@\vdmnotcovered{>}@*)=(*@\vdmnotcovered{}@*)0 (*@\vdmnotcovered{an}@*)d (*@\vdmnotcovered{lo}@*)c.#(*@\vdmnotcovered{}@*)3 (*@\vdmnotcovered{>}@*)=(*@\vdmnotcovered{}@*)0 (*@\vdmnotcovered{an}@*)d (*@\vdmnotcovered{lo}@*)c.#(*@\vdmnotcovered{}@*)1 (*@\vdmnotcovered{}@*)< (*@\vdmnotcovered{dimension}@*)s(*@\vdmnotcovered{}@*)+(*@\vdmnotcovered{}@*)1 (*@\vdmnotcovered{an}@*)d (*@\vdmnotcovered{lo}@*)c.#(*@\vdmnotcovered{}@*)2 (*@\vdmnotcovered{}@*)< (*@\vdmnotcovered{dimension}@*)s(*@\vdmnotcovered{}@*)+(*@\vdmnotcovered{}@*)1 (*@\vdmnotcovered{an}@*)d (*@\vdmnotcovered{lo}@*)c.#(*@\vdmnotcovered{}@*)3 (*@\vdmnotcovered{}@*)< (*@\vdmnotcovered{dimension}@*)s(*@\vdmnotcovered{}@*)+(*@\vdmnotcovered{}@*)1;
 
 public enterGarage: car ==> ()
 enterGarage(car) ==
 (      
-    --IO`println("Total amount of spots" ^ natToString(card dom electricSlots + card dom gasSlots));
-    
-    
-    --IO`println("GAS SLOTS" ^ natToString(card dom gasSlots));
-    --IO`println("ELECTRIC SLOTS" ^ natToString(card dom electricSlots));
-    --IO`println("PARKED CARD MAP " ^ natToString(card dom parkedCarsMap));
-    --IO`println("MAX CAPACITY " ^ natToString(maxCapacity));
-    if canPark(car) then
-    (       
-        if (fullnessRatio(card dom parkedCarsMap, getMaxCapacity()) > 0.7)  then
-                    car.setFeeApplied(true);
-        IO`println("RATIO IS: "^ realToString(fullnessRatio(card dom parkedCarsMap, getMaxCapacity())));
-        let loc = findSlotSeq(car) in
-        parkCar(car, loc);
-        parkedCarsMap := parkedCarsMap ++ {car.getPlate() |-> car};  -- Add to map
-        IO`println("Car PARKED  " ^ car.getPlate());
-    )
+           
+        (*@\vdmnotcovered{i}@*)f ((*@\vdmnotcovered{fullnessRati}@*)o((*@\vdmnotcovered{car}@*)d (*@\vdmnotcovered{do}@*)m (*@\vdmnotcovered{parkedCarsMa}@*)p(*@\vdmnotcovered{}@*)+(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{getMaxCapacit}@*)y()) (*@\vdmnotcovered{}@*)> (*@\vdmnotcovered{0.}@*)7)  then
+                    (*@\vdmnotcovered{ca}@*)r.setFeeApplied((*@\vdmnotcovered{tru}@*)e);
+        (*@\vdmnotcovered{le}@*)t loc = (*@\vdmnotcovered{findSlotSe}@*)q((*@\vdmnotcovered{ca}@*)r) in 
+        (*@\vdmnotcovered{parkCa}@*)r((*@\vdmnotcovered{ca}@*)r, (*@\vdmnotcovered{lo}@*)c);
+        (*@\vdmnotcovered{IO`printl}@*)n((*@\vdmnotcovered{"Car with license plate }@*)" (*@\vdmnotcovered{}@*)^ (*@\vdmnotcovered{ca}@*)r.(*@\vdmnotcovered{getPlat}@*)e() (*@\vdmnotcovered{}@*)^ (*@\vdmnotcovered{" has entered the garage}@*)");
+        (*@\vdmnotcovered{parkedCarsMa}@*)p := (*@\vdmnotcovered{parkedCarsMa}@*)p (*@\vdmnotcovered{+}@*)+ (*@\vdmnotcovered{}@*){(*@\vdmnotcovered{ca}@*)r.(*@\vdmnotcovered{getPlat}@*)e() |-> (*@\vdmnotcovered{ca}@*)r};  -- Add to map
+
     
 )
-pre card dom parkedCarsMap < maxCapacity and not carAlreadyExists(car.getPlate())
-post carAlreadyExists(car.getPlate());
+pre (*@\vdmnotcovered{car}@*)d (*@\vdmnotcovered{do}@*)m (*@\vdmnotcovered{parkedCarsMa}@*)p (*@\vdmnotcovered{}@*)< (*@\vdmnotcovered{maxCapacit}@*)y (*@\vdmnotcovered{an}@*)d ((*@\vdmnotcovered{no}@*)t (*@\vdmnotcovered{carAlreadyExist}@*)s((*@\vdmnotcovered{ca}@*)r.(*@\vdmnotcovered{getPlat}@*)e()) (*@\vdmnotcovered{an}@*)d (*@\vdmnotcovered{findSlotSe}@*)q((*@\vdmnotcovered{ca}@*)r) (*@\vdmnotcovered{<}@*)> (*@\vdmnotcovered{mk}@*)_((*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1));
+
 
 
 -- find available slot
-public findSlot: car * seq of location * seq of location ==> location
+public pure findSlot: car * seq of location * seq of location ==> location
 findSlot(car, electricSlotSeq, gasSlotSeq) ==
 (
-    if car.getType() = <electric> then
+    (*@\vdmnotcovered{i}@*)f (*@\vdmnotcovered{ca}@*)r.(*@\vdmnotcovered{getTyp}@*)e() (*@\vdmnotcovered{}@*)= (*@\vdmnotcovered{<electric}@*)> then
     (
-        if electricSlotSeq <> [] then
+        (*@\vdmnotcovered{i}@*)f (*@\vdmnotcovered{electricSlotSe}@*)q (*@\vdmnotcovered{<}@*)> (*@\vdmnotcovered{}@*)[] then
         (
-            let first = hd electricSlotSeq in
-            if isSlotFree(first) then
-                return first
+            (*@\vdmnotcovered{le}@*)t first = (*@\vdmnotcovered{h}@*)d (*@\vdmnotcovered{electricSlotSe}@*)q in
+            (*@\vdmnotcovered{i}@*)f (*@\vdmnotcovered{isSlotFre}@*)e((*@\vdmnotcovered{firs}@*)t) then
+                (*@\vdmnotcovered{retur}@*)n (*@\vdmnotcovered{firs}@*)t
             else
-                return findSlot(car, tl electricSlotSeq, gasSlotSeq)  -- Recurse to check the next electric slot
+                (*@\vdmnotcovered{retur}@*)n (*@\vdmnotcovered{findSlo}@*)t((*@\vdmnotcovered{ca}@*)r, (*@\vdmnotcovered{t}@*)l (*@\vdmnotcovered{electricSlotSe}@*)q, (*@\vdmnotcovered{gasSlotSe}@*)q)  -- recur
         )
-        elseif gasSlotSeq <> [] then
+        (*@\vdmnotcovered{elsei}@*)f (*@\vdmnotcovered{gasSlotSe}@*)q (*@\vdmnotcovered{<}@*)> (*@\vdmnotcovered{}@*)[] then
         (
-            let first = hd gasSlotSeq in
-            if isSlotFree(first) then
-                return first
+            (*@\vdmnotcovered{le}@*)t first = (*@\vdmnotcovered{h}@*)d (*@\vdmnotcovered{gasSlotSe}@*)q in
+            (*@\vdmnotcovered{i}@*)f (*@\vdmnotcovered{isSlotFre}@*)e((*@\vdmnotcovered{firs}@*)t) then
+                (*@\vdmnotcovered{retur}@*)n (*@\vdmnotcovered{firs}@*)t
             else
-                return findSlot(car, electricSlotSeq, tl gasSlotSeq)  -- Recurse to check the next gas slot
+                (*@\vdmnotcovered{retur}@*)n (*@\vdmnotcovered{findSlo}@*)t((*@\vdmnotcovered{ca}@*)r, (*@\vdmnotcovered{electricSlotSe}@*)q, (*@\vdmnotcovered{t}@*)l (*@\vdmnotcovered{gasSlotSe}@*)q)  -- recur
         )
         else
-            return mk_(-1, -1, -1);  -- No available slot found
+            (*@\vdmnotcovered{retur}@*)n (*@\vdmnotcovered{mk}@*)_((*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1);  -- No available slots
     )
-    elseif car.getType() = <gas> then
+    (*@\vdmnotcovered{elsei}@*)f (*@\vdmnotcovered{ca}@*)r.(*@\vdmnotcovered{getTyp}@*)e() (*@\vdmnotcovered{}@*)= (*@\vdmnotcovered{<gas}@*)> then
     (
-        if gasSlotSeq <> [] then
+        (*@\vdmnotcovered{i}@*)f (*@\vdmnotcovered{gasSlotSe}@*)q (*@\vdmnotcovered{<}@*)> (*@\vdmnotcovered{}@*)[] then
         (
-            let first = hd gasSlotSeq in
-            if isSlotFree(first) then
-                return first
+            (*@\vdmnotcovered{le}@*)t first = (*@\vdmnotcovered{h}@*)d (*@\vdmnotcovered{gasSlotSe}@*)q in
+            (*@\vdmnotcovered{i}@*)f (*@\vdmnotcovered{isSlotFre}@*)e((*@\vdmnotcovered{firs}@*)t) then
+                (*@\vdmnotcovered{retur}@*)n (*@\vdmnotcovered{firs}@*)t
             else
-                return findSlot(car, electricSlotSeq, tl gasSlotSeq)  -- Recurse to check the next gas slot
+                (*@\vdmnotcovered{retur}@*)n (*@\vdmnotcovered{findSlo}@*)t((*@\vdmnotcovered{ca}@*)r, (*@\vdmnotcovered{electricSlotSe}@*)q, (*@\vdmnotcovered{t}@*)l (*@\vdmnotcovered{gasSlotSe}@*)q)  -- recur
         )
         else
-            return mk_(-1, -1, -1);  -- No available slot found
+            (*@\vdmnotcovered{retur}@*)n (*@\vdmnotcovered{mk}@*)_((*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1);  -- No available slots
     )
     else
-        return mk_(-1, -1, -1)  -- Default case for unhandled types
+        (*@\vdmnotcovered{retur}@*)n (*@\vdmnotcovered{mk}@*)_((*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1)  -- default case
 );
 
 
-public findSlotSeq : car ==> location
+public pure findSlotSeq : car ==> location
 findSlotSeq(car) ==
 (
-    let electricSlotsSeqCopy = electricSlotsSeq, gasSlotsSeqCopy = gasSlotsSeq in
-    return findSlot(car, electricSlotsSeqCopy, gasSlotsSeqCopy);
+    (*@\vdmnotcovered{le}@*)t electricSlotsSeqCopy = (*@\vdmnotcovered{electricSlotsSe}@*)q, gasSlotsSeqCopy = (*@\vdmnotcovered{gasSlotsSe}@*)q in
+    (*@\vdmnotcovered{retur}@*)n (*@\vdmnotcovered{findSlo}@*)t((*@\vdmnotcovered{ca}@*)r, (*@\vdmnotcovered{electricSlotsSeqCop}@*)y, (*@\vdmnotcovered{gasSlotsSeqCop}@*)y);
 );
 
--- operation to check if car can park
+-- deprecated is pre condition now
 public canPark: car ==> bool
 canPark(car) ==
 (
-    if not carAlreadyExists(car.getPlate()) then
+    (*@\vdmnotcovered{i}@*)f (*@\vdmnotcovered{no}@*)t (*@\vdmnotcovered{carAlreadyExist}@*)s((*@\vdmnotcovered{ca}@*)r.(*@\vdmnotcovered{getPlat}@*)e()) then
     (
-        if findSlotSeq(car) <> mk_(-1, -1, -1) then
-            return true
+        (*@\vdmnotcovered{i}@*)f (*@\vdmnotcovered{findSlotSe}@*)q((*@\vdmnotcovered{ca}@*)r) (*@\vdmnotcovered{<}@*)> (*@\vdmnotcovered{mk}@*)_((*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1) then
+            (*@\vdmnotcovered{retur}@*)n (*@\vdmnotcovered{tru}@*)e
         else
-            return false
+            (*@\vdmnotcovered{retur}@*)n (*@\vdmnotcovered{fals}@*)e
     )
     else
-        return false
+        (*@\vdmnotcovered{retur}@*)n (*@\vdmnotcovered{fals}@*)e
 );
 
+-- find specifc licenplate 
 public lookupCar: car`licenseplate ==> [car]
 lookupCar(plate) ==
 (
-    if plate in set dom parkedCarsMap then
-        return parkedCarsMap(plate)
+    (*@\vdmnotcovered{i}@*)f (*@\vdmnotcovered{plat}@*)e (*@\vdmnotcovered{i}@*)n set (*@\vdmnotcovered{do}@*)m (*@\vdmnotcovered{parkedCarsMa}@*)p then
+        (*@\vdmnotcovered{retur}@*)n (*@\vdmnotcovered{parkedCarsMa}@*)p((*@\vdmnotcovered{plat}@*)e)
     else
-        return nil;
+        (*@\vdmnotcovered{retur}@*)n (*@\vdmnotcovered{ni}@*)l;
 );
 
 public leaveGarage: car`licenseplate ==> ()
 leaveGarage(plate) ==
 (
-        
-        let car = parkedCarsMap(plate) in
+       
+        (*@\vdmnotcovered{le}@*)t car = (*@\vdmnotcovered{parkedCarsMa}@*)p((*@\vdmnotcovered{plat}@*)e) in
         
         (
-            for all loc in set dom electricSlots do
+            (*@\vdmnotcovered{fo}@*)r all loc in set (*@\vdmnotcovered{do}@*)m (*@\vdmnotcovered{electricSlot}@*)s do
             (   
                 
-                if electricSlots(loc).car = car then
+                (*@\vdmnotcovered{i}@*)f (*@\vdmnotcovered{electricSlot}@*)s((*@\vdmnotcovered{lo}@*)c).(*@\vdmnotcovered{ca}@*)r (*@\vdmnotcovered{}@*)= (*@\vdmnotcovered{ca}@*)r then
                 (   
+                    dcl timeSpent : nat := (*@\vdmnotcovered{world`timerRe}@*)f.(*@\vdmnotcovered{getTim}@*)e() (*@\vdmnotcovered{}@*)- (*@\vdmnotcovered{electricSlot}@*)s((*@\vdmnotcovered{lo}@*)c).(*@\vdmnotcovered{tim}@*)e;
+         
+                    (*@\vdmnotcovered{ca}@*)r.addTime((*@\vdmnotcovered{timeSpen}@*)t);
                     
-                    dcl timeSpent : nat := world`timerRef.getTime() - electricSlots(loc).time;
-                    --IO`println("WORLD TIME" ^ natToString(world`timerRef.getTime()));
-                    --IO`println("SLOT TIME" ^ natToString(electricSlots(loc).time));
-                    --IO`println("ptime " ^ natToString(car.getTime()));
-                    --IO`println("timeSpent " ^ natToString(timeSpent));
-                    --let timeSpent = world`timerRef.getTime() - electricSlots(loc).time in  -- Use slot's entry time
-                    car.addTime(timeSpent);  -- Accumulate time spent
-                    --IO`println("ptimeNew " ^ natToString(car.getTime()));
-                    --IO`println("Car " ^ car.getPlate() ^ " was parked for " ^ natToString(timeSpent) ^ " hours.");
-                    
-                    
-                    let amount = pay(car) in  -- Calculate payment
-                    updateBankBalance(amount);
-                    electricSlots(loc).car := nil;  -- Free the slot
-                    car.setLocation(-1, -1, -1);  -- Set car location to outside
-                    parkedCarsMap := {plate} <-: parkedCarsMap;
-                    IO`println("Fee Applied" ^ boolToString(car.getFeeApplied()));
-
-                    return;  -- Exit after processing
+                    (*@\vdmnotcovered{le}@*)t amount = (*@\vdmnotcovered{pa}@*)y((*@\vdmnotcovered{ca}@*)r) in  -- payment
+                    (*@\vdmnotcovered{updateBankBalanc}@*)e((*@\vdmnotcovered{amoun}@*)t);
+                    (*@\vdmnotcovered{electricSlot}@*)s((*@\vdmnotcovered{lo}@*)c).car := (*@\vdmnotcovered{ni}@*)l;  -- free slot
+                    (*@\vdmnotcovered{ca}@*)r.setLocation((*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1);  -- move car to outside garage
+                    (*@\vdmnotcovered{parkedCarsMa}@*)p := (*@\vdmnotcovered{}@*){(*@\vdmnotcovered{plat}@*)e} (*@\vdmnotcovered{<-}@*): (*@\vdmnotcovered{parkedCarsMa}@*)p;
+                   (*@\vdmnotcovered{retur}@*)n;
                 )
             )
         );
         
-        let car = parkedCarsMap(plate) in
+        (*@\vdmnotcovered{le}@*)t car = (*@\vdmnotcovered{parkedCarsMa}@*)p((*@\vdmnotcovered{plat}@*)e) in
 
-            for all loc in set dom gasSlots do
+            (*@\vdmnotcovered{fo}@*)r all loc in set (*@\vdmnotcovered{do}@*)m (*@\vdmnotcovered{gasSlot}@*)s do
             (
-                if gasSlots(loc).car = car then
+                (*@\vdmnotcovered{i}@*)f (*@\vdmnotcovered{gasSlot}@*)s((*@\vdmnotcovered{lo}@*)c).(*@\vdmnotcovered{ca}@*)r (*@\vdmnotcovered{}@*)= (*@\vdmnotcovered{ca}@*)r then
                 (
-                    dcl timeSpent : nat := world`timerRef.getTime() - gasSlots(loc).time;
-                    --IO`println("SLOT TIME" ^ natToString(gasSlots(loc).time));
-                    --let timeSpent = world`timerRef.getTime() - electricSlots(loc).time in  -- Use slot's entry time
-                    car.addTime(timeSpent);  -- Accumulate time spent
-                    --IO`println("Car " ^ car.getPlate() ^ " was parked for " ^ natToString(timeSpent) ^ " hours.");
-                    let amount = pay(car) in  -- Calculate payment
-                    updateBankBalance(amount);
-                    gasSlots(loc).car := nil;  -- Free the slot
-                    car.setLocation(-1, -1, -1);  -- Set car location to outside
-                    parkedCarsMap := {plate} <-: parkedCarsMap;
+                    dcl timeSpent : nat := (*@\vdmnotcovered{world`timerRe}@*)f.(*@\vdmnotcovered{getTim}@*)e() (*@\vdmnotcovered{}@*)- (*@\vdmnotcovered{gasSlot}@*)s((*@\vdmnotcovered{lo}@*)c).(*@\vdmnotcovered{tim}@*)e;
+         
+                    (*@\vdmnotcovered{ca}@*)r.addTime((*@\vdmnotcovered{timeSpen}@*)t);
+                    
+                    (*@\vdmnotcovered{le}@*)t amount = (*@\vdmnotcovered{pa}@*)y((*@\vdmnotcovered{ca}@*)r) in  -- payment
+                    (*@\vdmnotcovered{updateBankBalanc}@*)e((*@\vdmnotcovered{amoun}@*)t);
+                    (*@\vdmnotcovered{gasSlot}@*)s((*@\vdmnotcovered{lo}@*)c).car := (*@\vdmnotcovered{ni}@*)l;  -- free slot
+                    (*@\vdmnotcovered{ca}@*)r.setLocation((*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1);  -- move car to outside garage
+                    (*@\vdmnotcovered{parkedCarsMa}@*)p := (*@\vdmnotcovered{}@*){(*@\vdmnotcovered{plat}@*)e} (*@\vdmnotcovered{<-}@*): (*@\vdmnotcovered{parkedCarsMa}@*)p;
+                    (*@\vdmnotcovered{retur}@*)n;
                 )
-                
-            )
-        
-    
-     
+            )    
 )
-pre plate in set dom parkedCarsMap;
+pre (*@\vdmnotcovered{plat}@*)e (*@\vdmnotcovered{i}@*)n set (*@\vdmnotcovered{do}@*)m (*@\vdmnotcovered{parkedCarsMa}@*)p;
 
 
 -- operation to get status of slot
-public isSlotFree: location ==> bool
+public pure isSlotFree: location ==> bool
 isSlotFree(loc) == (
-    if loc in set dom gasSlots then
-        return gasSlots(loc).car = nil  -- Check if gas slot is free
-    elseif loc in set dom electricSlots then
-        return electricSlots(loc).car = nil  -- Check if electric slot is free
-    else return false;  -- Location is not part of the garage slots
+    (*@\vdmnotcovered{i}@*)f (*@\vdmnotcovered{lo}@*)c (*@\vdmnotcovered{i}@*)n set (*@\vdmnotcovered{do}@*)m (*@\vdmnotcovered{gasSlot}@*)s then
+        (*@\vdmnotcovered{retur}@*)n (*@\vdmnotcovered{gasSlot}@*)s((*@\vdmnotcovered{lo}@*)c).(*@\vdmnotcovered{ca}@*)r (*@\vdmnotcovered{}@*)= (*@\vdmnotcovered{ni}@*)l  -- Check if gas slot is free
+    (*@\vdmnotcovered{elsei}@*)f (*@\vdmnotcovered{lo}@*)c (*@\vdmnotcovered{i}@*)n set (*@\vdmnotcovered{do}@*)m (*@\vdmnotcovered{electricSlot}@*)s then
+        (*@\vdmnotcovered{retur}@*)n (*@\vdmnotcovered{electricSlot}@*)s((*@\vdmnotcovered{lo}@*)c).(*@\vdmnotcovered{ca}@*)r (*@\vdmnotcovered{}@*)= (*@\vdmnotcovered{ni}@*)l  -- Check if electric slot is free
+    else (*@\vdmnotcovered{retur}@*)n (*@\vdmnotcovered{fals}@*)e;  -- Location is not part of the garage slots
 );
 
 -- operation to pay when leaving
 public pay: car ==> real
 pay(car) ==
 (   
-    dcl amount :real := 0;
-    let timeSpent = car.getTime() in
-    let feeApplied = car.getFeeApplied() in
-    if feeApplied then
-        amount:= fee * timeSpent * priceTypeCar(car)
+    dcl amount :real := (*@\vdmnotcovered{}@*)0;
+    (*@\vdmnotcovered{le}@*)t timeSpent = (*@\vdmnotcovered{ca}@*)r.(*@\vdmnotcovered{getTim}@*)e() in
+    (*@\vdmnotcovered{le}@*)t feeApplied = (*@\vdmnotcovered{ca}@*)r.(*@\vdmnotcovered{getFeeApplie}@*)d() in
+    (*@\vdmnotcovered{i}@*)f (*@\vdmnotcovered{feeApplie}@*)d then
+        (*@\vdmnotcovered{amoun}@*)t:= (*@\vdmnotcovered{fe}@*)e (*@\vdmnotcovered{}@*)* (*@\vdmnotcovered{timeSpen}@*)t (*@\vdmnotcovered{}@*)* (*@\vdmnotcovered{priceTypeCa}@*)r((*@\vdmnotcovered{ca}@*)r)
     else
-        amount := timeSpent * priceTypeCar(car);
+        (*@\vdmnotcovered{amoun}@*)t := (*@\vdmnotcovered{timeSpen}@*)t (*@\vdmnotcovered{}@*)* (*@\vdmnotcovered{priceTypeCa}@*)r((*@\vdmnotcovered{ca}@*)r);
     
-    return amount;
+    (*@\vdmnotcovered{retur}@*)n (*@\vdmnotcovered{amoun}@*)t;
 );
 
 public priceTypeCar : car ==> real
 priceTypeCar(car) ==
-    if car.getType() = <electric> then
-        return electricParkingPrice
+    (*@\vdmnotcovered{i}@*)f (*@\vdmnotcovered{ca}@*)r.(*@\vdmnotcovered{getTyp}@*)e() (*@\vdmnotcovered{}@*)= (*@\vdmnotcovered{<electric}@*)> then
+        (*@\vdmnotcovered{retur}@*)n (*@\vdmnotcovered{electricParkingPric}@*)e
     else
-        return gasParkingPrice;
+        (*@\vdmnotcovered{retur}@*)n (*@\vdmnotcovered{gasParkingPric}@*)e;
 
 private updateBankBalance: real ==> ()
 updateBankBalance(amount) == (
-    bank := bank + amount;
+    (*@\vdmnotcovered{ban}@*)k := (*@\vdmnotcovered{ban}@*)k (*@\vdmnotcovered{}@*)+ (*@\vdmnotcovered{amoun}@*)t;
 
 );
 
 pure public carAlreadyExists: car`licenseplate ==> bool
 carAlreadyExists(plate) == (
-    return plate in set dom parkedCarsMap;
+    (*@\vdmnotcovered{retur}@*)n (*@\vdmnotcovered{plat}@*)e (*@\vdmnotcovered{i}@*)n set (*@\vdmnotcovered{do}@*)m (*@\vdmnotcovered{parkedCarsMa}@*)p;
 );
 
 -- operation to pay when leaving the garage
 pure public getBankBalance: () ==> real
 getBankBalance() == (
-    return bank;
+    (*@\vdmnotcovered{retur}@*)n (*@\vdmnotcovered{ban}@*)k;
 );
 public static natToString : nat ==> seq of char 
   natToString(n) ==
   (
-   return VDMUtil`val2seq_of_char[nat](n);
+   (*@\vdmnotcovered{retur}@*)n (*@\vdmnotcovered{VDMUtil`val2seq\_of\_cha}@*)r[nat]((*@\vdmnotcovered{}@*)n);
   );
 public static realToString : real ==> seq of char
 realToString(n) ==
 (
-    return VDMUtil`val2seq_of_char[real](n);
+    (*@\vdmnotcovered{retur}@*)n (*@\vdmnotcovered{VDMUtil`val2seq\_of\_cha}@*)r[real]((*@\vdmnotcovered{}@*)n);
 );
 public getMaxCapacity: () ==> nat
 getMaxCapacity() == (
-    return maxCapacity;
+    (*@\vdmnotcovered{retur}@*)n (*@\vdmnotcovered{maxCapacit}@*)y;
 );
 
-public static boolToString : bool ==> seq of char
-boolToString(b) ==
-(
-    if b then
-        return "1"
-    else
-        return "0";
-);
 functions
 
 fullnessRatio: nat * nat -> real
 fullnessRatio(n, max) == 
-    n / max
-    pre n <= max and max > 0 and n >= 0;
+    (*@\vdmnotcovered{}@*)n (*@\vdmnotcovered{}@*)/ (*@\vdmnotcovered{ma}@*)x
+    pre (*@\vdmnotcovered{}@*)n (*@\vdmnotcovered{<}@*)= (*@\vdmnotcovered{ma}@*)x (*@\vdmnotcovered{an}@*)d (*@\vdmnotcovered{ma}@*)x (*@\vdmnotcovered{}@*)> (*@\vdmnotcovered{}@*)0 (*@\vdmnotcovered{an}@*)d (*@\vdmnotcovered{}@*)n (*@\vdmnotcovered{>}@*)= (*@\vdmnotcovered{}@*)0;
 end controller
 \end{vdm_al}
+\bigskip
+\begin{longtable}{|l|r|r|}
+\hline
+Function or operation & Coverage & Calls \\
+\hline
+\hline
+canPark & 0.0\% & 0 \\
+\hline
+carAlreadyExists & 0.0\% & 0 \\
+\hline
+controller & 0.0\% & 0 \\
+\hline
+enterGarage & 0.0\% & 0 \\
+\hline
+findSlot & 0.0\% & 0 \\
+\hline
+findSlotSeq & 0.0\% & 0 \\
+\hline
+fullnessRatio & 0.0\% & 0 \\
+\hline
+getBankBalance & 0.0\% & 0 \\
+\hline
+getMaxCapacity & 0.0\% & 0 \\
+\hline
+initGarage & 0.0\% & 0 \\
+\hline
+isSlotFree & 0.0\% & 0 \\
+\hline
+leaveGarage & 0.0\% & 0 \\
+\hline
+lookupCar & 0.0\% & 0 \\
+\hline
+natToString & 0.0\% & 0 \\
+\hline
+parkCar & 0.0\% & 0 \\
+\hline
+pay & 0.0\% & 0 \\
+\hline
+priceTypeCar & 0.0\% & 0 \\
+\hline
+realToString & 0.0\% & 0 \\
+\hline
+updateBankBalance & 0.0\% & 0 \\
+\hline
+\hline
+controller.vdmpp & 0.0\% & 0 \\
+\hline
+\end{longtable}
 \end{document}
