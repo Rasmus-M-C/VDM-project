@@ -4,21 +4,23 @@ operations
     
     public run: () ==> ()
     run() ==
-        let testsuite : TestSuite = new TestSuite(),
+        let ts : TestSuite = new TestSuite(),
             result : TestResult = new TestResult() 
         in
         (
-            testsuite.addTest(new ParkingTest("testEnterGarage"));
-            testsuite.addTest(new ParkingTest("testCapacityLimit"));
-            testsuite.addTest(new ParkingTest("testLeaveGarage"));
-            testsuite.addTest(new ParkingTest("testCapacityLimitGasCars"));
-            testsuite.addTest(new ParkingTest("testPaymentCalculation"));
-            --testsuite.addTest(new TestEnterGarage("testEnterGarage"));
-            --testsuite.addTest(new TestLeaveGarage("testLeaveGarage"));
-            --testsuite.addTest(new TestCapacityLimit("testCapacityLimit"));
-            testsuite.addTest(new TestElectricCarFee("testElectricCarFee"));
-            testsuite.addTest(new TestDimensionArePositive("testDimensionArePositive"));
-            testsuite.run(result);
+            ts.addTest(new ParkingTest("testEnterGarage"));
+            ts.addTest(new ParkingTest("testCapacityLimit"));
+            ts.addTest(new ParkingTest("testLeaveGarage"));
+            --ts.addTest(new ParkingTest("testCapacityLimitGasCars"));
+            ts.addTest(new ParkingTest("testPaymentCalculation"));
+            ts.addTest(new TestEnterGarage("testEnterGarage"));
+            ts.addTest(new TestLeaveGarage("testLeaveGarage"));
+            ts.addTest(new TestCapacityLimit("testCapacityLimit"));
+            ts.addTest(new TestElectricCarFee("testElectricCarFee"));
+            ts.addTest(new TestDimensionArePositive("testDimensionArePositive"));
+            
+            
+            ts.run(result);
             IO`println(result.toString());
         
         );

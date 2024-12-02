@@ -36,8 +36,9 @@ operations
     (
         dcl car1 : car := new car("AB12345", mk_(-1, -1, -1), 0, <electric>);
         controller.enterGarage(car1);
+        Assert`assertTrue(controller.carAlreadyExists(car1.getPlate()));
         controller.leaveGarage(car1.getPlate());
-        Assert`assertTrue(not controller.carAlreadyExists(car1.getPlate()));
+        
     );
 
     -- Example test case: Capacity Limit

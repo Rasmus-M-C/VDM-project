@@ -22,7 +22,7 @@ instance variables
     public gasSlotsSeq : seq of location := [];
 
     public parkedCarsMap : map car`licenseplate to car := {|->};  -- Map for parked cars
-    parkedCarsPlates: set of car`licenseplate := {};
+
 
     bank: real := 0.0;
 
@@ -34,6 +34,7 @@ operations
 -- flow of program
 -- 1. initGarage
 -- 2. can a car park
+-- set fee if garage is too populated
 -- 3  park car
 -- 4. remove car when leaving
 -- 5. get time spent in garage
@@ -94,9 +95,6 @@ initGarage() ==
         gasSlotsSeq := gasSlotsSeq ^ [loc];
 );
 
-
-
-
 -- operation to park a car in a slot
 public parkCar: car * location ==> ()
 parkCar(car, loc) ==
@@ -104,25 +102,15 @@ parkCar(car, loc) ==
     
     if loc in set dom gasSlots then
     (
-        --IO`println("Parking car " ^ car.getPlate() ^ " in gas slot at " ^ natToString(loc.#1) ^ "," ^ natToString(loc.#2) ^ "," ^ natToString(loc.#3));
-        --IO`println("Car " ^ car.getPlate() ^ " parked at time: " ^ natToString(world`timerRef.getTime()));
 
         gasSlots(loc).car := car;
         gasSlots(loc).time := world`timerRef.getTime();
-        --IO`println("CarCurrentTime: " ^ natToString(car.getTime()));
-        --car.setTime(world`timerRef.getTime());
+
     )
     elseif loc in set dom electricSlots then
     (
-        --IO`println("Parking car " ^ car.getPlate() ^ " in electric slot at " ^ natToString(loc.#1) ^ "," ^ natToString(loc.#2) ^ "," ^ natToString(loc.#3));
-        --IO`println("Car " ^ car.getPlate() ^ " parked at time: " ^ natToString(world`timerRef.getTime()));
-
         electricSlots(loc).car := car;
         electricSlots(loc).time := world`timerRef.getTime();
-        --IO`println("CarCurrentTime: " ^ natToString(car.getTime()));
-
-        --car.setTime(world`timerRef.getTime());
-
     );
 )
 
@@ -131,34 +119,22 @@ pre loc.#1 >=0 and loc.#2 >=0 and loc.#3 >=0 and loc.#1 < dimensions+1 and loc.#
 public enterGarage: car ==> ()
 enterGarage(car) ==
 (      
-
-    IO`println("Total amount of spots" ^ natToString(card dom electricSlots + card dom gasSlots));
-    
-    
-    --IO`println("GAS SLOTS" ^ natToString(card dom gasSlots));
-    --IO`println("ELECTRIC SLOTS" ^ natToString(card dom electricSlots));
-    --IO`println("PARKED CARD MAP " ^ natToString(card dom parkedCarsMap));
-    --IO`println("MAX CAPACITY " ^ natToString(maxCapacity));
-    if canPark(car) then
-    (       
+           
         if (fullnessRatio(card dom parkedCarsMap, getMaxCapacity()) > 0.7)  then
                     car.setFeeApplied(true);
-        IO`println("RATIO IS: "^ realToString(fullnessRatio(card dom parkedCarsMap, getMaxCapacity())));
         let loc = findSlotSeq(car) in
         parkCar(car, loc);
+        IO`println("Car with license plate " ^ car.getPlate() ^ " has entered the garage");
         parkedCarsMap := parkedCarsMap ++ {car.getPlate() |-> car};  -- Add to map
-        IO`println("Car PARKED  " ^ car.getPlate());
-    )
-    else 
-        IO`println("Car " ^ car.getPlate() ^ " could not be parked.");
+
     
 )
-pre card dom parkedCarsMap < maxCapacity and not carAlreadyExists(car.getPlate());
+pre card dom parkedCarsMap < maxCapacity and (not carAlreadyExists(car.getPlate()) and findSlotSeq(car) <> mk_(-1, -1, -1));
 
 
 
 -- find available slot
-public findSlot: car * seq of location * seq of location ==> location
+public pure findSlot: car * seq of location * seq of location ==> location
 findSlot(car, electricSlotSeq, gasSlotSeq) ==
 (
     if car.getType() = <electric> then
@@ -169,7 +145,7 @@ findSlot(car, electricSlotSeq, gasSlotSeq) ==
             if isSlotFree(first) then
                 return first
             else
-                return findSlot(car, tl electricSlotSeq, gasSlotSeq)  -- Recurse to check the next electric slot
+                return findSlot(car, tl electricSlotSeq, gasSlotSeq)  -- recur
         )
         elseif gasSlotSeq <> [] then
         (
@@ -177,10 +153,10 @@ findSlot(car, electricSlotSeq, gasSlotSeq) ==
             if isSlotFree(first) then
                 return first
             else
-                return findSlot(car, electricSlotSeq, tl gasSlotSeq)  -- Recurse to check the next gas slot
+                return findSlot(car, electricSlotSeq, tl gasSlotSeq)  -- recur
         )
         else
-            return mk_(-1, -1, -1);  -- No available slot found
+            return mk_(-1, -1, -1);  -- No available slots
     )
     elseif car.getType() = <gas> then
     (
@@ -190,24 +166,24 @@ findSlot(car, electricSlotSeq, gasSlotSeq) ==
             if isSlotFree(first) then
                 return first
             else
-                return findSlot(car, electricSlotSeq, tl gasSlotSeq)  -- Recurse to check the next gas slot
+                return findSlot(car, electricSlotSeq, tl gasSlotSeq)  -- recur
         )
         else
-            return mk_(-1, -1, -1);  -- No available slot found
+            return mk_(-1, -1, -1);  -- No available slots
     )
     else
-        return mk_(-1, -1, -1)  -- Default case for unhandled types
+        return mk_(-1, -1, -1)  -- default case
 );
 
 
-public findSlotSeq : car ==> location
+public pure findSlotSeq : car ==> location
 findSlotSeq(car) ==
 (
     let electricSlotsSeqCopy = electricSlotsSeq, gasSlotsSeqCopy = gasSlotsSeq in
     return findSlot(car, electricSlotsSeqCopy, gasSlotsSeqCopy);
 );
 
--- operation to check if car can park
+-- deprecated is pre condition now
 public canPark: car ==> bool
 canPark(car) ==
 (
@@ -222,6 +198,7 @@ canPark(car) ==
         return false
 );
 
+-- find specifc licenplate 
 public lookupCar: car`licenseplate ==> [car]
 lookupCar(plate) ==
 (
@@ -234,7 +211,8 @@ lookupCar(plate) ==
 public leaveGarage: car`licenseplate ==> ()
 leaveGarage(plate) ==
 (
-        
+        for all x in set dom parkedCarsMap do
+            IO`println("Car with license plate " ^ x ^ " xxxx");
         let car = parkedCarsMap(plate) in
         
         (
@@ -243,26 +221,16 @@ leaveGarage(plate) ==
                 
                 if electricSlots(loc).car = car then
                 (   
-                    
                     dcl timeSpent : nat := world`timerRef.getTime() - electricSlots(loc).time;
-                    --IO`println("WORLD TIME" ^ natToString(world`timerRef.getTime()));
-                    --IO`println("SLOT TIME" ^ natToString(electricSlots(loc).time));
-                    --IO`println("ptime " ^ natToString(car.getTime()));
-                    --IO`println("timeSpent " ^ natToString(timeSpent));
-                    --let timeSpent = world`timerRef.getTime() - electricSlots(loc).time in  -- Use slot's entry time
-                    car.addTime(timeSpent);  -- Accumulate time spent
-                    --IO`println("ptimeNew " ^ natToString(car.getTime()));
-                    --IO`println("Car " ^ car.getPlate() ^ " was parked for " ^ natToString(timeSpent) ^ " hours.");
+         
+                    car.addTime(timeSpent);
                     
-                    
-                    let amount = pay(car) in  -- Calculate payment
+                    let amount = pay(car) in  -- payment
                     updateBankBalance(amount);
-                    electricSlots(loc).car := nil;  -- Free the slot
-                    car.setLocation(-1, -1, -1);  -- Set car location to outside
+                    electricSlots(loc).car := nil;  -- free slot
+                    car.setLocation(-1, -1, -1);  -- move car to outside garage
                     parkedCarsMap := {plate} <-: parkedCarsMap;
-                    IO`println("Fee Applied" ^ boolToString(car.getFeeApplied()));
-
-                    return;  -- Exit after processing
+                   return;
                 )
             )
         );
@@ -273,28 +241,24 @@ leaveGarage(plate) ==
             (
                 if gasSlots(loc).car = car then
                 (
-                    dcl timeSpent : nat := world`timerRef.getTime() - gasSlots(loc).time;
-                    --IO`println("SLOT TIME" ^ natToString(gasSlots(loc).time));
-                    --let timeSpent = world`timerRef.getTime() - electricSlots(loc).time in  -- Use slot's entry time
-                    car.addTime(timeSpent);  -- Accumulate time spent
-                    --IO`println("Car " ^ car.getPlate() ^ " was parked for " ^ natToString(timeSpent) ^ " hours.");
-                    let amount = pay(car) in  -- Calculate payment
+                    dcl timeSpent : nat := world`timerRef.getTime() - electricSlots(loc).time;
+         
+                    car.addTime(timeSpent);
+                    
+                    let amount = pay(car) in  -- payment
                     updateBankBalance(amount);
-                    gasSlots(loc).car := nil;  -- Free the slot
-                    car.setLocation(-1, -1, -1);  -- Set car location to outside
+                    electricSlots(loc).car := nil;  -- free slot
+                    car.setLocation(-1, -1, -1);  -- move car to outside garage
                     parkedCarsMap := {plate} <-: parkedCarsMap;
+                    return;
                 )
-                
-            )
-        
-    
-     
+            )    
 )
 pre plate in set dom parkedCarsMap;
 
 
 -- operation to get status of slot
-public isSlotFree: location ==> bool
+public pure isSlotFree: location ==> bool
 isSlotFree(loc) == (
     if loc in set dom gasSlots then
         return gasSlots(loc).car = nil  -- Check if gas slot is free
@@ -356,14 +320,6 @@ getMaxCapacity() == (
     return maxCapacity;
 );
 
-public static boolToString : bool ==> seq of char
-boolToString(b) ==
-(
-    if b then
-        return "1"
-    else
-        return "0";
-);
 functions
 
 fullnessRatio: nat * nat -> real

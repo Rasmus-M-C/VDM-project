@@ -10,7 +10,7 @@
 				{
 					"classname": "quickcheck.plugin.QuickCheckLSPPlugin",
 					"dialects": [ "vdmsl", "vdmpp" ],
-					"jar": "/Users/rasmu/.vscode/extensions/overturetool.vdm-vscode-1.5.0/resources/jars/vdmj/plugins/quickcheck-4.6.0.jar",
+					"jar": "/Users/rasmu/.vscode/extensions/overturetool.vdm-vscode-1.3.7/resources/jars/plugins/quickcheck-4.5.0-SNAPSHOT.jar",
 					"name": "QuickCheck Plugin"
 				}
 			]

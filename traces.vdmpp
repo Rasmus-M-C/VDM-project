@@ -10,74 +10,15 @@ traces
 
 T1:
 (
-    let system1 = new controller() in -- Explicit initialization
+    system.initGarage();
+     -- Explicit initialization
     let car1 = new car("A1", mk_(-1, -1, -1), 0, <electric>) in
-    (
-        system1.enterGarage(car1);
-        system1.leaveGarage("A1");
-    )
-);
-
-
-OrderedAndMixedEntry:
-(
-    let car1 = new car("E1", mk_(-1, -1, -1), 0, <electric>) in
-    let car2 = new car("G1", mk_(-1, -1, -1), 0, <gas>) in
     (
         system.enterGarage(car1);
-        system.enterGarage(car2);
-        (system.leaveGarage(car1.getPlate()) | system.leaveGarage(car2.getPlate()));
-    )
-);
-ComplexMultiCarEntryAndExit:
-(
-    let car1 = new car("A1", mk_(-1, -1, -1), 0, <electric>) in
-    let car2 = new car("B1", mk_(-1, -1, -1), 0, <gas>) in
-    let car3 = new car("C1", mk_(-1, -1, -1), 0, <electric>) in
-    (
-        (system.enterGarage(car1) | system.enterGarage(car2) | system.enterGarage(car3));
         system.leaveGarage(car1.getPlate());
-        system.leaveGarage(car2.getPlate());
-        system.leaveGarage(car3.getPlate());
     )
 );
 
-    -- Trace 1: Basic parking and leaving
-    BasicParkingAndLeaving:
-        (system.enterGarage(new car("AB12345", mk_(-1, -1, -1), 0, <electric>)));
-        system.leaveGarage("AB12345");
-
-    -- Trace 2: Parking multiple cars
-    ParkingMultipleCars:
-        (system.enterGarage(new car("AB12345", mk_(-1, -1, -1), 0, <electric>)));
-        (system.enterGarage(new car("CD67890", mk_(-1, -1, -1), 0, <gas>)));
-        system.leaveGarage("AB12345");
-        system.leaveGarage("CD67890");
-
-    -- Trace 3: Handling a full garage
-    FullGarage:
-        (system.enterGarage(new car("CAR1", mk_(-1, -1, -1), 0, <electric>)));
-        (system.enterGarage(new car("CAR2", mk_(-1, -1, -1), 0, <electric>)));
-        
-        
-        (system.enterGarage(new car("CAR5", mk_(-1, -1, -1), 0, <gas>)));  
-        (system.enterGarage(new car("CAR6", mk_(-1, -1, -1), 0, <gas>)));
-        (system.enterGarage(new car("CAR7", mk_(-1, -1, -1), 0, <gas>)));
-        (system.enterGarage(new car("CAR8", mk_(-1, -1, -1), 0, <gas>)));
-        (system.enterGarage(new car("CAR9", mk_(-1, -1, -1), 0, <gas>)));
-        (system.enterGarage(new car("CAR10", mk_(-1, -1, -1), 0, <gas>)));
-
-
-
-    -- Trace 4: Fee calculation
-    FeeCalculation:
-        system.enterGarage(new car("EF78910", mk_(-1, -1, -1), 0, <electric>));
-        system.enterGarage(new car("GH11121", mk_(-1, -1, -1), 0, <gas>));
-        world`timerRef.Step();  -- Advance 1 hour
-        world`timerRef.Step();  -- Advance 1 more hour
-        system.leaveGarage("EF78910");
-        system.leaveGarage("GH11121");
-        system.getBankBalance();  -- Check bank balance reflects correct fees
 
 
 

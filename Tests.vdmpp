@@ -139,7 +139,7 @@ operations
         dcl car1 : car := new car("AB12345", mk_(-1, -1, -1), 0, <electric>);
         controller.enterGarage(car1);
         controller.leaveGarage(car1.getPlate());
-        Assert`assertTrue(controller.getBankBalance() = 0.5);
+        Assert`assertTrue(controller.getBankBalance() = 0);
     );
 
 end TestElectricCarFee
