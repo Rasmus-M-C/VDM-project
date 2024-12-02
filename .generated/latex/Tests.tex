@@ -1,0 +1,183 @@
+\documentclass[a4paper]{article}
+\usepackage{longtable}
+\usepackage[color]{vdmlisting}
+\usepackage{fullpage}
+\usepackage{hyperref}
+\begin{document}
+\title{}
+\author{}
+\begin{vdm_al}
+class TestEnterGarage is subclass of TestCase
+instance variables
+    controller : controller := new controller();
+
+operations
+    -- Constructor
+    public TestEnterGarage: seq of char ==> TestEnterGarage
+    TestEnterGarage(name) == TestCase(name);
+
+    -- Set up before each test
+    public setUp: () ==> ()
+    setUp() == 
+    (
+        controller := new controller();
+        controller.initGarage();
+    );
+
+    -- Tear down after each test (optional)
+    public tearDown: () ==> ()
+    tearDown() == skip;
+
+  
+    -- Example test case: Enter Garage
+    public testEnterGarage: () ==> ()
+    testEnterGarage() ==
+    (
+        dcl car1 : car := new car("AB12345", mk_(-1, -1, -1), 0, <electric>);
+        Assert`assertTrue(not controller.carAlreadyExists(car1.getPlate()));
+        controller.enterGarage(car1);
+        Assert`assertTrue(controller.carAlreadyExists(car1.getPlate()));
+    );
+end TestEnterGarage
+
+class TestLeaveGarage is subclass of TestCase
+instance variables
+    controller : controller := new controller();
+
+operations
+    -- Constructor
+    public TestLeaveGarage: seq of char ==> TestLeaveGarage
+    TestLeaveGarage(name) == TestCase(name);
+
+    -- Set up before each test
+    public setUp: () ==> ()
+    setUp() == 
+    (
+        controller := new controller();
+        controller.initGarage();
+    );
+
+    -- Tear down after each test (optional)
+    public tearDown: () ==> ()
+    tearDown() == skip;
+
+  
+    -- Example test case: Leave Garage
+    public testLeaveGarage: () ==> ()
+    testLeaveGarage() ==
+    (
+        dcl car1 : car := new car("AB12345", mk_(-1, -1, -1), 0, <electric>);
+        controller.enterGarage(car1);
+        controller.leaveGarage(car1.getPlate());
+        Assert`assertTrue(not controller.carAlreadyExists(car1.getPlate()));
+    );
+end TestLeaveGarage
+
+class TestCapacityLimit is subclass of TestCase
+instance variables
+    controller : controller := new controller();
+
+operations
+    -- Constructor
+    public TestCapacityLimit: seq of char ==> TestCapacityLimit
+    TestCapacityLimit(name) == TestCase(name);
+
+    public setUp: () ==> ()
+    setUp() == 
+    (
+        controller := new controller();
+        controller.initGarage();
+    );
+
+    -- Tear down after each test (optional)
+    public tearDown: () ==> ()
+    tearDown() == skip;
+
+    public testCapacityLimit: () ==> ()
+    testCapacityLimit() ==
+    (
+        dcl car1 : car := new car("CAR1", mk_(-1, -1, -1), 0, <electric>);
+        dcl car2 : car := new car("CAR2", mk_(-1, -1, -1), 0, <electric>);
+        dcl car3 : car := new car("CAR3", mk_(-1, -1, -1), 0, <electric>);
+        dcl car4 : car := new car("CAR4", mk_(-1, -1, -1), 0, <electric>);
+        dcl car5 : car := new car("CAR5", mk_(-1, -1, -1), 0, <electric>);
+        dcl car6 : car := new car("CAR6", mk_(-1, -1, -1), 0, <electric>);
+        dcl car7 : car := new car("CAR7", mk_(-1, -1, -1), 0, <electric>);
+        dcl car8 : car := new car("CAR8", mk_(-1, -1, -1), 0, <electric>);
+        
+
+        controller.enterGarage(car1);
+        controller.enterGarage(car2);
+        controller.enterGarage(car3);
+        controller.enterGarage(car4);
+        controller.enterGarage(car5);
+        controller.enterGarage(car6);
+        controller.enterGarage(car7);
+        controller.enterGarage(car8);
+        
+
+        Assert`assertTrue(card dom controller.parkedCarsMap = controller.getMaxCapacity());
+    
+    );
+
+end TestCapacityLimit
+
+class TestElectricCarFee is subclass of TestCase
+instance variables
+    controller : controller := new controller();
+
+operations
+    -- Constructor
+    public TestElectricCarFee: seq of char ==> TestElectricCarFee
+    TestElectricCarFee(name) == TestCase(name);
+
+    public setUp: () ==> ()
+    setUp() == 
+    (
+        controller := new controller();
+        controller.initGarage();
+    );
+
+    -- Tear down after each test (optional)
+    public tearDown: () ==> ()
+    tearDown() == skip;
+
+    public testElectricCarFee: () ==> ()
+    testElectricCarFee() ==
+    (
+        dcl car1 : car := new car("AB12345", mk_(-1, -1, -1), 0, <electric>);
+        controller.enterGarage(car1);
+        controller.leaveGarage(car1.getPlate());
+        Assert`assertTrue(controller.getBankBalance() = 0.5);
+    );
+
+end TestElectricCarFee
+
+class TestDimensionArePositive is subclass of TestCase
+instance variables
+    controller : controller := new controller();
+
+operations
+    -- Constructor
+    public TestDimensionArePositive: seq of char ==> TestDimensionArePositive
+    TestDimensionArePositive(name) == TestCase(name);
+
+    public setUp: () ==> ()
+    setUp() == 
+    (
+        controller := new controller();
+        controller.initGarage();
+    );
+
+    -- Tear down after each test (optional)
+    public tearDown: () ==> ()
+    tearDown() == skip;
+
+    public testDimensionArePositive: () ==> ()
+    testDimensionArePositive() ==
+    (
+        Assert`assertTrue(controller.dimensions > 0);
+    );
+end TestDimensionArePositive 
+\end{vdm_al}
+\end{document}

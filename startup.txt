@@ -1,12 +1,11 @@
 [   
-    mk_("AB12345", <electric>, 0, 25),
-    mk_("EF56789", <electric>, 2, 25),
-    mk_("EF5678", <electric>, 3, 25),
-    mk_("EF567", <electric>, 4, 25),
-    mk_("EF56", <electric>, 5, 25),
-    mk_("EF", <electric>, 6, 25),
+    mk_("AB12345", <gas>, 0, 25),
+    mk_("EF56789", <gas>, 2, 25),
+    mk_("EF5678", <gas>, 3, 25),
+    mk_("EF567", <gas>, 4, 25),
+    mk_("EF56", <gas>, 5, 25),
+    mk_("EF", <gas>, 6, 25),
     mk_("EF567891", <electric>, 7, 25),
-    mk_("EF5678912", <electric>, 8, 25),
-    mk_("EF56789123", <electric>, 9, 25)
+    mk_("EF5678912", <electric>, 8, 25)
 
 ]

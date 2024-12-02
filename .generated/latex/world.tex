@@ -1,0 +1,31 @@
+\documentclass[a4paper]{article}
+\usepackage{longtable}
+\usepackage[color]{vdmlisting}
+\usepackage{fullpage}
+\usepackage{hyperref}
+\begin{document}
+\title{}
+\author{}
+\begin{vdm_al}
+class world
+  
+instance variables  
+  
+
+public static  env : [environment] := nil;
+public static  controller : [controller] :=  new controller();
+public static  timerRef : [Timer] := new Timer();    
+
+  
+   
+operations
+
+public 
+  Run : () ==> ()
+  Run() ==(
+    env := new environment("startup.txt", controller);
+    env.Simulate();
+    );
+end world
+\end{vdm_al}
+\end{document}

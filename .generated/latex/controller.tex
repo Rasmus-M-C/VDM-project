@@ -1,3 +1,12 @@
+\documentclass[a4paper]{article}
+\usepackage{longtable}
+\usepackage[color]{vdmlisting}
+\usepackage{fullpage}
+\usepackage{hyperref}
+\begin{document}
+\title{}
+\author{}
+\begin{vdm_al}
 class controller
 types
 public location = real * real * real;
@@ -23,6 +32,8 @@ instance variables
 
     public parkedCarsMap : map car`licenseplate to car := {|->};  -- Map for parked cars
     parkedCarsPlates: set of car`licenseplate := {};
+    parkedCars: set of car := {};
+    --parkedCars: map car`licenseplate to car := {|->};
 
     bank: real := 0.0;
 
@@ -40,59 +51,57 @@ operations
 -- 6. pay when leaving
 
 -- operation to init garage (garage is currently the controller, should make new class)
---public initGarage: () ==> ()
---initGarage() ==
---(
---    -- Initialize empty sequences
---    electricSlotsSeq := [];
---    gasSlotsSeq := [];
---
---    -- Create electric and gas slots
---    for i = 0 to dimensions-1 do
---        for j = 0 to dimensions-1 do
---            for k = 0 to dimensions-1 do
---                if (i + j + k) mod 3 = 0 then
---                (
---                    -- Add to electric slots
---                    let loc = mk_(i, j, k) in
---                    (
---                        electricSlots := electricSlots ++ {loc |-> mk_parkingLot(nil, loc, <electric>, 0)};
---                        electricSlotsSeq := electricSlotsSeq ^ [loc];
---                    )
---                )
---                else
---                (
---                    -- Add to gas slots
---                    let loc = mk_(i, j, k) in
---                    (
---                        gasSlots := gasSlots ++ {loc |-> mk_parkingLot(nil, loc, <gas>, 0)};
---                        gasSlotsSeq := gasSlotsSeq ^ [loc];
---                    )
---                );
---);
-
-
-
 public initGarage: () ==> ()
 initGarage() ==
 (
-    electricSlots := {mk_(i,j,k) |-> mk_parkingLot(nil, mk_(i,j,k), <electric>, 0) | 
-    i in set {0,...,dimensions-1}, 
-    j in set {0,...,dimensions-1}, 
-    k in set {0,...,dimensions-1} 
-    & (i + j + k) mod 3 = 0};
+    -- Initialize empty sequences
+    electricSlotsSeq := [];
+    gasSlotsSeq := [];
 
-    gasSlots := {mk_(i,j,k) |-> mk_parkingLot(nil, mk_(i,j,k), <gas>, 0) | i in 
-    set {0,...,dimensions-1}, 
-    j in set {0,...,dimensions-1}, 
-    k in set {0,...,dimensions-1} 
-    & not (i + j + k) mod 3 = 0};
-
-    for all loc in set dom electricSlots do
-        electricSlotsSeq := electricSlotsSeq ^ [loc];
-    for all loc in set dom gasSlots do
-        gasSlotsSeq := gasSlotsSeq ^ [loc];
+    -- Create electric and gas slots
+    for i = 0 to dimensions-1 do
+        for j = 0 to dimensions-1 do
+            for k = 0 to dimensions-1 do
+                if (i + j + k) mod 3 = 0 then
+                (
+                    -- Add to electric slots
+                    let loc = mk_(i, j, k) in
+                    (
+                        electricSlots := electricSlots ++ {loc |-> mk_parkingLot(nil, loc, <electric>, 0)};
+                        electricSlotsSeq := electricSlotsSeq ^ [loc];
+                    )
+                )
+                else
+                (
+                    -- Add to gas slots
+                    let loc = mk_(i, j, k) in
+                    (
+                        gasSlots := gasSlots ++ {loc |-> mk_parkingLot(nil, loc, <gas>, 0)};
+                        gasSlotsSeq := gasSlotsSeq ^ [loc];
+                    )
+                );
 );
+
+
+
+--public initGarage: () ==> ()
+--initGarage() ==
+--(
+--    -- Create electric slots for every 3rd spot
+--    electricSlots := {mk_(i, j, k) |-> mk_parkingLot(nil, mk_(i, j, k), <electric>, 0) |
+--                        i, j, k in set {0,...,dimensions} &
+--                        ((i + j + k) mod 3 = 0)};
+--    for all x in set dom electricSlots do
+--        electricSlotsSeq := electricSlotsSeq ^ [x];
+--
+--    -- All other spots are gas
+--    gasSlots := {mk_(i, j, k) |-> mk_parkingLot(nil, mk_(i, j, k), <gas>, 0) |
+--                    i, j, k in set {0,...,dimensions}};
+--
+--    for all y in set dom gasSlots do
+--        gasSlotsSeq := gasSlotsSeq ^ [y];
+--
+--);
 
 
 
@@ -131,8 +140,7 @@ pre loc.#1 >=0 and loc.#2 >=0 and loc.#3 >=0 and loc.#1 < dimensions+1 and loc.#
 public enterGarage: car ==> ()
 enterGarage(car) ==
 (      
-
-    IO`println("Total amount of spots" ^ natToString(card dom electricSlots + card dom gasSlots));
+    --IO`println("Total amount of spots" ^ natToString(card dom electricSlots + card dom gasSlots));
     
     
     --IO`println("GAS SLOTS" ^ natToString(card dom gasSlots));
@@ -149,12 +157,10 @@ enterGarage(car) ==
         parkedCarsMap := parkedCarsMap ++ {car.getPlate() |-> car};  -- Add to map
         IO`println("Car PARKED  " ^ car.getPlate());
     )
-    else 
-        IO`println("Car " ^ car.getPlate() ^ " could not be parked.");
     
 )
-pre card dom parkedCarsMap < maxCapacity and not carAlreadyExists(car.getPlate());
-
+pre card dom parkedCarsMap < maxCapacity and not carAlreadyExists(car.getPlate())
+post carAlreadyExists(car.getPlate());
 
 
 -- find available slot
@@ -342,10 +348,10 @@ getBankBalance() == (
     return bank;
 );
 public static natToString : nat ==> seq of char 
-		natToString(n) ==
-		(
-			return VDMUtil`val2seq_of_char[nat](n);
-		);
+  natToString(n) ==
+  (
+   return VDMUtil`val2seq_of_char[nat](n);
+  );
 public static realToString : real ==> seq of char
 realToString(n) ==
 (
@@ -371,3 +377,5 @@ fullnessRatio(n, max) ==
     n / max
     pre n <= max and max > 0 and n >= 0;
 end controller
+\end{vdm_al}
+\end{document}

@@ -1,0 +1,91 @@
+\documentclass[a4paper]{article}
+\usepackage{longtable}
+\usepackage[color]{vdmlisting}
+\usepackage{fullpage}
+\usepackage{hyperref}
+\begin{document}
+\title{}
+\author{}
+\begin{vdm_al}
+class car
+
+types
+
+public licenseplate = seq of char;
+public location = rat * rat * rat;
+public time = nat;
+public typeCar = <electric> | <gas>;
+
+instance variables
+loc: location := mk_(-1,-1,-1); -- -1, -1, -1 represents everywhere outside the garage
+ptime: time := 0;
+plate: licenseplate := [];
+type: typeCar := <gas>;
+feeApplied: bool := false;
+inv ptime >= 0;
+
+operations
+public car : licenseplate * location * time * typeCar ==> car
+car(licenseplate, location, time, carType) ==
+  (
+    plate := licenseplate;   -- Set the license plate
+    loc := location;         -- Set the location
+    ptime := time;           -- Set the entry time
+    type := carType;      -- Set the car type
+  )
+  pre licenseplate <> [] and location.#1 >= -1 and location.#2 >= -1 and location.#3 >= -1;
+  
+
+-- getters
+
+pure public getPlate: () ==> licenseplate
+getPlate() == (
+    return plate
+);
+
+pure public getLocation: () ==> location
+getLocation() == (
+return loc
+);
+
+pure public getTime: () ==> time
+getTime() == (
+return ptime
+);
+
+pure public getType: () ==> typeCar 
+getType() == (
+return type 
+);
+
+pure public getFeeApplied: () ==> bool
+getFeeApplied() == (
+return feeApplied
+);
+-- setters
+public setLocation: rat * rat * rat ==> ()
+setLocation(x,y,z) == (
+    loc:= mk_(x,y,z)
+)
+post loc = mk_(x,y,z);
+
+public setTime: nat ==> ()
+setTime(newTime) ==(
+ptime := newTime
+)
+pre newTime >= 0
+post ptime = newTime;
+
+public addTime: nat ==> ()
+addTime(addedTime) ==(
+ptime := ptime + addedTime
+);
+
+public setFeeApplied: bool ==> ()
+setFeeApplied(boolean) == (
+    feeApplied := boolean
+)
+
+end car
+\end{vdm_al}
+\end{document}

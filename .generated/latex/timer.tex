@@ -1,0 +1,44 @@
+\documentclass[a4paper]{article}
+\usepackage{longtable}
+\usepackage[color]{vdmlisting}
+\usepackage{fullpage}
+\usepackage{hyperref}
+\begin{document}
+\title{}
+\author{}
+\begin{vdm_al}
+class Timer 
+
+instance variables
+
+  currentTime : nat := 0;
+  endSimTime : nat := 0;
+
+values 
+
+  stepLength : nat = 1;
+
+operations
+
+public 
+  Step:() ==> ()
+  Step() == 
+    currentTime := currentTime + stepLength;
+
+pure public
+  getTime: () ==> nat 
+  getTime() == 
+  return currentTime;
+  
+public
+  GetEndSimTime: () ==> nat
+  GetEndSimTime() == 
+  return endSimTime;
+
+public SetEndSimTime: nat ==> ()
+SetEndSimTime(newEndTime) == 
+  endSimTime := newEndTime;
+
+end Timer
+\end{vdm_al}
+\end{document}

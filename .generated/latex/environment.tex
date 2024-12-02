@@ -1,3 +1,12 @@
+\documentclass[a4paper]{article}
+\usepackage{longtable}
+\usepackage[color]{vdmlisting}
+\usepackage{fullpage}
+\usepackage{hyperref}
+\begin{document}
+\title{}
+\author{}
+\begin{vdm_al}
 class environment
 types
     public Time = nat;
@@ -110,13 +119,15 @@ report() ==
     IO`println("Final bank balance: " ^ realToString(controllerRef.getBankBalance()));
 );
 public static natToString : nat ==> seq of char 
-		natToString(n) ==
-		(
-			return VDMUtil`val2seq_of_char[nat](n);
-		);
+  natToString(n) ==
+  (
+   return VDMUtil`val2seq_of_char[nat](n);
+  );
 public static realToString : real ==> seq of char
         realToString(n) ==
         (
             return VDMUtil`val2seq_of_char[real](n);
         );
 end environment
+\end{vdm_al}
+\end{document}
