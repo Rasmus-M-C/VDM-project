@@ -1,0 +1,40 @@
+\documentclass[a4paper]{article}
+\usepackage{longtable}
+\usepackage[color]{vdmlisting}
+\usepackage{fullpage}
+\usepackage{hyperref}
+\begin{document}
+\title{}
+\author{}
+\begin{vdm_al}
+class Traces2
+values 
+    system2 : controller = (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{controlle}@*)r();
+
+traces
+FullnessRatioTest:
+(
+    let car = (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{ca}@*)r((*@\vdmnotcovered{"1E1}@*)", (*@\vdmnotcovered{mk}@*)_((*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1), (*@\vdmnotcovered{}@*)0, (*@\vdmnotcovered{<electric}@*)>) in
+    (
+        (*@\vdmnotcovered{system}@*)2.initGarage();
+        (*@\vdmnotcovered{system}@*)2.enterGarage((*@\vdmnotcovered{ca}@*)r);
+        (*@\vdmnotcovered{system}@*)2.leaveGarage((*@\vdmnotcovered{"1E1}@*)");
+    );
+    
+);
+
+end Traces2
+\end{vdm_al}
+\bigskip
+\begin{longtable}{|l|r|r|}
+\hline
+Function or operation & Coverage & Calls \\
+\hline
+\hline
+Traces2 & 0.0\% & 0 \\
+\hline
+\hline
+traces2.vdmpp & 0.0\% & 0 \\
+\hline
+\end{longtable}
+\end{document}

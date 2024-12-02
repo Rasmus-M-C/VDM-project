@@ -7,24 +7,97 @@
 \title{}
 \author{}
 \begin{vdm_al}
-class ParkingTraces
+class Traces
 types
 
 values
 
     system : controller = (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{controlle}@*)r();  -- Reference to the parking controller
-    
+    system1 : controller = (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{controlle}@*)r();  -- Reference to the parking controller
 
 traces
 
 T1:
 (
     (*@\vdmnotcovered{syste}@*)m.initGarage();
-     -- Explicit initialization
-    let car1 = (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{ca}@*)r((*@\vdmnotcovered{"A1}@*)", (*@\vdmnotcovered{mk}@*)_((*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1), (*@\vdmnotcovered{}@*)0, (*@\vdmnotcovered{<electric}@*)>) in
+    let car1 = (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{ca}@*)r((*@\vdmnotcovered{"1E1}@*)", (*@\vdmnotcovered{mk}@*)_((*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1), (*@\vdmnotcovered{}@*)0, (*@\vdmnotcovered{<electric}@*)>),
+        car2 = (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{ca}@*)r((*@\vdmnotcovered{"1G1}@*)", (*@\vdmnotcovered{mk}@*)_((*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1), (*@\vdmnotcovered{}@*)0, (*@\vdmnotcovered{<gas}@*)>) in
     (
+        ((*@\vdmnotcovered{syste}@*)m.enterGarage((*@\vdmnotcovered{car}@*)1); (*@\vdmnotcovered{syste}@*)m.enterGarage((*@\vdmnotcovered{car}@*)2)) |  -- Test car1 first, then car2
+        ((*@\vdmnotcovered{syste}@*)m.enterGarage((*@\vdmnotcovered{car}@*)2); (*@\vdmnotcovered{syste}@*)m.enterGarage((*@\vdmnotcovered{car}@*)1));  -- Test car2 first, then car1
+        
+        ((*@\vdmnotcovered{syste}@*)m.leaveGarage((*@\vdmnotcovered{"1E1}@*)"); (*@\vdmnotcovered{syste}@*)m.leaveGarage((*@\vdmnotcovered{"1G1}@*)")) |  -- Test leave car1 first
+        ((*@\vdmnotcovered{syste}@*)m.leaveGarage((*@\vdmnotcovered{"1G1}@*)"); (*@\vdmnotcovered{syste}@*)m.leaveGarage((*@\vdmnotcovered{"1E1}@*)"))   -- Test leave car2 first
+    )
+);
+
+T2:
+(
+    (*@\vdmnotcovered{system}@*)1.initGarage();
+    let car1 = (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{ca}@*)r((*@\vdmnotcovered{"2E1}@*)", (*@\vdmnotcovered{mk}@*)_((*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1), (*@\vdmnotcovered{}@*)0, (*@\vdmnotcovered{<electric}@*)>),
+        car2 = (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{ca}@*)r((*@\vdmnotcovered{"2G1}@*)", (*@\vdmnotcovered{mk}@*)_((*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1), (*@\vdmnotcovered{}@*)0, (*@\vdmnotcovered{<gas}@*)>) in
+    (
+        ((*@\vdmnotcovered{system}@*)1.enterGarage((*@\vdmnotcovered{car}@*)1) | (*@\vdmnotcovered{system}@*)1.enterGarage((*@\vdmnotcovered{car}@*)2));  -- Test all entry orders
+        ((*@\vdmnotcovered{system}@*)1.leaveGarage((*@\vdmnotcovered{"2E1}@*)") | (*@\vdmnotcovered{system}@*)1.leaveGarage((*@\vdmnotcovered{"2G1}@*)"));  -- Test all exit orders
+    )
+);
+
+T3:
+(
+    
+    let car1 = (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{ca}@*)r((*@\vdmnotcovered{"3E1}@*)", (*@\vdmnotcovered{mk}@*)_((*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1), (*@\vdmnotcovered{}@*)0, (*@\vdmnotcovered{<electric}@*)>),
+        car2 = (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{ca}@*)r((*@\vdmnotcovered{"3E2}@*)", (*@\vdmnotcovered{mk}@*)_((*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1), (*@\vdmnotcovered{}@*)0, (*@\vdmnotcovered{<electric}@*)>),
+        car3 = (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{ca}@*)r((*@\vdmnotcovered{"3G1}@*)", (*@\vdmnotcovered{mk}@*)_((*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1), (*@\vdmnotcovered{}@*)0, (*@\vdmnotcovered{<gas}@*)>) in
+    (
+        ((*@\vdmnotcovered{syste}@*)m.enterGarage((*@\vdmnotcovered{car}@*)1); (*@\vdmnotcovered{syste}@*)m.enterGarage((*@\vdmnotcovered{car}@*)2); (*@\vdmnotcovered{syste}@*)m.enterGarage((*@\vdmnotcovered{car}@*)3)) |  -- Electric cars first
+        ((*@\vdmnotcovered{syste}@*)m.enterGarage((*@\vdmnotcovered{car}@*)3); (*@\vdmnotcovered{syste}@*)m.enterGarage((*@\vdmnotcovered{car}@*)1); (*@\vdmnotcovered{syste}@*)m.enterGarage((*@\vdmnotcovered{car}@*)2));  -- Gas car first
+
+        ((*@\vdmnotcovered{syste}@*)m.leaveGarage((*@\vdmnotcovered{"3E1}@*)"); (*@\vdmnotcovered{syste}@*)m.leaveGarage((*@\vdmnotcovered{"3E2}@*)"); (*@\vdmnotcovered{syste}@*)m.leaveGarage((*@\vdmnotcovered{"3G1}@*)")) |  -- Electric cars leave first
+        ((*@\vdmnotcovered{syste}@*)m.leaveGarage((*@\vdmnotcovered{"3G1}@*)"); (*@\vdmnotcovered{syste}@*)m.leaveGarage((*@\vdmnotcovered{"3E1}@*)"); (*@\vdmnotcovered{syste}@*)m.leaveGarage((*@\vdmnotcovered{"3E2}@*)"))   -- Gas car leaves first
+    )
+);
+
+T4:
+(
+    let car1 = (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{ca}@*)r((*@\vdmnotcovered{"A1}@*)", (*@\vdmnotcovered{mk}@*)_((*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1), (*@\vdmnotcovered{}@*)0, (*@\vdmnotcovered{<electric}@*)>) in
+    let car2 = (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{ca}@*)r((*@\vdmnotcovered{"A2}@*)", (*@\vdmnotcovered{mk}@*)_((*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1), (*@\vdmnotcovered{}@*)0, (*@\vdmnotcovered{<electric}@*)>) in
+    (
+        (*@\vdmnotcovered{syste}@*)m.enterGarage((*@\vdmnotcovered{car}@*)1) | (*@\vdmnotcovered{syste}@*)m.enterGarage((*@\vdmnotcovered{car}@*)2);
+        (*@\vdmnotcovered{syste}@*)m.leaveGarage((*@\vdmnotcovered{"A1}@*)");
+        (*@\vdmnotcovered{syste}@*)m.leaveGarage((*@\vdmnotcovered{"A2}@*)");
+    )
+);
+
+T6:
+(
+    let car1 = (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{ca}@*)r((*@\vdmnotcovered{"B1}@*)", (*@\vdmnotcovered{mk}@*)_((*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1), (*@\vdmnotcovered{}@*)0, (*@\vdmnotcovered{<gas}@*)>) in
+    let car2 = (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{ca}@*)r((*@\vdmnotcovered{"B2}@*)", (*@\vdmnotcovered{mk}@*)_((*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1), (*@\vdmnotcovered{}@*)0, (*@\vdmnotcovered{<gas}@*)>) in
+    (
+        (*@\vdmnotcovered{syste}@*)m.enterGarage((*@\vdmnotcovered{car}@*)1) | (*@\vdmnotcovered{syste}@*)m.enterGarage((*@\vdmnotcovered{car}@*)2);
+        (*@\vdmnotcovered{syste}@*)m.leaveGarage((*@\vdmnotcovered{"B1}@*)");
+        (*@\vdmnotcovered{syste}@*)m.leaveGarage((*@\vdmnotcovered{"B2}@*)");
+    )
+);
+
+
+
+
+DimensionsValid:
+(
+   
+    (*@\vdmnotcovered{Assert`assertTru}@*)e((*@\vdmnotcovered{syste}@*)m.(*@\vdmnotcovered{getMaxCapacit}@*)y() (*@\vdmnotcovered{}@*)> (*@\vdmnotcovered{}@*)0);  -- Verify dimensions are positive
+);
+
+PaymentTest:
+(
+    let car1 = (*@\vdmnotcovered{ne}@*)w (*@\vdmnotcovered{ca}@*)r((*@\vdmnotcovered{"1E1}@*)", (*@\vdmnotcovered{mk}@*)_((*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1, (*@\vdmnotcovered{}@*)-(*@\vdmnotcovered{}@*)1), (*@\vdmnotcovered{}@*)0, (*@\vdmnotcovered{<electric}@*)>) in
+        
+    (
+        (*@\vdmnotcovered{syste}@*)m.initGarage();
         (*@\vdmnotcovered{syste}@*)m.enterGarage((*@\vdmnotcovered{car}@*)1);
-        (*@\vdmnotcovered{syste}@*)m.leaveGarage((*@\vdmnotcovered{car}@*)1.(*@\vdmnotcovered{getPlat}@*)e());
+        (*@\vdmnotcovered{world`timerRe}@*)f.Step();
+        (*@\vdmnotcovered{syste}@*)m.leaveGarage((*@\vdmnotcovered{"1E1}@*)");
+        (*@\vdmnotcovered{Assert`assertTru}@*)e( (*@\vdmnotcovered{syste}@*)m.(*@\vdmnotcovered{getBankBalanc}@*)e() (*@\vdmnotcovered{}@*)= (*@\vdmnotcovered{}@*)1);  -- Verify fee is 0
     )
 );
 
@@ -32,9 +105,7 @@ T1:
 
 
 
-
-
-end ParkingTraces
+end Traces
 \end{vdm_al}
 \bigskip
 \begin{longtable}{|l|r|r|}
@@ -42,7 +113,7 @@ end ParkingTraces
 Function or operation & Coverage & Calls \\
 \hline
 \hline
-ParkingTraces & 0.0\% & 0 \\
+Traces & 0.0\% & 0 \\
 \hline
 \hline
 traces.vdmpp & 0.0\% & 0 \\
