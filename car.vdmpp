@@ -1,19 +1,18 @@
 class car
 
 types
-
 public licenseplate = seq of char;
 public location = rat * rat * rat;
 public time = nat;
 public typeCar = <electric> | <gas>;
 
 instance variables
-loc: location := mk_(-1,-1,-1); -- -1, -1, -1 represents everywhere outside the garage
-ptime: time := 0;
-plate: licenseplate := [];
+loc: location := mk_(-1,-1,-1); 
+ptime: time;
+plate: licenseplate;
 type: typeCar := <gas>;
 feeApplied: bool := false;
-inv ptime >= 0;
+inv loc.#1 >= -1 and loc.#2 >= -1 and loc.#3 >= -1;
 
 operations
 public car : licenseplate * location * time * typeCar ==> car
